@@ -1,0 +1,77 @@
+{
+  "common": {
+    "brand": "WineHouse Da Nang",
+    "slogan": "Fine Wines – Fast Delivery – Dedicated Advice",
+    "buy_now": "Buy Now",
+    "contact_us": "Contact Us",
+    "see_more": "See More",
+    "home": "Home",
+    "products": "Products",
+    "news": "News",
+    "about": "About Us",
+    "contact": "Contact",
+    "search": "Search...",
+    "all": "All",
+    "loading": "Loading...",
+    "no_products": "No products found.",
+    "features": {
+      "delivery": { "title": "National Delivery", "desc": "Careful packaging" },
+      "advice": { "title": "Free Advice", "desc": "24/7 Support" },
+      "authentic": { "title": "Authentic Only", "desc": "100% Imported" },
+      "gift": { "title": "Exquisite Gifts", "desc": "Artistic wrapping" }
+    },
+    "categories_list": {
+      "wine": "Wines",
+      "whisky": "Whisky",
+      "spirits": "Spirits"
+    }
+  },
+  "home": {
+    "hero_title": "The Art of True Wine Appreciation",
+    "hero_subtitle": "Discover the finest collection of wines, whiskies, and premium spirits in Da Nang.",
+    "bestseller": "Best Sellers",
+    "categories": "Featured Categories",
+    "testimonials": "What Clients Say",
+    "cta_title": "Need help choosing?",
+    "cta_subtitle": "Our experts are available 24/7 to assist you.",
+    "combos": "Special Combos",
+    "combos_subtitle": "Save more with expert-curated collections.",
+    "gifts": "Luxury Gift Sets",
+    "gifts_subtitle": "Express your gratitude with elegant and sophisticated gift boxes.",
+    "knowledge": "Knowledge & Events",
+    "knowledge_subtitle": "Explore the world of wine through featured articles and events."
+  },
+  "product": {
+    "price": "Price: ",
+    "description": "Product Description",
+    "origin": "Origin",
+    "type": "Type",
+    "alcohol": "Alcohol",
+    "volume": "Volume",
+    "related": "Related Products",
+    "filter": "Filter",
+    "details": "Details",
+    "categories": {
+      "wine": "Wine",
+      "whisky": "Whisky",
+      "spirits": "Spirits",
+      "combo": "Special Combo",
+      "gift": "Gift Set"
+    }
+  },
+  "zalo": {
+    "message": "Hi, I saw the {name} product on WineHouse Da Nang website, could you please provide the price and advice?"
+  },
+  "age_verify": {
+    "title": "Age Verification",
+    "description": "You must be over 18 years old to access this website. Please confirm your age.",
+    "confirm": "I am over 18",
+    "cancel": "I am under 18"
+  },
+  "footer": {
+    "address": "Address: 123 Wine Street, Da Nang",
+    "phone": "Hotline: 0905 123 456",
+    "email": "Email: contact@winehousedanang.vn",
+    "follow": "Follow Us"
+  }
+}

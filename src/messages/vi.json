@@ -1,0 +1,77 @@
+{
+  "common": {
+    "brand": "WineHouse Đà Nẵng",
+    "slogan": "Rượu ngon – Giao nhanh – Tư vấn tận tình",
+    "buy_now": "Mua ngay",
+    "contact_us": "Liên hệ ngay",
+    "see_more": "Xem thêm",
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "news": "Tin tức",
+    "about": "Về chúng tôi",
+    "contact": "Liên hệ",
+    "search": "Tìm kiếm...",
+    "all": "Tất cả",
+    "loading": "Đang tải...",
+    "no_products": "Không tìm thấy sản phẩm nào.",
+    "features": {
+      "delivery": { "title": "Giao hàng toàn quốc", "desc": "Đóng gói cẩn thận" },
+      "advice": { "title": "Tư vấn miễn phí", "desc": "Hỗ trợ 24/7" },
+      "authentic": { "title": "Cam kết chính hãng", "desc": "100% nhập khẩu" },
+      "gift": { "title": "Quà tặng tinh tế", "desc": "Gói quà nghệ thuật" }
+    },
+    "categories_list": {
+      "wine": "Rượu Vang",
+      "whisky": "Whisky",
+      "spirits": "Rượu Mạnh"
+    }
+  },
+  "home": {
+    "hero_title": "Nghệ Thuật Thưởng Thức Rượu Vang Đích Thực",
+    "hero_subtitle": "Khám phá bộ sưu tập rượu vang, whisky và rượu mạnh cao cấp nhất tại Đà Nẵng.",
+    "bestseller": "Sản Phẩm Bán Chạy",
+    "categories": "Danh Mục Nổi Bật",
+    "testimonials": "Khách Hàng Nói Gì",
+    "cta_title": "Bạn cần tư vấn chọn rượu?",
+    "cta_subtitle": "Chuyên gia của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7.",
+    "combos": "Combo Ưu Đãi",
+    "combos_subtitle": "Tiết kiệm hơn với các bộ sưu tập được chuyên gia phối hợp sẵn.",
+    "gifts": "Quà Tặng Sang Trọng",
+    "gifts_subtitle": "Gói trọn tâm tình trong những hộp quà đẳng cấp và tinh tế.",
+    "knowledge": "Kiến Thức & Sự Kiện",
+    "knowledge_subtitle": "Khám phá thế giới rượu vang qua những bài viết và sự kiện đặc sắc."
+  },
+  "product": {
+    "price": "Giá: ",
+    "description": "Mô tả sản phẩm",
+    "origin": "Xuất xứ",
+    "type": "Loại rượu",
+    "alcohol": "Nồng độ",
+    "volume": "Dung tích",
+    "related": "Sản phẩm liên quan",
+    "filter": "Lọc sản phẩm",
+    "details": "Chi tiết",
+    "categories": {
+      "wine": "Rượu Vang",
+      "whisky": "Whisky",
+      "spirits": "Rượu Mạnh",
+      "combo": "Combo Ưu Đãi",
+      "gift": "Gói Quà"
+    }
+  },
+  "zalo": {
+    "message": "Chào anh, em xem sản phẩm {name} trên web WineHouse Đà Nẵng, anh báo giá và tư vấn giúp em nhé!"
+  },
+  "age_verify": {
+    "title": "Xác Minh Độ Tuổi",
+    "description": "Bạn phải trên 18 tuổi để truy cập website này. Vui lòng xác nhận tuổi của bạn.",
+    "confirm": "Tôi đã trên 18 tuổi",
+    "cancel": "Tôi chưa đủ 18 tuổi"
+  },
+  "footer": {
+    "address": "Địa chỉ: 123 Đường Rượu Vang, Đà Nẵng",
+    "phone": "Hotline: 0905 123 456",
+    "email": "Email: contact@winehousedanang.vn",
+    "follow": "Theo dõi chúng tôi"
+  }
+}
