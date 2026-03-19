@@ -1,99 +1,71 @@
 'use client';
 
-import { useTranslations, useLocale } from 'next-intl';
-import { Link, usePathname, useRouter } from '@/i18n/routing';
-import { useState, useEffect, useRef } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { Link, usePathname } from '@/i18n/routing';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Globe, Search, ChevronDown, Phone, MapPin } from 'lucide-react';
+import { ChevronDown, Globe, Menu, X } from 'lucide-react';
+import { useRef } from 'react';
+ const languages = [
+    { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+  ];
 
 export default function Header() {
   const t = useTranslations('common');
-  const locale = useLocale();
-  const pathname = usePathname();
-  const router = useRouter();
-  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLangOpen, setIsLangOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const langRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+    const [isLangOpen, setIsLangOpen] = useState(false);
+     const langRef = useRef<HTMLDivElement>(null);
+      const locale = useLocale();
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
-  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (langRef.current && !langRef.current.contains(event.target as Node)) {
-        setIsLangOpen(false);
-      }
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navItems = [
     { name: t('home'), path: '/' },
     { name: t('products'), path: '/products' },
     { name: t('news'), path: '/news' },
-    { name: t('about'), path: '/about' },
-    { name: t('contact'), path: '/contact' },
-  ];
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-    }
-  };
-
-  const languages = [
-    { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
-    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { name: t('promotion'), path: '/promotion' },
+    { name: t('gifts'), path: '/gifts' },
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
-      {/* Row 1: Logo, Contact, Search, Actions */}
-      <div className="py-4 border-b border-gray-50">
-        <div className="container mx-auto px-4 flex items-center justify-between gap-4">
-          {/* Logo + Contact */}
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex flex-col group shrink-0">
-              <span className="text-2xl font-serif font-bold leading-none text-brand-primary">
-                WINEHOUSE
-              </span>
-              <span className="text-[10px] tracking-[0.3em] uppercase font-medium text-gray-500">
-                Đà Nẵng
-              </span>
-            </Link>
-            <div className="hidden md:flex flex-col text-[11px] text-gray-600 gap-1">
-              <a href="tel:0905123456" className="flex items-center gap-2 hover:text-brand-primary transition-colors">
-                <Phone size={12} className="text-brand-primary" />
-                0905 123 456
-              </a>
-              <div className="flex items-center gap-2">
-                <MapPin size={12} className="text-brand-primary" />
-                {locale === 'vi' ? '123 Nguyễn Văn Linh, Đà Nẵng' : '123 Nguyen Van Linh, Da Nang'}
-              </div>
-            </div>
+    <header className="fixed top-0 left-0 w-full z-50 px-4 py-6">
+      <div className="container mx-auto">
+        <nav className={`flex items-center justify-between px-8 py-4 rounded-2xl transition-all duration-300 ${
+          (scrolled || !isHome)
+            ? 'bg-black/60 backdrop-blur-xl shadow-2xl' 
+            : 'bg-white/10 backdrop-blur-md border border-white/10'
+        }`}>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-xl md:text-2xl font-bold tracking-tight text-white whitespace-nowrap">
+              VIORA WINE
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-8">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                href={item.path}
+                className="text-[13px] font-semibold text-white/90 hover:text-white transition-colors uppercase tracking-wider"
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
-
-          <div className="flex items-center gap-3 flex-1 justify-end">
-            {/* Search Bar (Smaller) */}
-            <form 
-              onSubmit={handleSearch}
-              className="hidden md:flex items-center relative group w-full max-w-[240px]"
-            >
-              <input
-                type="text"
-                placeholder={t('search')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-200 rounded-full py-1.5 pl-9 pr-4 text-xs focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
-              />
-              <Search className="absolute left-3 text-gray-400 group-focus-within:text-brand-primary transition-colors" size={14} />
-            </form>
-
-            {/* Language Dropdown */}
-            <div className="relative" ref={langRef}>
+<div className="flex items-center gap-4">
+   <div className="relative" ref={langRef}>
               <button
                 onClick={() => setIsLangOpen(!isLangOpen)}
                 className="flex items-center gap-2 border border-gray-200 rounded-full px-3 py-1.5 hover:border-brand-primary transition-colors bg-white"
@@ -131,72 +103,56 @@ export default function Header() {
                 )}
               </AnimatePresence>
             </div>
+             <div className="flex items-center gap-4">
+            <Link
+              href="/contact"
+              className="hidden md:flex items-center justify-center px-6 py-2.5 bg-brand-primary hover:bg-[#A3162A] text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 whitespace-nowrap uppercase"
+            >
+              {t('contact')}
+            </Link>
 
             {/* Mobile Menu Toggle */}
             <button
-              className="lg:hidden text-brand-primary p-2 hover:bg-gray-50 rounded-full transition-colors"
+              className="lg:hidden text-white p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-        </div>
+</div>
+          {/* Action Button */}
+         
+        </nav>
       </div>
 
-      {/* Row 2: Navigation Menu */}
-      <div className="hidden lg:block py-3">
-        <div className="container mx-auto px-4">
-          <nav className="flex items-center justify-center gap-12">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className={`text-[11px] uppercase tracking-[0.2em] transition-all font-bold relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-brand-primary after:transition-all hover:after:w-full text-gray-700 hover:text-brand-primary ${
-                  pathname === item.path ? 'text-brand-primary after:w-full' : ''
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="absolute top-full left-0 w-full bg-white border-t border-gray-100 overflow-hidden lg:hidden shadow-xl"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-full left-4 right-4 mt-2 lg:hidden"
           >
-            <div className="p-6 space-y-6">
-              {/* Mobile Search */}
-              <form onSubmit={handleSearch} className="relative">
-                <input
-                  type="text"
-                  placeholder={t('search')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-brand-primary"
-                />
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-              </form>
-
+            <div className="bg-black/90 backdrop-blur-2xl rounded-2xl border border-white/10 p-6 shadow-2xl overflow-hidden">
               <nav className="flex flex-col gap-4">
                 {navItems.map((item) => (
                   <Link
                     key={item.path}
                     href={item.path}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-lg uppercase tracking-widest py-2 border-b border-gray-50 transition-colors ${
-                      pathname === item.path ? 'text-brand-primary font-bold' : 'text-gray-700 hover:text-brand-primary'
-                    }`}
+                    className="text-white/90 hover:text-white text-lg font-medium py-2 border-b border-white/5 transition-colors"
                   >
                     {item.name}
                   </Link>
                 ))}
+                <Link
+                  href="/contact"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="mt-4 flex items-center justify-center px-6 py-4 bg-brand-primary text-white rounded-xl font-bold uppercase"
+                >
+                  {t('contact')}
+                </Link>
               </nav>
             </div>
           </motion.div>

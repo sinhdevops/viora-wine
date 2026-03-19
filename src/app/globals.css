@@ -3,12 +3,11 @@
 
 @theme {
   --color-brand-black: #111111;
-  --color-brand-primary: #E1001ECC;
+  --color-brand-primary: #C80000;
   --color-brand-wine: #8B0000;
   --color-brand-wood: #3F2A1D;
   
-  --font-serif: var(--font-serif), serif;
-  --font-sans: var(--font-sans), sans-serif;
+  --font-lexend: var(--font-lexend), ;
 }
 
 :root {
@@ -18,7 +17,7 @@
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-lexend);
   font-size: var(--font-size-base);
   font-weight: 300;
   line-height: 1.6;
@@ -29,7 +28,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
+  font-family: var(--font-lexend);
   font-weight: 400; /* Playfair looks better at 400 even if body is 300 */
   letter-spacing: -0.02em;
 }
@@ -72,4 +71,28 @@ h1, h2, h3, h4, h5, h6 {
 /* Optimize for Vietnamese readability */
 p {
   letter-spacing: 0.01em;
+}
+
+ .testimonial-swiper .swiper-pagination-bullet {
+            background: #d1d5db;
+            opacity: 1;
+            width: 8px;
+            height: 8px;
+            transition: all 0.3s ease;
+          }
+          .testimonial-swiper .swiper-pagination-bullet-active {
+            background: var(--color-brand-primary, #C80000);
+            width: 24px;
+            border-radius: 4px;
+          }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

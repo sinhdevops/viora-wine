@@ -10,7 +10,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <div className="flex flex-col min-h-screen bg-white text-brand-black selection:bg-brand-primary selection:text-white">
       <NextTopLoader color="#E1001ECC" showSpinner={false} />
       <Header />
-      <main className="flex-grow pt-[85px] lg:pt-[120px]">
+      <main className="grow pt-0">
         {children}
       </main>
       <Footer />
