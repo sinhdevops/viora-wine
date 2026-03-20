@@ -9,16 +9,10 @@ export const productSchema = z.object({
 	description: z.string().min(1, "Mô tả là bắt buộc"),
 	thumbnail_url: z.string().min(1, "Vui lòng upload ảnh sản phẩm"),
 	content: z.string().min(1, "Nội dung chi tiết là bắt buộc"),
-	price: z.number({ invalid_type_error: "Nhập số hợp lệ" }).min(0, "Giá phải ≥ 0"),
-	discount_percentage: z
-		.number({ invalid_type_error: "Nhập số hợp lệ" })
-		.min(0, "Tối thiểu 0%")
-		.max(100, "Tối đa 100%"),
-	category: z.enum(CATEGORIES, { message: "Chọn danh mục hợp lệ" }),
-	stock: z
-		.number({ invalid_type_error: "Nhập số hợp lệ" })
-		.int("Phải là số nguyên")
-		.min(0, "Kho phải ≥ 0"),
+	price: z.number().min(0, "Giá phải ≥ 0"),
+	discount_percentage: z.number().min(0, "Tối thiểu 0%").max(100, "Tối đa 100%"),
+	category: z.enum(CATEGORIES, { error: "Chọn danh mục hợp lệ" }),
+	stock: z.number().int("Phải là số nguyên").min(0, "Kho phải ≥ 0"),
 	is_hot: z.boolean(),
 });
 
