@@ -1,22 +1,41 @@
-import { routing } from "@/i18n/routing";
-import { notFound } from "next/navigation";
+import {NextIntlClientProvider} from 'next-intl';
+import {getMessages} from 'next-intl/server';
+import {routing} from '@/i18n/routing';
+import MainLayout from '@/components/layout/main-layout';
+import {  Lexend } from 'next/font/google';
+import '../globals.css';
+import { notFound } from 'next/navigation';
+
+const lexend = Lexend({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-lexend',
+});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({locale}));
 }
 
-export default async function MainLayout({
-  children,params
+export default async function RootLayout({
+  children,
+  params
 }: {
   children: React.ReactNode;
   params: Promise<{locale: string}>;
 }) {
   const {locale} = await params;
-  
-  if (!routing.locales.includes(locale as any)) {
+  const messages = await getMessages();
+
+   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
   return (
-   <>{children}</>
+    <html lang={locale} className={`${lexend.variable}`} suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          <MainLayout>{children}</MainLayout>
+        </NextIntlClientProvider>
+      </body>
+    </html>
   );
 }
