@@ -96,3 +96,18 @@ p {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+  .custom-pagination .swiper-pagination-bullet {
+          width: 10px;
+          height: 10px;
+          background: rgba(255, 255, 255, 0.4);
+          opacity: 1;
+          margin: 0 !important;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border-radius: 50%;
+        }
+        .custom-pagination .swiper-pagination-bullet-active {
+          background: white;
+          transform: scale(1.2);
+        }

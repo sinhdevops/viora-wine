@@ -1,163 +1,167 @@
-'use client';
+"use client";
 
-import { useLocale, useTranslations } from 'next-intl';
-import { Link, usePathname } from '@/i18n/routing';
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { ChevronDown, Globe, Menu, X } from 'lucide-react';
-import { useRef } from 'react';
- const languages = [
-    { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-  ];
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/routing";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { ChevronDown, Globe, Menu, X } from "lucide-react";
+
+const languages = [
+	{ code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
+	{ code: "en", name: "English", flag: "🇺🇸" },
+];
 
 export default function Header() {
-  const t = useTranslations('common');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-    const [isLangOpen, setIsLangOpen] = useState(false);
-     const langRef = useRef<HTMLDivElement>(null);
-      const locale = useLocale();
-  const pathname = usePathname();
-  const isHome = pathname === '/';
+	const t = useTranslations("common");
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [isLangOpen, setIsLangOpen] = useState(false);
+	const langRef = useRef<HTMLDivElement>(null);
+	const locale = useLocale();
+	const pathname = usePathname();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+	useEffect(() => {
+		const handleClickOutside = (e: MouseEvent) => {
+			if (langRef.current && !langRef.current.contains(e.target as Node)) {
+				setIsLangOpen(false);
+			}
+		};
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => document.removeEventListener("mousedown", handleClickOutside);
+	}, []);
 
-  const navItems = [
-    { name: t('home'), path: '/' },
-    { name: t('products'), path: '/products' },
-    { name: t('news'), path: '/news' },
-    { name: t('promotion'), path: '/promotion' },
-    { name: t('gifts'), path: '/gifts' },
-  ];
+	const navItems = [
+		{ name: t("home"), path: "/" },
+		{ name: t("products"), path: "/products" },
+		{ name: t("news"), path: "/news" },
+		{ name: t("promotion"), path: "/promotion" },
+		{ name: t("gifts"), path: "/gifts" },
+	];
 
-  return (
-    <header className="fixed top-0 left-0 w-full z-50 px-4 py-6">
-      <div className="container mx-auto">
-        <nav className={`flex items-center justify-between px-8 py-4 rounded-2xl transition-all duration-300 ${
-          (scrolled || !isHome)
-            ? 'bg-black/60 backdrop-blur-xl shadow-2xl' 
-            : 'bg-white/10 backdrop-blur-md border border-white/10'
-        }`}>
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl md:text-2xl font-bold tracking-tight text-white whitespace-nowrap">
-              VIORA WINE
-            </span>
-          </Link>
+	return (
+		<header className="sticky top-0 z-50 bg-white shadow-sm">
+			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<div className="flex h-20 items-center justify-between">
+					{/* Logo */}
+					<Link href="/" className="flex-shrink-0">
+						<span className="font-serif text-2xl font-bold tracking-tighter text-black">
+							VIORA WINE
+						</span>
+					</Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                className="text-[13px] font-semibold text-white/90 hover:text-white transition-colors uppercase tracking-wider"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-<div className="flex items-center gap-4">
-   <div className="relative" ref={langRef}>
-              <button
-                onClick={() => setIsLangOpen(!isLangOpen)}
-                className="flex items-center gap-2 border border-gray-200 rounded-full px-3 py-1.5 hover:border-brand-primary transition-colors bg-white"
-              >
-                <Globe className="text-brand-primary" size={14} />
-                <span className="text-[10px] font-bold uppercase text-gray-700">
-                  {locale === 'vi' ? 'VI' : 'EN'}
-                </span>
-                <ChevronDown className={`text-gray-400 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} size={12} />
-              </button>
+					{/* Desktop Navigation */}
+					<nav className="hidden items-center gap-8 md:flex">
+						{navItems.map((item) => (
+							<Link
+								key={item.path}
+								href={item.path}
+								className="text-sm font-medium text-gray-700 transition-colors hover:text-red-600"
+							>
+								{item.name}
+							</Link>
+						))}
+					</nav>
 
-              <AnimatePresence>
-                {isLangOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="absolute right-0 mt-2 w-40 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden py-2"
-                  >
-                    {languages.map((lang) => (
-                      <Link
-                        key={lang.code}
-                        href={pathname}
-                        locale={lang.code}
-                        onClick={() => setIsLangOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 ${
-                          locale === lang.code ? 'text-brand-primary font-bold' : 'text-gray-600'
-                        }`}
-                      >
-                        <span className="text-lg">{lang.flag}</span>
-                        {lang.name}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-             <div className="flex items-center gap-4">
-            <Link
-              href="/contact"
-              className="hidden md:flex items-center justify-center px-6 py-2.5 bg-brand-primary hover:bg-[#A3162A] text-white rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 whitespace-nowrap uppercase"
-            >
-              {t('contact')}
-            </Link>
+					{/* Right side: language switcher + contact */}
+					<div className="hidden items-center gap-4 md:flex">
+						{/* Language Switcher */}
+						<div className="relative" ref={langRef}>
+							<button
+								onClick={() => setIsLangOpen(!isLangOpen)}
+								className="flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-sm transition-colors hover:border-red-400"
+							>
+								<Globe size={14} className="text-red-500" />
+								<span className="text-xs font-bold uppercase text-gray-700">
+									{locale.toUpperCase()}
+								</span>
+								<ChevronDown
+									size={12}
+									className={`text-gray-400 transition-transform ${isLangOpen ? "rotate-180" : ""}`}
+								/>
+							</button>
 
-            {/* Mobile Menu Toggle */}
-            <button
-              className="lg:hidden text-white p-2"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-</div>
-          {/* Action Button */}
-         
-        </nav>
-      </div>
+							<AnimatePresence>
+								{isLangOpen && (
+									<motion.div
+										initial={{ opacity: 0, y: 8 }}
+										animate={{ opacity: 1, y: 0 }}
+										exit={{ opacity: 0, y: 8 }}
+										transition={{ duration: 0.15 }}
+										className="absolute right-0 mt-2 w-40 overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-lg"
+									>
+										{languages.map((lang) => (
+											<Link
+												key={lang.code}
+												href={pathname}
+												locale={lang.code}
+												onClick={() => setIsLangOpen(false)}
+												className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 ${
+													locale === lang.code
+														? "font-bold text-red-600"
+														: "text-gray-600"
+												}`}
+											>
+												<span>{lang.flag}</span>
+												{lang.name}
+											</Link>
+										))}
+									</motion.div>
+								)}
+							</AnimatePresence>
+						</div>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-4 right-4 mt-2 lg:hidden"
-          >
-            <div className="bg-black/90 backdrop-blur-2xl rounded-2xl border border-white/10 p-6 shadow-2xl overflow-hidden">
-              <nav className="flex flex-col gap-4">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    href={item.path}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-white/90 hover:text-white text-lg font-medium py-2 border-b border-white/5 transition-colors"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-                <Link
-                  href="/contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="mt-4 flex items-center justify-center px-6 py-4 bg-brand-primary text-white rounded-xl font-bold uppercase"
-                >
-                  {t('contact')}
-                </Link>
-              </nav>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
-  );
+						{/* Contact Button */}
+						<Link
+							href="/contact"
+							className="rounded-lg bg-[#f43f5e] px-6 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-red-200"
+						>
+							{t("contact")}
+						</Link>
+					</div>
+
+					{/* Mobile menu toggle */}
+					<button
+						onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+						className="text-gray-700 hover:text-black md:hidden"
+					>
+						{isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+					</button>
+				</div>
+			</div>
+
+			{/* Mobile Navigation */}
+			<AnimatePresence>
+				{isMobileMenuOpen && (
+					<motion.div
+						initial={{ opacity: 0, y: -8 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: -8 }}
+						transition={{ duration: 0.2 }}
+						className="border-t border-gray-100 bg-white md:hidden"
+					>
+						<div className="space-y-1 px-4 py-3">
+							{navItems.map((item) => (
+								<Link
+									key={item.path}
+									href={item.path}
+									onClick={() => setIsMobileMenuOpen(false)}
+									className="block rounded-md px-3 py-4 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-red-600"
+								>
+									{item.name}
+								</Link>
+							))}
+							<div className="px-3 py-4">
+								<Link
+									href="/contact"
+									onClick={() => setIsMobileMenuOpen(false)}
+									className="block w-full rounded-lg bg-[#f43f5e] py-3 text-center text-base font-semibold text-white hover:bg-red-700"
+								>
+									{t("contact")}
+								</Link>
+							</div>
+						</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
+		</header>
+	);
 }
