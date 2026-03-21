@@ -1,30 +1,31 @@
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
+import { WINE_IMAGES } from "../../../../public/statics/images";
 
 const categories = [
 	{
 		name: "RƯỢU MẠNH",
-		image: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?auto=format&fit=crop&q=80&w=600&h=400",
+		image: WINE_IMAGES.categoryWine1,
 		path: "/products?cat=spirits",
 	},
 	{
 		name: "RƯỢU VANG",
-		image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=600&h=400",
+		image: WINE_IMAGES.categoryWine2,
 		path: "/products?cat=wine",
 	},
 	{
 		name: "CHAMPAGNE",
-		image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=600&h=400",
+		image: WINE_IMAGES.categoryWine3,
 		path: "/products?cat=champagne",
 	},
 	{
 		name: "WHISKY",
-		image: "https://images.unsplash.com/photo-1527281400683-1aefee2c0e17?auto=format&fit=crop&q=80&w=600&h=400",
+		image: WINE_IMAGES.categoryWine4,
 		path: "/products?cat=whisky",
 	},
 	{
 		name: "QUÀ TẶNG",
-		image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=600&h=400",
+		image: WINE_IMAGES.categoryWine5,
 		path: "/products?cat=gift",
 	},
 ];

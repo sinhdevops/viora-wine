@@ -5,6 +5,8 @@ import { Link, usePathname } from "@/i18n/routing";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Globe, Menu, X } from "lucide-react";
+import Image from "next/image";
+import { WINE_IMAGES } from "../../../public/statics/images";
 
 const languages = [
 	{ code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
@@ -43,9 +45,7 @@ export default function Header() {
 				<div className="flex h-20 items-center justify-between">
 					{/* Logo */}
 					<Link href="/" className="flex-shrink-0">
-						<span className="font-serif text-2xl font-bold tracking-tighter text-black">
-							VIORA WINE
-						</span>
+						<Image src={WINE_IMAGES.logo} alt="logo" />
 					</Link>
 
 					{/* Desktop Navigation */}

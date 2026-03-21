@@ -145,15 +145,12 @@ export default function Footer() {
 						{locale === "vi" ? "Đã đăng ký bản quyền" : "All rights reserved"}.
 					</p>
 					<div className="flex gap-6">
-						{["Chính sách bảo mật", "Điều khoản sử dụng"].map((policy) => (
-							<a
-								key={policy}
-								href="#"
-								className="text-[11px] uppercase tracking-widest text-white/30 transition-colors hover:text-white/60"
-							>
-								{policy}
-							</a>
-						))}
+						<Link href="/privacy-policy" className="text-[11px] uppercase tracking-widest text-white/30 transition-colors hover:text-white/60">
+							Chính sách bảo mật
+						</Link>
+						<Link href="/terms" className="text-[11px] uppercase tracking-widest text-white/30 transition-colors hover:text-white/60">
+							Điều khoản sử dụng
+						</Link>
 					</div>
 				</div>
 			</div>

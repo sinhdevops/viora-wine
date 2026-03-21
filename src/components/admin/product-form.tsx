@@ -9,6 +9,8 @@ import "react-quill-new/dist/quill.snow.css";
 
 import {
 	CATEGORIES,
+	WINE_TYPES,
+	WINE_TYPE_LABELS,
 	productSchema,
 	type ProductFormValues,
 } from "@/lib/schemas/product-schema";
@@ -58,12 +60,15 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 			price: 0,
 			discount_percentage: 0,
 			category: CATEGORIES[0],
+			wine_type: null,
 			stock: 0,
 			is_hot: false,
 		},
 	});
 
 	const thumbnailUrl = watch("thumbnail_url");
+	const category     = watch("category");
+	const isWine       = category === "wine";
 
 	const onSubmit = async (data: ProductFormValues) => {
 
@@ -233,14 +238,14 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 				</div>
 			</div>
 
-			{/* Row: Category + Is Hot */}
+			{/* Row: Category + Wine type */}
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 				<div>
 					<label className={cls.label}>Danh mục</label>
 					<select {...register("category")} className={cls.input}>
 						{CATEGORIES.map((cat) => (
 							<option key={cat} value={cat}>
-								{cat.charAt(0).toUpperCase() + cat.slice(1)}
+								{{ wine: "Rượu vang", whisky: "Whisky", spirits: "Rượu mạnh", combo: "Combo", gift: "Quà tặng" }[cat]}
 							</option>
 						))}
 					</select>
@@ -249,20 +254,44 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 					)}
 				</div>
 
-				<div className="flex items-center gap-3 pt-7">
-					<input
-						type="checkbox"
-						id="is_hot"
-						{...register("is_hot")}
-						className="h-4 w-4 rounded border-gray-300 accent-[#C80000]"
-					/>
-					<label
-						htmlFor="is_hot"
-						className="text-sm font-medium text-gray-700"
-					>
-						Sản phẩm nổi bật (Hot)
+				<div>
+					<label className={`${cls.label} ${!isWine ? "text-gray-400" : ""}`}>
+						Loại vang
+						{!isWine && (
+							<span className="ml-1.5 text-xs font-normal text-gray-400">
+								(chỉ dùng cho Rượu vang)
+							</span>
+						)}
 					</label>
+					<select
+						{...register("wine_type")}
+						disabled={!isWine}
+						className={
+							cls.input +
+							(!isWine ? " cursor-not-allowed bg-gray-50 text-gray-400 opacity-60" : "")
+						}
+					>
+						<option value="">-- Chọn loại vang --</option>
+						{WINE_TYPES.map((type) => (
+							<option key={type} value={type}>
+								{WINE_TYPE_LABELS[type]}
+							</option>
+						))}
+					</select>
 				</div>
+			</div>
+
+			{/* Is Hot */}
+			<div className="flex items-center gap-3">
+				<input
+					type="checkbox"
+					id="is_hot"
+					{...register("is_hot")}
+					className="h-4 w-4 rounded border-gray-300 accent-brand-primary"
+				/>
+				<label htmlFor="is_hot" className="text-sm font-medium text-gray-700">
+					Sản phẩm nổi bật (Hot)
+				</label>
 			</div>
 
 			{/* Actions */}

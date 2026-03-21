@@ -13,6 +13,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
+import { WINE_IMAGES } from "../../../../../public/statics/images";
 
 const CATEGORY_LABEL: Record<string, string> = {
 	wine: "Rượu vang",
@@ -75,9 +76,8 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 								priority
 							/>
 							{product.is_hot && (
-								<div className="absolute top-4 left-4 flex items-center gap-1.5 rounded-lg bg-linear-to-br from-orange-400 to-red-600 px-3 py-1.5 shadow">
-									<span className="text-sm leading-none">🔥</span>
-									<span className="text-[12px] font-black tracking-wider text-white uppercase">HOT</span>
+								<div className="absolute top-0 -left-2.5 ">
+									<Image src={WINE_IMAGES.hot} alt="Hot product detailt" />
 								</div>
 							)}
 							{product.discount_percentage > 0 && (
@@ -152,31 +152,20 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 							))}
 						</div>
 
-						{/* Description */}
-						<div className="mt-6">
-							<p className={`text-[15px] leading-relaxed text-gray-600 wrap-break-word ${descExpanded ? "" : "line-clamp-4"}`}>
+					{/* Description — inline below commitments */}
+					{product.description && (
+						<div className="mt-6 border-t border-gray-100 pt-6">
+							<p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-gray-400">
+								Mô tả sản phẩm
+							</p>
+							<p className="text-[14px] leading-relaxed text-gray-600">
 								{product.description}
 							</p>
-							<button
-								onClick={() => setDescExpanded((v) => !v)}
-								className="mt-2 text-[13px] font-semibold text-brand-primary hover:underline"
-							>
-								{descExpanded ? "Thu gọn ▲" : "Xem thêm ▼"}
-							</button>
 						</div>
+					)}
 					</div>
 				</div>
 
-				{/* Product content / detail */}
-				{product.content && (
-					<div className="mt-14 border-t border-gray-100 pt-10">
-						<h2 className="mb-6 text-xl font-bold text-gray-900">Mô tả sản phẩm</h2>
-						<div
-							className="prose prose-gray max-w-none text-[15px] leading-relaxed"
-							dangerouslySetInnerHTML={{ __html: product.content }}
-						/>
-					</div>
-				)}
 
 				{/* Related products */}
 				{related.length > 0 && (

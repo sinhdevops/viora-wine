@@ -5,6 +5,7 @@ import { useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { formatCurrency } from "@/utils/format-currency";
 import type { DbProduct } from "@/@types/product";
+import { WINE_IMAGES } from "../../../public/statics/images";
 
 interface CardProductProps {
 	product: DbProduct;
@@ -32,11 +33,8 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 
 					{/* HOT badge */}
 					{isHot && (
-						<div className="absolute -top-3 -left-3 flex items-center gap-1.5 rounded-lg bg-linear-to-br from-orange-400 to-red-600 px-2.5 py-1.5 shadow-md">
-							<span className="text-base leading-none">🔥</span>
-							<span className="text-[13px] font-black tracking-wider text-white uppercase">
-								HOT
-							</span>
+						<div className="absolute -top-5 -left-3">
+							<Image src={WINE_IMAGES.hot} alt="hot product" />
 						</div>
 					)}
 				</div>

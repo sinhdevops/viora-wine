@@ -20,17 +20,25 @@ const tabs = [
 export default function GoodWineSection() {
 	const [activeTab, setActiveTab] = useState("all");
 	const [products, setProducts] = useState<DbProduct[]>([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		supabase
+		setLoading(true);
+		const query = supabase
 			.from("products")
-			.select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot")
+			.select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, wine_type")
 			.eq("category", "wine")
-			.limit(10)
-			.then(({ data }) => {
-				if (data) setProducts(data as DbProduct[]);
-			});
-	}, []);
+			.limit(10);
+
+		if (activeTab !== "all") {
+			query.eq("wine_type", activeTab);
+		}
+
+		query.then(({ data }) => {
+			setProducts((data as DbProduct[]) ?? []);
+			setLoading(false);
+		});
+	}, [activeTab]);
 
 	const displayed = products;
 
@@ -68,11 +76,23 @@ export default function GoodWineSection() {
 				</div>
 
 				{/* Product Grid */}
-				<div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:gap-x-5 lg:grid-cols-5">
-					{displayed.map((product) => (
-						<CardProduct key={product.id} product={product} />
-					))}
-				</div>
+				{loading ? (
+					<div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:gap-x-5 lg:grid-cols-5">
+						{Array.from({ length: 5 }).map((_, i) => (
+							<div key={i} className="aspect-216/290 animate-pulse rounded-xl bg-gray-100" />
+						))}
+					</div>
+				) : displayed.length > 0 ? (
+					<div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:gap-x-5 lg:grid-cols-5">
+						{displayed.map((product) => (
+							<CardProduct key={product.id} product={product} />
+						))}
+					</div>
+				) : (
+					<div className="flex flex-col items-center justify-center py-16 text-center">
+						<p className="text-gray-400 text-sm">Chưa có sản phẩm nào trong danh mục này.</p>
+					</div>
+				)}
 			</div>
 		</section>
 	);

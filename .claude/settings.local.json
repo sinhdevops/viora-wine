@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"e:/Works/EmSinhKay-company/wine-house/src/app/[locale]/privacy-policy\")",
+      "Bash(mkdir -p \"e:/Works/EmSinhKay-company/wine-house/src/app/[locale]/terms\")"
+    ]
+  }
+}

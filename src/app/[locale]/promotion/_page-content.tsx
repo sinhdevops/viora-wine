@@ -1,199 +1,218 @@
-'use client';
+"use client";
 
-import { useTranslations, useLocale } from 'next-intl';
-import Image from 'next/image';
-import { Link } from '@/i18n/routing';
-import { motion } from 'motion/react';
-import { HiOutlineTicket, HiOutlineGift, HiOutlineClock,  HiCheckBadge } from 'react-icons/hi2';
-import { HiArrowNarrowRight } from 'react-icons/hi';
+import { useState } from "react";
+import { Link } from "@/i18n/routing";
+import { ChevronRight, Tag } from "lucide-react";
+import { HiOutlineTicket, HiOutlineClock, HiOutlineGift, HiCheckBadge } from "react-icons/hi2";
+import CardProduct from "@/components/page/card-product";
+import type { DbProduct } from "@/@types/product";
 
-const DEALS = [
-  {
-    id: 1,
-    title: { vi: 'Tiệc Vang Cuối Tuần', en: 'Weekend Wine Party' },
-    desc: { vi: 'Giảm 20% cho tất cả dòng vang đỏ Pháp khi mua từ 2 chai.', en: '20% off all French red wines when buying 2+ bottles.' },
-    code: 'WEEKEND20',
-    expiry: '2026-03-25',
-    image: 'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?q=80&w=1000&auto=format&fit=crop',
-    color: 'from-brand-primary/20'
-  },
-  {
-    id: 2,
-    title: { vi: 'Đặc Quyền Hội Viên', en: 'Member Privileges' },
-    desc: { vi: 'Ưu đãi 15% cho đơn hàng đầu tiên dành riêng cho thành viên mới.', en: '15% off your first order exclusively for new members.' },
-    code: 'WELCOME15',
-    expiry: 'Vĩnh viễn',
-    image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1000&auto=format&fit=crop',
-    color: 'from-amber-500/10'
-  }
+const VOUCHERS = [
+	{
+		code: "WEEKEND20",
+		label: "Giảm 20%",
+		desc: "Áp dụng cho tất cả dòng vang đỏ khi mua từ 2 chai.",
+		expiry: "31/03/2026",
+	},
+	{
+		code: "WELCOME15",
+		label: "Giảm 15%",
+		desc: "Dành cho khách hàng đặt hàng lần đầu tiên.",
+		expiry: "Không giới hạn",
+	},
+	{
+		code: "GIFT500",
+		label: "Giảm 500.000đ",
+		desc: "Áp dụng cho đơn hàng từ 3.000.000đ trở lên.",
+		expiry: "30/04/2026",
+	},
 ];
 
-export default function PromotionPageContent() {
-  const t = useTranslations('common');
-  const locale = useLocale();
+const BENEFITS = [
+	{
+		icon: HiCheckBadge,
+		title: "Tích lũy điểm thưởng",
+		desc: "Hoàn tiền 5% cho mỗi đơn hàng bằng điểm thưởng.",
+	},
+	{
+		icon: HiOutlineGift,
+		title: "Quà tặng sinh nhật",
+		desc: "Nhận ngay một chai vang tuyển chọn vào tuần sinh nhật.",
+	},
+];
 
-  return (
-    <div className="flex flex-col min-h-screen bg-[#FDFDFD]">
-      {/* Hero Header */}
-      <section className="relative pt-40 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-[#0A0A0A]">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-brand-primary/10 to-transparent pointer-events-none"></div>
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-brand-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+const CATEGORY_TABS = [
+	{ id: "all",     label: "TẤT CẢ"    },
+	{ id: "wine",    label: "RƯỢU VANG" },
+	{ id: "whisky",  label: "WHISKY"    },
+	{ id: "spirits", label: "RƯỢU MẠNH" },
+	{ id: "combo",   label: "COMBO"     },
+	{ id: "gift",    label: "QUÀ TẶNG"  },
+];
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-2 text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold mb-8 transition-opacity hover:opacity-100">
-              <Link href="/" className="hover:text-brand-primary transition-colors">TRANG CHỦ</Link>
-              <span className="w-1 h-1 rounded-full bg-white/20"></span>
-              <span className="text-white/80 uppercase">ƯU ĐÃI ĐẶC QUYỀN</span>
-            </div>
+interface Props {
+	products: DbProduct[];
+}
 
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-[2px] bg-brand-primary"></div>
-                <span className="text-brand-primary text-[11px] uppercase tracking-[0.4em] font-black">
-                  EXCLUSIVE OFFERS
-                </span>
-              </div>
-              
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif text-white leading-tight font-black tracking-tight">
-                Tiệc Rượu & <br className="hidden md:block" /> Ưu Đãi Đặc Quyền
-              </h1>
-              
-              <p className="text-gray-400 text-sm md:text-lg font-medium max-w-xl leading-relaxed italic opacity-80 border-l-2 border-brand-primary/30 pl-6 py-1">
-                &ldquo;Trân trọng gửi tới quý khách những chương trình ưu đãi độc quyền dành riêng cho giới mộ điệu rượu vang và whisky thượng hạng.&rdquo;
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+export default function PromotionPageContent({ products }: Props) {
+	const [activeTab, setActiveTab] = useState("all");
+	const [copied, setCopied] = useState<string | null>(null);
 
-      {/* Flash Deals Section */}
-      <section className="py-24 container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
-          {DEALS.map((deal) => (
-            <motion.div
-              key={deal.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="group relative bg-[#F8F9FA] rounded-[40px] overflow-hidden min-h-[400px] flex flex-col md:flex-row shadow-2xl shadow-black/5 border border-gray-100"
-            >
-              <div className="md:w-1/2 relative h-[250px] md:h-auto overflow-hidden">
-                <Image
-                  src={deal.image}
-                  alt={deal.title[locale as 'vi' | 'en']}
-                  fill
-                  className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-linear-to-r from-black/20 to-transparent"></div>
-              </div>
-              
-              <div className="md:w-1/2 p-10 flex flex-col justify-center relative">
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-linear-to-br ${deal.color} to-transparent rounded-bl-[100px] -z-0`}></div>
-                
-                <div className="relative z-10">
-                  <div className="flex items-center gap-2 mb-6">
-                    <HiOutlineTicket size={24} className="text-brand-primary" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-brand-primary">Lên đến -20%</span>
-                  </div>
-                  
-                  <h3 className="text-2xl font-serif text-gray-900 mb-4 font-black group-hover:text-brand-primary transition-colors">
-                    {deal.title[locale as 'vi' | 'en']}
-                  </h3>
-                  
-                  <p className="text-gray-500 text-sm font-medium leading-relaxed mb-8">
-                    {deal.desc[locale as 'vi' | 'en']}
-                  </p>
-                  
-                  <div className="bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-between mb-8">
-                    <div>
-                      <p className="text-[9px] uppercase tracking-widest text-gray-400 font-bold mb-1">Mã ưu đãi</p>
-                      <p className="text-lg font-black text-brand-primary tracking-widest">{deal.code}</p>
-                    </div>
-                    <button className="bg-brand-primary text-white text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-widest shadow-xl shadow-brand-primary/20">Sao chép</button>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-gray-400 text-[10px] font-bold uppercase tracking-widest">
-                    <HiOutlineClock size={16} />
-                    Hạn dùng: {deal.expiry}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+	const displayed =
+		activeTab === "all" ? products : products.filter((p) => p.category === activeTab);
 
-      {/* Viora Club Membership */}
-      <section className="py-24 bg-[#F8F9FA] relative overflow-hidden">
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-brand-primary/5 rounded-full blur-[100px]"></div>
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="flex flex-col lg:flex-row gap-16 items-center">
-            <div className="lg:w-1/2 space-y-8 text-center lg:text-left">
-              <span className="text-brand-primary text-[11px] uppercase tracking-[0.4em] font-black px-4 py-1.5 border border-brand-primary/30 rounded-full inline-block">
-                VIORA ELITE CLUB
-              </span>
-              <h2 className="text-4xl lg:text-6xl font-serif text-gray-900 font-black leading-tight">
-                Đặc Quyền Dành Cho <br /> Giới Thượng Lưu
-              </h2>
-              <p className="text-gray-500 text-lg font-medium leading-relaxed">
-                Trở thành thành viên của Viora Wine để tận hưởng những ưu đãi cá nhân hóa, quyền ưu tiên mua các dòng rượu hiếm và tham gia các buổi nếm thử độc quyền.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
-                <div className="flex items-start gap-4 p-6 bg-white rounded-3xl shadow-xl shadow-black/5">
-                  <HiCheckBadge size={32} className="text-brand-primary shrink-0" />
-                  <div className="text-left">
-                    <p className="text-sm font-black text-gray-900 mb-1">Tích lũy điểm thưởng</p>
-                    <p className="text-xs text-gray-500 font-medium">Hoàn tiền 5% cho mỗi đơn hàng bằng điểm thưởng.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4 p-6 bg-white rounded-3xl shadow-xl shadow-black/5">
-                  <HiOutlineGift size={32} className="text-brand-primary shrink-0" />
-                  <div className="text-left">
-                    <p className="text-sm font-black text-gray-900 mb-1">Quà tặng sinh nhật</p>
-                    <p className="text-xs text-gray-500 font-medium">Nhận ngay một chai vang tuyển chọn vào tuần sinh nhật.</p>
-                  </div>
-                </div>
-              </div>
-              
-              <button className="bg-brand-primary text-white px-12 py-5 rounded-full text-xs font-black uppercase tracking-[0.3em] shadow-2xl shadow-brand-primary/30 hover:scale-105 transition-all mt-8">
-                Đăng ký thành viên ngay
-              </button>
-            </div>
-            
-            <div className="lg:w-1/2 relative h-[500px] w-full rounded-[60px] overflow-hidden shadow-2xl">
-              <Image 
-                src="https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?q=80&w=1000&auto=format&fit=crop"
-                alt="Elite Club"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent flex items-end p-12">
-                <div className="space-y-4">
-                  <p className="text-amber-400 font-serif italic text-2xl">Viora Gold Member</p>
-                  <p className="text-white/60 text-sm font-medium">Đẳng cấp khởi đầu từ sự thấu hiểu.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+	const handleCopy = (code: string) => {
+		navigator.clipboard.writeText(code);
+		setCopied(code);
+		setTimeout(() => setCopied(null), 2000);
+	};
 
-      {/* Referral Section */}
-      <section className="py-32 container mx-auto px-6 text-center">
-        <div className="max-w-3xl mx-auto space-y-8">
-          <h2 className="text-3xl lg:text-5xl font-serif text-gray-900 font-black">Lan tỏa tinh hoa, Nhận quà đặc biệt</h2>
-          <p className="text-gray-500 font-medium text-lg leading-relaxed">
-            Giới thiệu bạn bè cùng thưởng thức rượu vang tại Viora Wine. Bạn sẽ nhận ngay voucher <span className="text-brand-primary font-black">500.000đ</span> cho mỗi lời giới thiệu thành công.
-          </p>
-          <div className="flex items-center justify-center gap-4 text-brand-primary font-black text-sm uppercase tracking-[0.2em] group cursor-pointer pt-6">
-            Tìm hiểu chương trình giới thiệu 
-            <HiArrowNarrowRight className="group-hover:translate-x-4 transition-transform" size={20} />
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+	return (
+		<div className="min-h-screen bg-white">
+			{/* Breadcrumb */}
+			<div className="border-b border-gray-100">
+				<div className="mx-auto max-w-360 px-4 py-3 sm:px-6 lg:px-8">
+					<nav className="flex items-center gap-1.5 text-[12px] text-gray-400">
+						<Link href="/" className="hover:text-gray-700">Trang chủ</Link>
+						<ChevronRight size={12} />
+						<span className="text-gray-700">Khuyến mãi</span>
+					</nav>
+				</div>
+			</div>
+
+			<div className="mx-auto max-w-360 px-4 py-10 sm:px-6 lg:px-8">
+
+				{/* ── Voucher codes ── */}
+				<div className="mb-10">
+					<div className="mb-4 flex items-center gap-2">
+						<Tag size={18} className="text-brand-primary" />
+						<h2 className="text-[15px] font-black uppercase tracking-wide">Mã ưu đãi</h2>
+					</div>
+					<div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+						{VOUCHERS.map((v) => (
+							<div
+								key={v.code}
+								className="flex flex-col gap-3 rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-5"
+							>
+								<div className="flex items-start justify-between gap-2">
+									<div>
+										<span className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-brand-primary">
+											{v.label}
+										</span>
+										<p className="text-[13px] leading-relaxed text-gray-500">{v.desc}</p>
+									</div>
+									<HiOutlineTicket size={20} className="shrink-0 text-brand-primary" />
+								</div>
+								<div className="flex items-center justify-between rounded-lg bg-white px-3 py-2">
+									<span className="text-[15px] font-black tracking-widest text-brand-primary">
+										{v.code}
+									</span>
+									<button
+										onClick={() => handleCopy(v.code)}
+										className="rounded-md bg-brand-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#a30000]"
+									>
+										{copied === v.code ? "Đã sao chép!" : "Sao chép"}
+									</button>
+								</div>
+								<div className="flex items-center gap-1.5 text-[11px] text-gray-400">
+									<HiOutlineClock size={13} />
+									HSD: {v.expiry}
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+
+				{/* ── Products on sale ── */}
+				<div className="mb-6">
+					<h1 className="text-xl font-black uppercase tracking-tight md:text-[28px]">
+						SẢN PHẨM ĐANG GIẢM GIÁ
+					</h1>
+					<p className="mt-1.5 text-sm text-gray-500">
+						{products.length} sản phẩm đang được ưu đãi — cập nhật liên tục.
+					</p>
+				</div>
+
+				{/* Tabs */}
+				<div className="no-scrollbar mb-8 flex gap-6 overflow-x-auto border-b border-gray-200">
+					{CATEGORY_TABS.map((tab) => (
+						<button
+							key={tab.id}
+							onClick={() => setActiveTab(tab.id)}
+							className={`shrink-0 pb-3 text-[13px] font-semibold tracking-wider transition-colors ${
+								activeTab === tab.id
+									? "border-b-2 border-brand-primary text-brand-primary"
+									: "text-gray-500 hover:text-gray-800"
+							}`}
+						>
+							{tab.label}
+						</button>
+					))}
+				</div>
+
+				{/* Grid */}
+				{displayed.length > 0 ? (
+					<div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:gap-x-5 lg:grid-cols-5">
+						{displayed.map((product) => (
+							<CardProduct key={product.id} product={product} />
+						))}
+					</div>
+				) : (
+					<div className="flex flex-col items-center justify-center py-20 text-center">
+						<p className="text-sm text-gray-400">Không có sản phẩm đang giảm giá trong danh mục này.</p>
+						<button
+							onClick={() => setActiveTab("all")}
+							className="mt-4 rounded-lg bg-brand-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#a30000]"
+						>
+							Xem tất cả
+						</button>
+					</div>
+				)}
+
+				{/* ── Member benefits ── */}
+				<div className="mt-14 border-t border-gray-100 pt-10">
+					<div className="mb-6">
+						<h2 className="text-xl font-black uppercase tracking-tight md:text-[22px]">
+							ƯU ĐÃI THÀNH VIÊN
+						</h2>
+						<p className="mt-1.5 text-sm text-gray-500">
+							Đăng ký thành viên để nhận thêm nhiều quyền lợi độc quyền.
+						</p>
+					</div>
+
+					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+						{BENEFITS.map(({ icon: Icon, title, desc }) => (
+							<div key={title} className="rounded-2xl bg-gray-50 p-6">
+								<Icon size={24} className="mb-3 text-brand-primary" />
+								<h3 className="mb-1.5 text-[14px] font-bold text-gray-900">{title}</h3>
+								<p className="text-[13px] leading-relaxed text-gray-500">{desc}</p>
+							</div>
+						))}
+
+						{/* CTA card */}
+						<div className="flex flex-col items-start justify-between rounded-2xl bg-brand-primary p-6 text-white sm:col-span-2 lg:col-span-2">
+							<div>
+								<p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-white/70">
+									Giới thiệu bạn bè
+								</p>
+								<h3 className="mb-2 text-[16px] font-black leading-snug">
+									Nhận voucher 500.000đ cho mỗi lời giới thiệu thành công
+								</h3>
+								<p className="text-[13px] leading-relaxed text-white/70">
+									Chia sẻ link của bạn — bạn bè đặt hàng lần đầu là bạn nhận ngay ưu đãi.
+								</p>
+							</div>
+							<Link
+								href="/contact"
+								className="mt-5 inline-block rounded-lg bg-white px-5 py-2 text-[13px] font-bold text-brand-primary transition-opacity hover:opacity-90"
+							>
+								Tìm hiểu thêm
+							</Link>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	);
 }
