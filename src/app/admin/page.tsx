@@ -1,4 +1,4 @@
-import { Image, Package } from "lucide-react";
+import { CalendarDays, Image, Package } from "lucide-react";
 import Link from "next/link";
 
 const cards = [
@@ -13,6 +13,12 @@ const cards = [
 		icon: Package,
 		title: "Sản phẩm",
 		desc: "Thêm sản phẩm mới vào danh mục",
+	},
+	{
+		href: "/admin/events",
+		icon: CalendarDays,
+		title: "Sự kiện & Kiến thức",
+		desc: "Quản lý sự kiện và bài viết kiến thức về rượu",
 	},
 ];
 

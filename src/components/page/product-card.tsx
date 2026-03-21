@@ -24,7 +24,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <motion.div
       whileHover={{ y: -10 }}
-      className="bg-white border border-gray-100 rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-300"
+      className="bg-white border border-gray-100 rounded-xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-300 aspect-216/386 max-w-54"
     >
       <Link href={`/products/${product.slug}`} className="relative block h-80 overflow-hidden">
         <Image
@@ -42,12 +42,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       <div className="p-6">
-        <span className="text-[10px] uppercase tracking-[0.1em] text-brand-primary mb-2 block font-bold">
-          {product.origin}
+        <span className="text-[10px] uppercase tracking-widest text-brand-primary mb-2 block font-bold">
+         {product.origin}
         </span>
         <Link href={`/products/${product.slug}`}>
-          <h3 className="text-lg font-serif text-gray-900 mb-2 group-hover:text-brand-primary transition-colors line-clamp-1 font-normal">
-            {name}
+          <h3 className="text-lg font-serif text-gray-900 mb-2 group-hover:text-brand-primary transition-colors line-clamp-2 font-normal">
+           {name}
           </h3>
         </Link>
         <p className="text-brand-primary font-bold text-base mb-6">

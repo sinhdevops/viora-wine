@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Modal } from "@/components/ui/modal";
@@ -18,6 +18,7 @@ function formatPrice(price: number) {
 
 export default function ProductsPage() {
 	const [open, setOpen] = useState(false);
+	const [editProduct, setEditProduct] = useState<Product | null>(null);
 	const [products, setProducts] = useState<Product[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -175,17 +176,25 @@ export default function ProductsPage() {
 
 									{/* Actions */}
 									<td className="px-5 py-4 text-right">
-										<button
-											onClick={() => handleDelete(product.id)}
-											disabled={deletingId === product.id}
-											className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-40"
-										>
-											{deletingId === product.id ? (
-												<Loader2 size={14} className="animate-spin" />
-											) : (
-												<Trash2 size={14} />
-											)}
-										</button>
+										<div className="flex items-center justify-end gap-1">
+											<button
+												onClick={() => setEditProduct(product)}
+												className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-500"
+											>
+												<Pencil size={14} />
+											</button>
+											<button
+												onClick={() => handleDelete(product.id)}
+												disabled={deletingId === product.id}
+												className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-40"
+											>
+												{deletingId === product.id ? (
+													<Loader2 size={14} className="animate-spin" />
+												) : (
+													<Trash2 size={14} />
+												)}
+											</button>
+										</div>
 									</td>
 								</tr>
 							))}
@@ -194,7 +203,7 @@ export default function ProductsPage() {
 				)}
 			</div>
 
-			{/* Modal */}
+			{/* Modal tạo mới */}
 			<Modal
 				open={open}
 				onClose={() => setOpen(false)}
@@ -208,6 +217,25 @@ export default function ProductsPage() {
 						fetchProducts();
 					}}
 				/>
+			</Modal>
+
+			{/* Modal chỉnh sửa */}
+			<Modal
+				open={!!editProduct}
+				onClose={() => setEditProduct(null)}
+				title="Chỉnh sửa sản phẩm"
+				description={editProduct ? `ID: ${editProduct.id}` : ""}
+				size="2xl"
+			>
+				{editProduct && (
+					<ProductForm
+						initialData={editProduct}
+						onSuccess={() => {
+							setEditProduct(null);
+							fetchProducts();
+						}}
+					/>
+				)}
 			</Modal>
 		</div>
 	);

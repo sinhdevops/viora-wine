@@ -1,139 +1,162 @@
-import { useTranslations, useLocale } from 'next-intl';
-import { Link } from '@/i18n/routing';
-import { FaFacebookF, FaInstagram, FaYoutube, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { useTranslations, useLocale } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 export default function Footer() {
-  const t = useTranslations('footer');
-  const commonT = useTranslations('common');
-  const locale = useLocale();
+	const t = useTranslations("footer");
+	const commonT = useTranslations("common");
+	const locale = useLocale();
 
-  const navItems = [
-    { name: commonT('home'), path: '/' },
-    { name: commonT('products'), path: '/products' },
-    { name: commonT('news'), path: '/news' },
-    { name: commonT('promotion'), path: '/promotion' },
-    { name: commonT('gifts'), path: '/gifts' },
-  ];
+	const navItems = [
+		{ name: commonT("home"), path: "/" },
+		{ name: commonT("products"), path: "/products" },
+		{ name: commonT("news"), path: "/news" },
+		{ name: commonT("promotion"), path: "/promotion" },
+		{ name: commonT("gifts"), path: "/gifts" },
+		{ name: commonT("contact"), path: "/contact" },
+	];
 
-  return (
-    <footer className="bg-[#0A0A0A] text-white pt-24 border-t border-white/5">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
-          {/* Brand Column */}
-          <div className="space-y-8">
-            <Link href="/" className="inline-block group">
-              <span className="text-3xl font-serif font-black text-white tracking-tight block group-hover:text-brand-primary transition-colors">
-                VIORA WINE
-              </span>
-              <div className="h-0.5 w-12 bg-brand-primary mt-1 group-hover:w-full transition-all duration-500"></div>
-            </Link>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-xs font-medium">
-              {commonT('slogan') || "Tinh túy trong từng giọt rượu, đẳng cấp trong từng nhãn hiệu."}
-            </p>
-            <div className="flex gap-4">
-              {[FaFacebookF, FaInstagram, FaYoutube].map((Icon, idx) => (
-                <a 
-                  key={idx} 
-                  href="#" 
-                  className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:bg-brand-primary hover:text-white transition-all duration-300 border border-white/10"
-                >
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
-          </div>
+	const socials = [
+		{ icon: FaFacebookF, href: "#", label: "Facebook" },
+		{ icon: FaInstagram, href: "#", label: "Instagram" },
+		{ icon: FaYoutube, href: "#", label: "YouTube" },
+	];
 
-          {/* Quick Links Column */}
-          <div>
-            <h4 className="text-white font-serif text-xl mb-8 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-brand-primary"></span>
-              Thông tin
-            </h4>
-            <ul className="space-y-4">
-              {navItems.map((item) => (
-                <li key={item.path}>
-                  <Link 
-                    href={item.path} 
-                    className="text-gray-400 hover:text-brand-primary text-[13px] uppercase tracking-widest font-semibold transition-colors flex items-center gap-2 group"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand-primary scale-0 group-hover:scale-100 transition-transform"></span>
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+	const contacts = [
+		{ icon: MapPin, label: "Địa chỉ", value: t("address") },
+		{ icon: Phone, label: "Hotline", value: t("phone") },
+		{ icon: Mail, label: "Email", value: t("email") },
+	];
 
-          {/* Contact Column */}
-          <div>
-            <h4 className="text-white font-serif text-xl mb-8 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-brand-primary"></span>
-              {commonT('contact')}
-            </h4>
-            <ul className="space-y-6">
-              <li className="flex items-start gap-4 group">
-                <div className="w-10 h-10 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all">
-                  <FaMapMarkerAlt />
-                </div>
-                <div className="text-gray-400 text-sm leading-relaxed group-hover:text-white transition-colors">
-                  <span className="block text-white font-bold mb-1 uppercase text-[10px] tracking-widest">Địa chỉ</span>
-                  {t('address')}
-                </div>
-              </li>
-              <li className="flex items-start gap-4 group">
-                <div className="w-10 h-10 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all">
-                  <FaPhoneAlt />
-                </div>
-                <div className="text-gray-400 text-sm leading-relaxed group-hover:text-white transition-colors">
-                  <span className="block text-white font-bold mb-1 uppercase text-[10px] tracking-widest">Hotline</span>
-                  {t('phone')}
-                </div>
-              </li>
-              <li className="flex items-start gap-4 group">
-                <div className="w-10 h-10 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all">
-                  <FaEnvelope />
-                </div>
-                <div className="text-gray-400 text-sm leading-relaxed group-hover:text-white transition-colors">
-                  <span className="block text-white font-bold mb-1 uppercase text-[10px] tracking-widest">Email</span>
-                  {t('email')}
-                </div>
-              </li>
-            </ul>
-          </div>
+	const hours = [
+		{ day: locale === "vi" ? "Thứ 2 – Thứ 6" : "Mon – Fri", time: "08:00 – 22:00" },
+		{ day: locale === "vi" ? "Thứ 7 – Chủ nhật" : "Sat – Sun", time: "09:00 – 23:00" },
+	];
 
-          {/* Map / Newsletter Column */}
-          <div>
-            <h4 className="text-white font-serif text-xl mb-8 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-brand-primary"></span>
-              Kết nối
-            </h4>
-            <div className="rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl border border-white/10 aspect-video lg:aspect-square relative">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.102385108842!2d108.21958687588373!3d16.060197739702213!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219b676f62e87%3A0xe6792f39281a8c08!2zVmnhu4d0IE5hbSwgxJDDoCBO4bq1bmcsIEjhuqNpIENow6J1LCBCw6xuaCBUaHXhuq1u!5e0!3m2!1svi!2s!4v1710899456789!5m2!1svi!2s" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen={true} 
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-          </div>
-        </div>
+	return (
+		<footer className="bg-[#0C0C0C] text-white">
+			{/* Main content */}
+			<div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+				<div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
 
-        <div className="py-5 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-gray-500 text-[11px] uppercase tracking-[0.2em] font-medium text-center md:text-left">
-            © {new Date().getFullYear()} <span className="text-white font-bold">VIORA WINE</span>. {locale === 'vi' ? 'Đã đăng ký bản quyền' : 'All rights reserved'}.
-          </p>
-          <div className="flex gap-8">
-            {['Chính sách bảo mật', 'Điều khoản sử dụng'].map((policy) => (
-              <a key={policy} href="#" className="text-gray-500 hover:text-white text-[10px] uppercase tracking-widest transition-colors">
-                {policy}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
+					{/* Col 1 — Brand */}
+					<div className="space-y-6">
+						<Link href="/">
+							<span className="font-serif text-2xl font-black tracking-tight text-white">
+								VIORA WINE
+							</span>
+							<div className="mt-1 h-0.5 w-10 bg-brand-primary" />
+						</Link>
+						<p className="text-sm leading-relaxed text-white/50">
+							{commonT("slogan")}
+						</p>
+						<div className="flex gap-3">
+							{socials.map(({ icon: Icon, href, label }) => (
+								<a
+									key={label}
+									href={href}
+									aria-label={label}
+									className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/40 transition-all hover:border-brand-primary hover:bg-brand-primary hover:text-white"
+								>
+									<Icon size={14} />
+								</a>
+							))}
+						</div>
+					</div>
+
+					{/* Col 2 — Navigation */}
+					<div>
+						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+							Thông tin
+						</h4>
+						<ul className="space-y-3">
+							{navItems.map((item) => (
+								<li key={item.path}>
+									<Link
+										href={item.path}
+										className="text-sm text-white/60 transition-colors hover:text-white"
+									>
+										{item.name}
+									</Link>
+								</li>
+							))}
+						</ul>
+					</div>
+
+					{/* Col 3 — Contact */}
+					<div>
+						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+							{commonT("contact")}
+						</h4>
+						<ul className="space-y-5">
+							{contacts.map(({ icon: Icon, label, value }) => (
+								<li key={label} className="flex items-start gap-3">
+									<span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/5">
+										<Icon size={13} className="text-brand-primary" />
+									</span>
+									<div>
+										<p className="text-[10px] font-bold uppercase tracking-widest text-white/30">
+											{label}
+										</p>
+										<p className="mt-0.5 text-sm text-white/60">{value}</p>
+									</div>
+								</li>
+							))}
+						</ul>
+					</div>
+
+					{/* Col 4 — Hours */}
+					<div>
+						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+							Giờ hoạt động
+						</h4>
+						<ul className="space-y-3">
+							{hours.map(({ day, time }) => (
+								<li key={day} className="flex items-center gap-2.5">
+									<Clock size={13} className="shrink-0 text-brand-primary" />
+									<span className="text-sm text-white/60">
+										{day}
+										<span className="mx-1.5 text-white/20">—</span>
+										<span className="font-semibold text-white/80">{time}</span>
+									</span>
+								</li>
+							))}
+						</ul>
+
+						<div className="mt-8">
+							<Link
+								href="/contact"
+								className="inline-block rounded-lg bg-brand-primary px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#A30000]"
+							>
+								{commonT("contact_us")}
+							</Link>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Bottom bar */}
+			<div className="border-t border-white/5">
+				<div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-5 sm:flex-row lg:px-8">
+					<p className="text-[11px] uppercase tracking-[0.15em] text-white/30">
+						© {new Date().getFullYear()}{" "}
+						<span className="text-white/60 font-semibold">VIORA WINE</span>.{" "}
+						{locale === "vi" ? "Đã đăng ký bản quyền" : "All rights reserved"}.
+					</p>
+					<div className="flex gap-6">
+						{["Chính sách bảo mật", "Điều khoản sử dụng"].map((policy) => (
+							<a
+								key={policy}
+								href="#"
+								className="text-[11px] uppercase tracking-widest text-white/30 transition-colors hover:text-white/60"
+							>
+								{policy}
+							</a>
+						))}
+					</div>
+				</div>
+			</div>
+		</footer>
+	);
 }

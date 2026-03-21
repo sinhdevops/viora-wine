@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Image, LayoutDashboard, Package } from "lucide-react";
+import { CalendarDays, Image, LayoutDashboard, Package } from "lucide-react";
 
 const navItems = [
 	{ href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
 	{ href: "/admin/hero-banner", label: "Hero Banner", icon: Image, exact: false },
 	{ href: "/admin/products", label: "Sản phẩm", icon: Package, exact: false },
+	{ href: "/admin/events", label: "Sự kiện", icon: CalendarDays, exact: false },
 ];
 
 export function AdminSidebar() {

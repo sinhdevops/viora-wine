@@ -1,20 +1,25 @@
-import { PRODUCTS } from '@/constants/products';
-import { notFound } from 'next/navigation';
-import ProductDetailPageContent from './_page-content';
-
-export async function generateStaticParams() {
-  return PRODUCTS.map((product) => ({
-    slug: product.slug,
-  }));
-}
+import { createClient } from "@/utils/supabase/server";
+import { notFound } from "next/navigation";
+import ProductDetailPageContent from "./_page-content";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const product = PRODUCTS.find((p) => p.slug === slug);
+	const { slug } = await params;
+	const supabase = await createClient();
 
-  if (!product) {
-    notFound();
-  }
+	const { data: product } = await supabase
+		.from("products")
+		.select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot")
+		.eq("id", slug)
+		.single();
 
-  return <ProductDetailPageContent product={product} />;
+	if (!product) notFound();
+
+	const { data: related } = await supabase
+		.from("products")
+		.select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot")
+		.eq("category", product.category)
+		.neq("id", product.id)
+		.limit(5);
+
+	return <ProductDetailPageContent product={product} related={related ?? []} />;
 }

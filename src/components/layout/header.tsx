@@ -50,15 +50,25 @@ export default function Header() {
 
 					{/* Desktop Navigation */}
 					<nav className="hidden items-center gap-8 md:flex">
-						{navItems.map((item) => (
-							<Link
-								key={item.path}
-								href={item.path}
-								className="text-sm font-medium text-gray-700 transition-colors hover:text-red-600"
-							>
-								{item.name}
-							</Link>
-						))}
+						{navItems.map((item) => {
+							const isActive =
+								item.path === "/"
+									? pathname === "/"
+									: pathname.startsWith(item.path);
+							return (
+								<Link
+									key={item.path}
+									href={item.path}
+									className={`text-sm font-medium transition-colors hover:text-red-600 ${
+										isActive
+											? "border-b-2 border-red-600 pb-0.5 text-red-600"
+											: "text-gray-700"
+									}`}
+								>
+									{item.name}
+								</Link>
+							);
+						})}
 					</nav>
 
 					{/* Right side: language switcher + contact */}

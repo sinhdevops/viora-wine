@@ -12,8 +12,8 @@ import {
 	productSchema,
 	type ProductFormValues,
 } from "@/lib/schemas/product-schema";
-import { createClient } from "@/lib/supabase";
 import { ImageUploader } from "./image-uploader";
+import { supabase } from "@/lib/supabase-client";
 
 const QuillEditor = dynamic(() => import("react-quill-new"), {
 	ssr: false,
@@ -32,10 +32,13 @@ const cls = {
 };
 
 interface ProductFormProps {
+	initialData?: ProductFormValues;
 	onSuccess?: () => void;
 }
 
-export function ProductForm({ onSuccess }: ProductFormProps) {
+export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
+	const isEdit = !!initialData;
+
 	const {
 		register,
 		handleSubmit,
@@ -46,7 +49,7 @@ export function ProductForm({ onSuccess }: ProductFormProps) {
 		formState: { errors, isSubmitting },
 	} = useForm<ProductFormValues>({
 		resolver: zodResolver(productSchema),
-		defaultValues: {
+		defaultValues: initialData ?? {
 			id: "",
 			name: "",
 			description: "",
@@ -63,16 +66,28 @@ export function ProductForm({ onSuccess }: ProductFormProps) {
 	const thumbnailUrl = watch("thumbnail_url");
 
 	const onSubmit = async (data: ProductFormValues) => {
-		const supabase = createClient();
-		const { error } = await supabase.from("products").insert(data);
 
-		if (error) {
-			toast.error("Lỗi khi lưu sản phẩm: " + error.message);
-			return;
+		if (isEdit) {
+			const { id, ...rest } = data;
+			const { error } = await supabase
+				.from("products")
+				.update(rest)
+				.eq("id", id);
+			if (error) {
+				toast.error("Lỗi khi cập nhật: " + error.message);
+				return;
+			}
+			toast.success("Cập nhật sản phẩm thành công!");
+		} else {
+			const { error } = await supabase.from("products").insert(data);
+			if (error) {
+				toast.error("Lỗi khi lưu sản phẩm: " + error.message);
+				return;
+			}
+			toast.success("Tạo sản phẩm thành công!");
+			reset();
 		}
 
-		toast.success("Tạo sản phẩm thành công!");
-		reset();
 		onSuccess?.();
 	};
 
@@ -86,8 +101,12 @@ export function ProductForm({ onSuccess }: ProductFormProps) {
 					</label>
 					<input
 						{...register("id")}
-						className={cls.input}
+						className={
+							cls.input +
+							(isEdit ? " cursor-not-allowed bg-gray-50 text-gray-400" : "")
+						}
 						placeholder="vd: chateau-margaux-2015"
+						disabled={isEdit}
 					/>
 					{errors.id && <p className={cls.error}>{errors.id.message}</p>}
 				</div>
@@ -254,7 +273,7 @@ export function ProductForm({ onSuccess }: ProductFormProps) {
 					className="flex items-center gap-2 rounded-lg bg-[#C80000] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#a30000] disabled:cursor-not-allowed disabled:opacity-60"
 				>
 					{isSubmitting && <Loader2 size={16} className="animate-spin" />}
-					Tạo sản phẩm
+					{isEdit ? "Cập nhật" : "Tạo sản phẩm"}
 				</button>
 
 				<button
