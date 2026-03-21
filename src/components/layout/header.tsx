@@ -44,7 +44,7 @@ export default function Header() {
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-20 items-center justify-between">
 					{/* Logo */}
-					<Link href="/" className="flex-shrink-0">
+					<Link href="/" className="shrink-0">
 						<Image src={WINE_IMAGES.logo} alt="logo" />
 					</Link>
 
@@ -79,7 +79,7 @@ export default function Header() {
 								onClick={() => setIsLangOpen(!isLangOpen)}
 								className="flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-sm transition-colors hover:border-red-400"
 							>
-								<Globe size={14} className="text-red-500" />
+								<Globe size={14} className="text-brand-primary" />
 								<span className="text-xs font-bold uppercase text-gray-700">
 									{locale.toUpperCase()}
 								</span>
@@ -122,7 +122,7 @@ export default function Header() {
 						{/* Contact Button */}
 						<Link
 							href="/contact"
-							className="rounded-lg bg-[#f43f5e] px-6 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-red-200"
+							className="rounded-lg bg-brand-primary px-6 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-red-200"
 						>
 							{t("contact")}
 						</Link>

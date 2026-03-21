@@ -1,27 +1,55 @@
-import { PRODUCTS } from '@/constants/products';
+import { createClient } from '@/utils/supabase/server';
 import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata({
-  params
+  params,
 }: {
-  params: Promise<{locale: string, slug: string}>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const {locale, slug} = await params;
-  const product = PRODUCTS.find(p => p.slug === slug);
-  const t = await getTranslations({locale, namespace: 'common'});
+  const { locale, slug } = await params;
+  const supabase = await createClient();
+  const t = await getTranslations({ locale, namespace: 'product' });
+  const common = await getTranslations({ locale, namespace: 'common' });
+
+  const { data: product } = await supabase
+    .from('products')
+    .select('id, name, description, thumbnail_url, category')
+    .eq('id', slug)
+    .single();
 
   if (!product) return {};
 
-  const name = locale === 'vi' ? product.name.vi : product.name.en;
-  const desc = locale === 'vi' ? product.description.vi : product.description.en;
+  const title = product.name;
+  const description = product.description
+    ? `${product.description} — ${t('meta_desc_suffix')}`
+    : t('meta_desc_suffix');
 
   return {
-    title: name,
-    description: desc,
+    title,
+    description,
+    alternates: {
+      canonical: `https://winehousedanang.vn/${locale}/products/${slug}`,
+      languages: {
+        vi: `https://winehousedanang.vn/vi/products/${slug}`,
+        en: `https://winehousedanang.vn/en/products/${slug}`,
+      },
+    },
     openGraph: {
-      title: `${name} | ${t('brand')}`,
-      description: desc,
-      images: [product.image],
+      title: `${title} | ${common('brand')}`,
+      description,
+      url: `https://winehousedanang.vn/${locale}/products/${slug}`,
+      siteName: common('brand'),
+      locale,
+      type: 'website',
+      images: product.thumbnail_url
+        ? [{ url: product.thumbnail_url, width: 800, height: 800, alt: title }]
+        : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} | ${common('brand')}`,
+      description,
+      images: product.thumbnail_url ? [product.thumbnail_url] : [],
     },
   };
 }

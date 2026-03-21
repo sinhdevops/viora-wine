@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { HiChevronDown, HiX } from 'react-icons/hi';
@@ -11,23 +11,10 @@ import { supabase } from '@/lib/supabase-client';
 import CardProduct from '@/components/page/card-product';
 import type { DbProduct } from '@/@types/product';
 
-// ─── Category tabs (like GoodWineSection) ───────────────────────────────────
-const CATEGORY_TABS = [
-  { id: 'all',     vi: 'TẤT CẢ',     en: 'ALL'     },
-  { id: 'wine',    vi: 'RƯỢU VANG',  en: 'WINES'   },
-  { id: 'whisky',  vi: 'WHISKY',     en: 'WHISKY'  },
-  { id: 'spirits', vi: 'RƯỢU MẠNH', en: 'SPIRITS' },
-  { id: 'combo',   vi: 'COMBO',      en: 'COMBOS'  },
-  { id: 'gift',    vi: 'QUÀ TẶNG',  en: 'GIFTS'   },
-];
+const CATEGORY_TAB_IDS = ['all', 'wine', 'whisky', 'spirits', 'combo', 'gift'] as const;
+const PRICE_RANGE_IDS = ['all', 'under-5', '5-10', '10-20', 'over-20'] as const;
 
-const PRICE_RANGES = [
-  { id: 'all',     vi: 'Tất cả mức giá', en: 'All prices' },
-  { id: 'under-5', vi: 'Dưới 5 triệu',  en: 'Under 5M'   },
-  { id: '5-10',    vi: '5 – 10 triệu',  en: '5 – 10M'    },
-  { id: '10-20',   vi: '10 – 20 triệu', en: '10 – 20M'   },
-  { id: 'over-20', vi: 'Trên 20 triệu', en: 'Over 20M'   },
-];
+type PriceRangeId = (typeof PRICE_RANGE_IDS)[number];
 
 // ─── Collapsible filter section ──────────────────────────────────────────────
 function FilterSection({
@@ -109,20 +96,19 @@ function RadioOption({
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function ProductsPageContent() {
-  const locale   = useLocale();
+  const t = useTranslations('products_page');
   const searchParams = useSearchParams();
-  const router   = useRouter();
+  const router = useRouter();
 
-  const categoryFilter = searchParams.get('cat')   || 'all';
-  const priceFilter    = searchParams.get('price') || 'all';
+  const categoryFilter = searchParams.get('cat') || 'all';
+  const priceFilter = (searchParams.get('price') || 'all') as PriceRangeId;
 
-  const [products,     setProducts]     = useState<DbProduct[]>([]);
-  const [loading,      setLoading]      = useState(true);
-  const [searchInput,  setSearchInput]  = useState('');
+  const [products, setProducts] = useState<DbProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchInput, setSearchInput] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [priceOpen,    setPriceOpen]    = useState(true);
+  const [priceOpen, setPriceOpen] = useState(true);
 
-  // Fetch all products once
   useEffect(() => {
     supabase
       .from('products')
@@ -148,33 +134,35 @@ export default function ProductsPageContent() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      const matchCat    = categoryFilter === 'all' || p.category === categoryFilter;
-      const matchSearch = !searchInput   || p.name.toLowerCase().includes(searchInput.toLowerCase());
+      const matchCat = categoryFilter === 'all' || p.category === categoryFilter;
+      const matchSearch = !searchInput || p.name.toLowerCase().includes(searchInput.toLowerCase());
       let matchPrice = true;
-      if      (priceFilter === 'under-5') matchPrice = p.price < 5_000_000;
-      else if (priceFilter === '5-10')    matchPrice = p.price >= 5_000_000  && p.price <= 10_000_000;
-      else if (priceFilter === '10-20')   matchPrice = p.price >  10_000_000 && p.price <= 20_000_000;
-      else if (priceFilter === 'over-20') matchPrice = p.price >  20_000_000;
+      if (priceFilter === 'under-5') matchPrice = p.price < 5_000_000;
+      else if (priceFilter === '5-10') matchPrice = p.price >= 5_000_000 && p.price <= 10_000_000;
+      else if (priceFilter === '10-20') matchPrice = p.price > 10_000_000 && p.price <= 20_000_000;
+      else if (priceFilter === 'over-20') matchPrice = p.price > 20_000_000;
       return matchCat && matchSearch && matchPrice;
     });
   }, [products, categoryFilter, priceFilter, searchInput]);
 
   const hasActiveFilters = categoryFilter !== 'all' || priceFilter !== 'all' || searchInput;
 
-  // Shared filter content (sidebar + drawer)
   const filterContent = (isMobile = false) => (
     <FilterSection
-      title={locale === 'vi' ? 'Mức giá' : 'Price range'}
+      title={t('price_range')}
       isOpen={priceOpen}
       onToggle={() => setPriceOpen((v) => !v)}
     >
-      {PRICE_RANGES.map((r) => (
+      {PRICE_RANGE_IDS.map((id) => (
         <RadioOption
-          key={r.id}
+          key={id}
           name="price"
-          checked={priceFilter === r.id}
-          onChange={() => { updateFilter('price', r.id); if (isMobile) setIsFilterOpen(false); }}
-          label={locale === 'vi' ? r.vi : r.en}
+          checked={priceFilter === id}
+          onChange={() => {
+            updateFilter('price', id);
+            if (isMobile) setIsFilterOpen(false);
+          }}
+          label={t(`price_range_tabs.${id}`)}
         />
       ))}
     </FilterSection>
@@ -183,62 +171,54 @@ export default function ProductsPageContent() {
   return (
     <div className="flex flex-col min-h-screen">
 
-      {/* ═══════════════════════════════════════════════════════════════════════
-          HERO
-      ═══════════════════════════════════════════════════════════════════════ */}
+      {/* HERO */}
       <section className="relative py-5 overflow-hidden bg-[#0A0A0A]">
-        <div className="absolute -top-32 -right-32 w-[480px] h-[480px] bg-brand-primary/15 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute -top-32 -right-32 w-120 h-120 bg-brand-primary/15 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-brand-primary/8 to-transparent pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
 
         <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center gap-2 text-white/30 text-[10px] uppercase tracking-[0.2em] font-bold mb-10">
             <Link href="/" className="hover:text-brand-primary transition-colors">
-              {locale === 'vi' ? 'Trang chủ' : 'Home'}
+              {t('home')}
             </Link>
             <span className="w-1 h-1 rounded-full bg-white/20" />
-            <span className="text-white/70">{locale === 'vi' ? 'Cửa hàng' : 'Shop'}</span>
+            <span className="text-white/70">{t('shop')}</span>
           </div>
 
           <div className="flex items-center gap-4 mb-5">
             <div className="w-10 h-0.5 bg-brand-primary" />
             <span className="text-brand-primary text-[10px] uppercase tracking-[0.4em] font-black">
-              {locale === 'vi' ? 'Bộ sưu tập độc quyền' : 'Exclusive Collection'}
+              {t('exclusive_collection')}
             </span>
           </div>
 
           <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight uppercase mb-6 leading-none">
-            {locale === 'vi' ? 'Cửa hàng' : 'Shop'}
+            {t('shop')}
           </h1>
 
           <p className="text-gray-500 text-sm md:text-base font-light max-w-lg leading-relaxed border-l-2 border-brand-primary/30 pl-5 py-1 italic">
-            {locale === 'vi'
-              ? 'Khám phá tinh hoa nghệ thuật thưởng thức qua những dòng rượu tuyển chọn từ các điền trang danh tiếng hàng đầu thế giới.'
-              : "Discover the finest wines and spirits from the world's most prestigious estates."}
+            {t('shop_desc')}
           </p>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════════
-          CATEGORY TABS + SEARCH — sticky, white, like GoodWineSection
-      ═══════════════════════════════════════════════════════════════════════ */}
+      {/* CATEGORY TABS + SEARCH */}
       <div className="bg-white border-b border-gray-100 sticky top-18 z-30 shadow-sm">
         <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 lg:gap-8">
-
-            {/* Category tabs */}
             <div className="no-scrollbar flex gap-6 overflow-x-auto flex-1">
-              {CATEGORY_TABS.map((tab) => (
+              {CATEGORY_TAB_IDS.map((id) => (
                 <button
-                  key={tab.id}
-                  onClick={() => updateFilter('cat', tab.id)}
+                  key={id}
+                  onClick={() => updateFilter('cat', id)}
                   className={`shrink-0 py-3.5 text-[12px] font-semibold tracking-wider transition-colors border-b-2 ${
-                    categoryFilter === tab.id
+                    categoryFilter === id
                       ? 'border-brand-primary text-brand-primary'
                       : 'border-transparent text-gray-500 hover:text-gray-800'
                   }`}
                 >
-                  {locale === 'vi' ? tab.vi : tab.en}
+                  {t(`tabs.${id}`)}
                 </button>
               ))}
             </div>
@@ -250,7 +230,7 @@ export default function ProductsPageContent() {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder={locale === 'vi' ? 'Tìm kiếm...' : 'Search...'}
+                placeholder={t('search_placeholder')}
                 className="bg-transparent outline-none text-[13px] text-gray-700 w-full placeholder:text-gray-400"
               />
               {searchInput && (
@@ -266,7 +246,7 @@ export default function ProductsPageContent() {
               className="lg:hidden flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 shrink-0 py-3.5 hover:text-brand-primary transition-colors"
             >
               <HiAdjustmentsHorizontal size={17} />
-              {locale === 'vi' ? 'Lọc' : 'Filter'}
+              {t('filter')}
               {priceFilter !== 'all' && (
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
               )}
@@ -275,9 +255,7 @@ export default function ProductsPageContent() {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════════════════════════════
-          MAIN CONTENT
-      ═══════════════════════════════════════════════════════════════════════ */}
+      {/* MAIN CONTENT */}
       <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
 
         {/* Mobile search */}
@@ -287,7 +265,7 @@ export default function ProductsPageContent() {
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder={locale === 'vi' ? 'Tìm kiếm sản phẩm...' : 'Search products...'}
+            placeholder={t('search_placeholder_mobile')}
             className="bg-transparent outline-none text-[14px] text-gray-700 w-full placeholder:text-gray-400"
           />
           {searchInput && (
@@ -299,33 +277,33 @@ export default function ProductsPageContent() {
 
         <div className="flex gap-10 lg:gap-14">
 
-          {/* ── Desktop Sidebar ── */}
+          {/* Desktop Sidebar */}
           <aside className="hidden lg:block w-48 shrink-0 sticky top-40 self-start">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[11px] uppercase tracking-widest font-black text-gray-900">
-                {locale === 'vi' ? 'Bộ lọc' : 'Filters'}
+                {t('filters')}
               </span>
               {priceFilter !== 'all' && (
                 <button
                   onClick={() => updateFilter('price', 'all')}
                   className="text-[10px] text-brand-primary hover:underline uppercase tracking-wider font-bold"
                 >
-                  {locale === 'vi' ? 'Xóa' : 'Clear'}
+                  {t('clear')}
                 </button>
               )}
             </div>
             {filterContent()}
           </aside>
 
-          {/* ── Product area ── */}
+          {/* Product area */}
           <main className="flex-1 min-w-0">
 
             {/* Count + clear row */}
             <div className="flex items-center justify-between mb-8">
               <p className="text-[11px] text-gray-400 uppercase tracking-widest font-bold">
                 {loading
-                  ? (locale === 'vi' ? 'Đang tải...' : 'Loading...')
-                  : `${filteredProducts.length} ${locale === 'vi' ? 'sản phẩm' : 'products'}`}
+                  ? t('loading')
+                  : `${filteredProducts.length} ${t('count')}`}
               </p>
               {hasActiveFilters && (
                 <button
@@ -333,7 +311,7 @@ export default function ProductsPageContent() {
                   className="flex items-center gap-1 text-[11px] text-brand-primary hover:underline uppercase tracking-wider font-bold"
                 >
                   <HiX size={12} />
-                  {locale === 'vi' ? 'Xóa bộ lọc' : 'Clear filters'}
+                  {t('clear_filters')}
                 </button>
               )}
             </div>
@@ -384,18 +362,16 @@ export default function ProductsPageContent() {
                   </div>
                 </div>
                 <h3 className="text-xl font-black uppercase tracking-tight text-gray-900 mb-3">
-                  {locale === 'vi' ? 'Không tìm thấy sản phẩm' : 'No products found'}
+                  {t('no_products_title')}
                 </h3>
                 <p className="text-gray-400 text-sm max-w-xs leading-relaxed mb-8">
-                  {locale === 'vi'
-                    ? 'Không có sản phẩm nào phù hợp với bộ lọc của bạn. Hãy thử lại với tiêu chí khác.'
-                    : 'No products match your current filters. Try adjusting your criteria.'}
+                  {t('no_products_desc')}
                 </p>
                 <button
                   onClick={clearAll}
                   className="bg-brand-primary text-white px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-[0.2em] shadow-lg shadow-brand-primary/30 hover:shadow-brand-primary/50 transition-all active:scale-95"
                 >
-                  {locale === 'vi' ? 'Xóa tất cả bộ lọc' : 'Clear all filters'}
+                  {t('clear_all_filters')}
                 </button>
               </motion.div>
             )}
@@ -403,9 +379,7 @@ export default function ProductsPageContent() {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════════════════════════════
-          MOBILE FILTER DRAWER
-      ═══════════════════════════════════════════════════════════════════════ */}
+      {/* MOBILE FILTER DRAWER */}
       <AnimatePresence>
         {isFilterOpen && (
           <>
@@ -421,11 +395,11 @@ export default function ProductsPageContent() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 220 }}
-              className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-white z-[60] lg:hidden shadow-2xl flex flex-col"
+              className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-white z-60 lg:hidden shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
                 <span className="text-[11px] uppercase tracking-widest font-black text-gray-900">
-                  {locale === 'vi' ? 'Bộ lọc' : 'Filters'}
+                  {t('filters')}
                 </span>
                 <button
                   onClick={() => setIsFilterOpen(false)}
@@ -444,13 +418,13 @@ export default function ProductsPageContent() {
                   onClick={() => { clearAll(); setIsFilterOpen(false); }}
                   className="flex-1 py-3.5 text-[11px] font-black text-gray-500 uppercase tracking-widest border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors"
                 >
-                  {locale === 'vi' ? 'Xóa bộ lọc' : 'Clear'}
+                  {t('clear_filters')}
                 </button>
                 <button
                   onClick={() => setIsFilterOpen(false)}
                   className="flex-1 bg-brand-primary text-white py-3.5 rounded-xl text-[11px] font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20"
                 >
-                  {locale === 'vi' ? 'Áp dụng' : 'Apply'}
+                  {t('apply')}
                 </button>
               </div>
             </motion.div>

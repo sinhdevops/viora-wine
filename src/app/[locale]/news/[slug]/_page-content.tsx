@@ -1,16 +1,15 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
 import { Link } from '@/i18n/routing';
 import { motion } from 'motion/react';
 import { NewsItem } from '@/@types/news';
 import { NEWS } from '@/constants/news';
-import { 
-  HiOutlineCalendar, 
-  HiOutlineClock, 
-  HiOutlineUser, 
-  HiOutlineShare, 
+import {
+  HiOutlineCalendar,
+  HiOutlineClock,
+  HiOutlineUser,
   HiOutlineArrowLeft,
   HiOutlineChevronRight
 } from 'react-icons/hi';
@@ -22,7 +21,7 @@ interface NewsDetailPageContentProps {
 
 export default function NewsDetailPageContent({ newsItem }: NewsDetailPageContentProps) {
   const locale = useLocale();
-  const t = useTranslations('common');
+  const t = useTranslations('news_detail');
 
   const relatedNews = NEWS.filter(item => item.id !== newsItem.id).slice(0, 3);
 
@@ -30,12 +29,12 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
     <div className="pt-24 pb-24 bg-white">
       {/* Breadcrumbs */}
       <div className="container mx-auto px-4 mb-12">
-        <nav className="flex items-center gap-2 text-[12px] font-medium text-gray-400 uppercase tracking-widest">
-          <Link href="/" className="hover:text-brand-primary transition-colors">Trang chủ</Link>
+        <nav className="flex items-center gap-2 text-[12px] font-medium text-gray-400 uppercase tracking-widest" aria-label="breadcrumb">
+          <Link href="/" className="hover:text-brand-primary transition-colors">{t('breadcrumb_home')}</Link>
           <HiOutlineChevronRight size={14} />
-          <Link href="/news" className="hover:text-brand-primary transition-colors">Tin tức</Link>
+          <Link href="/news" className="hover:text-brand-primary transition-colors">{t('breadcrumb_news')}</Link>
           <HiOutlineChevronRight size={14} />
-          <span className="text-gray-900 truncate max-w-[200px] md:max-w-none">
+          <span className="text-gray-900 truncate max-w-50 md:max-w-none">
             {newsItem.title[locale as 'vi' | 'en']}
           </span>
         </nav>
@@ -49,12 +48,12 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
             animate={{ opacity: 1, y: 0 }}
           >
             <span className="bg-brand-primary/10 text-brand-primary text-[10px] uppercase tracking-[0.3em] font-bold px-4 py-1.5 rounded-full mb-8 inline-block">
-              {newsItem.category === 'knowledge' ? 'Kiến thức rượu' : newsItem.category}
+              {newsItem.category === 'knowledge' ? t('category_knowledge') : newsItem.category}
             </span>
             <h1 className="text-4xl md:text-6xl font-serif text-gray-900 mb-8 leading-tight">
               {newsItem.title[locale as 'vi' | 'en']}
             </h1>
-            
+
             <div className="flex flex-wrap items-center gap-8 text-gray-400 text-[13px] border-y border-gray-100 py-6">
               <div className="flex items-center gap-2">
                 <HiOutlineUser className="text-brand-primary" size={18} />
@@ -77,7 +76,7 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative aspect-[21/9] rounded-[40px] overflow-hidden shadow-2xl"
+            className="relative aspect-21/9 rounded-[40px] overflow-hidden shadow-2xl"
           >
             <Image
               src={newsItem.image}
@@ -93,18 +92,18 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="flex flex-col lg:flex-row gap-16">
             {/* Social Share - Sticky */}
-            <aside className="hidden lg:block w-12">
+            <aside className="hidden lg:block w-12" aria-label={t('share_label')}>
               <div className="sticky top-40 flex flex-col gap-4">
                 <span className="text-[10px] uppercase tracking-widest font-bold text-gray-400 rotate-180 [writing-mode:vertical-lr] mb-4">
-                  Chia sẻ
+                  {t('share_label')}
                 </span>
-                <button className="w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-sm">
+                <button aria-label="Share on Facebook" className="w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-sm">
                   <FaFacebookF />
                 </button>
-                <button className="w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-sm">
+                <button aria-label="Share on Twitter" className="w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-sm">
                   <FaTwitter />
                 </button>
-                <button className="w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-sm">
+                <button aria-label="Share on LinkedIn" className="w-12 h-12 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-sm">
                   <FaLinkedinIn />
                 </button>
               </div>
@@ -112,7 +111,7 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
 
             {/* Article Body */}
             <div className="flex-1">
-              <div 
+              <div
                 className="prose prose-lg prose-brand-primary max-w-none text-gray-600 font-light leading-relaxed
                   prose-headings:font-serif prose-headings:text-gray-900 prose-headings:font-normal
                   prose-h3:text-2xl prose-h3:mt-12 prose-h3:mb-6
@@ -127,24 +126,24 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
               {/* Tags & Share Mobile */}
               <div className="mt-16 pt-12 border-t border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-8">
                 <div className="flex flex-wrap gap-2">
-                  {['Rượu vang', 'Kiến thức', 'Thưởng thức'].map(tag => (
+                  {[t('tag_wine'), t('tag_knowledge'), t('tag_enjoyment')].map(tag => (
                     <span key={tag} className="px-4 py-1.5 bg-gray-50 text-gray-500 text-[12px] font-medium rounded-full border border-gray-100">
                       #{tag}
                     </span>
                   ))}
                 </div>
                 <div className="flex items-center gap-4 lg:hidden">
-                  <span className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">Chia sẻ:</span>
+                  <span className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">{t('share_mobile_label')}</span>
                   <div className="flex gap-3">
-                    <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600"><FaFacebookF /></button>
-                    <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600"><FaTwitter /></button>
+                    <button aria-label="Share on Facebook" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600"><FaFacebookF /></button>
+                    <button aria-label="Share on Twitter" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-600"><FaTwitter /></button>
                   </div>
                 </div>
               </div>
 
               {/* Author Bio */}
               <div className="mt-16 bg-gray-50 rounded-[30px] p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
-                <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0 border-4 border-white shadow-md">
+                <div className="w-24 h-24 rounded-full overflow-hidden shrink-0 border-4 border-white shadow-md">
                   <Image
                     src="https://picsum.photos/seed/author/200/200"
                     alt={newsItem.author}
@@ -156,7 +155,7 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
                 <div className="text-center md:text-left">
                   <h4 className="text-xl font-serif text-gray-900 mb-2">{newsItem.author}</h4>
                   <p className="text-gray-500 text-[14px] font-light leading-relaxed">
-                    Chuyên gia rượu vang với hơn 10 năm kinh nghiệm trong ngành. Đam mê chia sẻ kiến thức và văn hóa thưởng thức rượu vang đến mọi người.
+                    {t('author_bio')}
                   </p>
                 </div>
               </div>
@@ -169,12 +168,12 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
       <section className="mt-24 pt-24 border-t border-gray-100 bg-[#FDFDFD]">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif text-gray-900">Bài viết liên quan</h2>
-            <Link 
-              href="/news" 
+            <h2 className="text-3xl md:text-4xl font-serif text-gray-900">{t('related_title')}</h2>
+            <Link
+              href="/news"
               className="text-[11px] uppercase tracking-widest font-bold text-gray-400 hover:text-brand-primary transition-colors border border-gray-200 px-6 py-2 rounded-full"
             >
-              Xem tất cả
+              {t('view_all')}
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -208,12 +207,12 @@ export default function NewsDetailPageContent({ newsItem }: NewsDetailPageConten
 
       {/* Back to News Button */}
       <div className="container mx-auto px-4 mt-24 text-center">
-        <Link 
-          href="/news" 
+        <Link
+          href="/news"
           className="inline-flex items-center gap-3 text-gray-500 hover:text-brand-primary transition-colors font-bold uppercase tracking-widest text-[13px] group"
         >
           <HiOutlineArrowLeft className="group-hover:-translate-x-2 transition-transform" />
-          Quay lại danh sách tin tức
+          {t('back_to_news')}
         </Link>
       </div>
     </div>

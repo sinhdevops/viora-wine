@@ -57,8 +57,8 @@ export default function HeroBanner() {
 							<Image
 								src={banner.image_url}
 								alt="Hero Banner"
-								className="object-cover object-center"
 								referrerPolicy="no-referrer"
+								className="lg:object-cover"
 								fill
 								priority
 							/>

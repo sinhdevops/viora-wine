@@ -17,7 +17,7 @@ export default function WinePromoBanner() {
 
 			{/* Content */}
 			<div className="relative z-10 mx-auto flex min-h-48 max-w-360 items-center px-8 py-10 sm:min-h-65 sm:px-12 lg:min-h-90 lg:px-16 lg:py-16">
-				<div className="max-w-1/2">
+				<div className="w-full text-center sm:text-left sm:max-w-1/2">
 					<h2 className="mb-3 text-xl font-black leading-tight tracking-tight uppercase md:mb-4 md:text-[28px]">
 						QUY TRÌNH SẢN XUẤT RƯỢU VANG
 					</h2>

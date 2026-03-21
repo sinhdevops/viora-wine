@@ -39,13 +39,13 @@ export default function FeaturedCategories() {
 					DANH MỤC NỔI BẬT
 				</h2>
 
-				{/* Desktop: 5 columns | Mobile: 2 columns grid */}
-				<div className="grid grid-cols-2 gap-3 lg:gap-7.5 sm:grid-cols-3 md:gap-4 lg:grid-cols-5">
-					{categories.map((cat) => (
+				{/* Mobile: first item full width, rest 2 cols | Desktop: 5 columns */}
+				<div className="grid grid-cols-2 gap-3 md:gap-4 sm:grid-cols-3 lg:grid-cols-5 lg:gap-7.5">
+					{categories.map((cat, index) => (
 						<Link
 							key={cat.name}
 							href={cat.path}
-							className="group relative aspect-[4/3] overflow-hidden rounded-2xl"
+							className={`group relative aspect-4/3 overflow-hidden rounded-2xl${index === 0 ? " col-span-2 sm:col-span-1" : ""}`}
 						>
 							{/* Background Image */}
 							<Image
@@ -68,7 +68,7 @@ export default function FeaturedCategories() {
 										"linear-gradient(90deg, rgba(0,0,0,0) 6.94%, #000000 49.13%, rgba(0,0,0,0) 92.36%)",
 								}}
 							>
-								<span className="text-[18px] font-semibold tracking-wider text-white uppercase">
+								<span className="text-sm lg:text-[18px] font-semibold tracking-wider text-white uppercase">
 									{cat.name}
 								</span>
 							</div>

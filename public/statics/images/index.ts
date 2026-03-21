@@ -5,6 +5,7 @@ import categoryWine4 from './category-wine4.webp'
 import categoryWine5 from './category-wine5.webp'
 import hot from './hot.svg'
 import logo from './logo.svg'
+import logoDark from './logo-dark.svg'
 
 export const WINE_IMAGES = {
     categoryWine1,
@@ -12,6 +13,6 @@ categoryWine2,
 categoryWine3,
 categoryWine4,
 categoryWine5,
-hot,
+hot,logoDark,
 logo
 }

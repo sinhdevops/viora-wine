@@ -8,17 +8,22 @@ import { toast } from 'sonner';
 import { motion } from 'motion/react';
 import { HiOutlineMail, HiOutlinePhone, HiOutlineLocationMarker } from 'react-icons/hi';
 
-const contactSchema = z.object({
-  name: z.string().min(2, 'Tên quá ngắn'),
-  email: z.string().email('Email không hợp lệ'),
-  message: z.string().min(10, 'Nội dung quá ngắn'),
-});
-
-type ContactFormValues = z.infer<typeof contactSchema>;
+type ContactFormValues = {
+  name: string;
+  email: string;
+  message: string;
+};
 
 export default function ContactPageContent() {
-  const t = useTranslations('common');
+  const t = useTranslations('contact');
   const footerT = useTranslations('footer');
+  const commonT = useTranslations('common');
+
+  const contactSchema = z.object({
+    name: z.string().min(2, t('error_name_short')),
+    email: z.string().email(t('error_email_invalid')),
+    message: z.string().min(10, t('error_message_short')),
+  });
 
   const {
     register,
@@ -30,10 +35,9 @@ export default function ContactPageContent() {
   });
 
   const onSubmit = async (data: ContactFormValues) => {
-    // Giả lập gửi form
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log(data);
-    toast.success('Gửi tin nhắn thành công! Chúng tôi sẽ liên hệ lại sớm nhất.');
+    toast.success(t('success'));
     reset();
   };
 
@@ -41,7 +45,7 @@ export default function ContactPageContent() {
     <div className="pt-32 pb-24">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-serif text-brand-primary mb-4">{t('contact')}</h1>
+          <h1 className="text-5xl font-serif text-brand-primary mb-4">{commonT('contact')}</h1>
           <div className="w-24 h-1 bg-brand-primary mx-auto"></div>
         </div>
 
@@ -53,14 +57,14 @@ export default function ContactPageContent() {
             className="space-y-12"
           >
             <div>
-              <h2 className="text-3xl font-serif text-brand-primary mb-8">Thông Tin Liên Hệ</h2>
+              <h2 className="text-3xl font-serif text-brand-primary mb-8">{t('info_title')}</h2>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary shrink-0">
                     <HiOutlineLocationMarker size={24} />
                   </div>
                   <div>
-                    <h4 className="text-gray-900 font-bold mb-1">Địa chỉ</h4>
+                    <h4 className="text-gray-900 font-bold mb-1">{t('address_label')}</h4>
                     <p className="text-gray-600">{footerT('address')}</p>
                   </div>
                 </div>
@@ -69,7 +73,7 @@ export default function ContactPageContent() {
                     <HiOutlinePhone size={24} />
                   </div>
                   <div>
-                    <h4 className="text-gray-900 font-bold mb-1">Điện thoại</h4>
+                    <h4 className="text-gray-900 font-bold mb-1">{t('phone_label')}</h4>
                     <p className="text-gray-600">{footerT('phone')}</p>
                   </div>
                 </div>
@@ -78,7 +82,7 @@ export default function ContactPageContent() {
                     <HiOutlineMail size={24} />
                   </div>
                   <div>
-                    <h4 className="text-gray-900 font-bold mb-1">Email</h4>
+                    <h4 className="text-gray-900 font-bold mb-1">{t('email_label')}</h4>
                     <p className="text-gray-600">{footerT('email')}</p>
                   </div>
                 </div>
@@ -93,6 +97,7 @@ export default function ContactPageContent() {
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
+                title="WineHouse Da Nang Map"
               ></iframe>
             </div>
           </motion.div>
@@ -103,33 +108,33 @@ export default function ContactPageContent() {
             animate={{ opacity: 1, x: 0 }}
             className="bg-gray-50 p-8 md:p-12 rounded-3xl border border-brand-primary/10 shadow-xl"
           >
-            <h2 className="text-3xl font-serif text-brand-primary mb-8">Gửi Tin Nhắn</h2>
+            <h2 className="text-3xl font-serif text-brand-primary mb-8">{t('form_title')}</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <label className="block text-sm text-gray-500 mb-2">Họ và tên</label>
+                <label className="block text-sm text-gray-500 mb-2">{t('name_label')}</label>
                 <input
                   {...register('name')}
                   className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all shadow-sm"
-                  placeholder="Nhập tên của bạn"
+                  placeholder={t('name_placeholder')}
                 />
                 {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
               </div>
               <div>
-                <label className="block text-sm text-gray-500 mb-2">Email</label>
+                <label className="block text-sm text-gray-500 mb-2">{t('email_input_label')}</label>
                 <input
                   {...register('email')}
                   className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all shadow-sm"
-                  placeholder="email@example.com"
+                  placeholder={t('email_placeholder')}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
               </div>
               <div>
-                <label className="block text-sm text-gray-500 mb-2">Nội dung tư vấn</label>
+                <label className="block text-sm text-gray-500 mb-2">{t('message_label')}</label>
                 <textarea
                   {...register('message')}
                   rows={5}
                   className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all resize-none shadow-sm"
-                  placeholder="Bạn cần tư vấn về loại rượu nào?"
+                  placeholder={t('message_placeholder')}
                 ></textarea>
                 {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
               </div>
@@ -138,7 +143,7 @@ export default function ContactPageContent() {
                 disabled={isSubmitting}
                 className="w-full bg-brand-primary text-white font-bold py-4 rounded-lg hover:bg-brand-black transition-all disabled:opacity-50 shadow-lg"
               >
-                {isSubmitting ? 'Đang gửi...' : 'Gửi yêu cầu'}
+                {isSubmitting ? t('submitting') : t('submit')}
               </button>
             </form>
           </motion.div>

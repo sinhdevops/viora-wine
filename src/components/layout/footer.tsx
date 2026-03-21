@@ -1,12 +1,13 @@
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import Image from "next/image";
+import { WINE_IMAGES } from "../../../public/statics/images";
 
 export default function Footer() {
 	const t = useTranslations("footer");
 	const commonT = useTranslations("common");
-	const locale = useLocale();
 
 	const navItems = [
 		{ name: commonT("home"), path: "/" },
@@ -24,14 +25,14 @@ export default function Footer() {
 	];
 
 	const contacts = [
-		{ icon: MapPin, label: "Địa chỉ", value: t("address") },
-		{ icon: Phone, label: "Hotline", value: t("phone") },
-		{ icon: Mail, label: "Email", value: t("email") },
+		{ icon: MapPin, label: t("contact_address_label"), value: t("address") },
+		{ icon: Phone, label: t("contact_phone_label"), value: t("phone") },
+		{ icon: Mail, label: t("contact_email_label"), value: t("email") },
 	];
 
 	const hours = [
-		{ day: locale === "vi" ? "Thứ 2 – Thứ 6" : "Mon – Fri", time: "08:00 – 22:00" },
-		{ day: locale === "vi" ? "Thứ 7 – Chủ nhật" : "Sat – Sun", time: "09:00 – 23:00" },
+		{ day: t("hours_weekday"), time: "08:00 – 22:00" },
+		{ day: t("hours_weekend"), time: "09:00 – 23:00" },
 	];
 
 	return (
@@ -43,10 +44,7 @@ export default function Footer() {
 					{/* Col 1 — Brand */}
 					<div className="space-y-6">
 						<Link href="/">
-							<span className="font-serif text-2xl font-black tracking-tight text-white">
-								VIORA WINE
-							</span>
-							<div className="mt-1 h-0.5 w-10 bg-brand-primary" />
+							<Image src={WINE_IMAGES.logoDark} alt="Logo dark" />
 						</Link>
 						<p className="text-sm leading-relaxed text-white/50">
 							{commonT("slogan")}
@@ -68,7 +66,7 @@ export default function Footer() {
 					{/* Col 2 — Navigation */}
 					<div>
 						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
-							Thông tin
+							{t("nav_label")}
 						</h4>
 						<ul className="space-y-3">
 							{navItems.map((item) => (
@@ -109,7 +107,7 @@ export default function Footer() {
 					{/* Col 4 — Hours */}
 					<div>
 						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
-							Giờ hoạt động
+							{t("hours_label")}
 						</h4>
 						<ul className="space-y-3">
 							{hours.map(({ day, time }) => (
@@ -142,14 +140,14 @@ export default function Footer() {
 					<p className="text-[11px] uppercase tracking-[0.15em] text-white/30">
 						© {new Date().getFullYear()}{" "}
 						<span className="text-white/60 font-semibold">VIORA WINE</span>.{" "}
-						{locale === "vi" ? "Đã đăng ký bản quyền" : "All rights reserved"}.
+						{t("copyright")}.
 					</p>
 					<div className="flex gap-6">
 						<Link href="/privacy-policy" className="text-[11px] uppercase tracking-widest text-white/30 transition-colors hover:text-white/60">
-							Chính sách bảo mật
+							{t("privacy_link")}
 						</Link>
 						<Link href="/terms" className="text-[11px] uppercase tracking-widest text-white/30 transition-colors hover:text-white/60">
-							Điều khoản sử dụng
+							{t("terms_link")}
 						</Link>
 					</div>
 				</div>
