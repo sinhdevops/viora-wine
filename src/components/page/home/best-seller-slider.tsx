@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Navigation, Grid } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase-client";
@@ -10,6 +10,7 @@ import type { DbProduct } from "@/@types/product";
 import CardProduct from "@/components/page/card-product";
 
 import "swiper/css";
+import "swiper/css/grid";
 
 export default function BestSellerSlider() {
 	const swiperRef = useRef<SwiperType | null>(null);
@@ -45,14 +46,16 @@ export default function BestSellerSlider() {
 					</button>
 
 					<Swiper
-						modules={[Navigation]}
+						modules={[Navigation, Grid]}
 						onSwiper={(swiper) => (swiperRef.current = swiper)}
 						spaceBetween={16}
 						slidesPerView={2}
+						slidesPerGroup={4}
+						grid={{ rows: 2, fill: "row" }}
 						breakpoints={{
-							640: { slidesPerView: 3, spaceBetween: 16 },
-							1024: { slidesPerView: 4, spaceBetween: 20 },
-							1280: { slidesPerView: 5, spaceBetween: 20 },
+							640: { slidesPerView: 3, spaceBetween: 16, grid: { rows: 1 }, slidesPerGroup: 1 },
+							1024: { slidesPerView: 4, spaceBetween: 20, grid: { rows: 1 }, slidesPerGroup: 1 },
+							1280: { slidesPerView: 5, spaceBetween: 20, grid: { rows: 1 }, slidesPerGroup: 1 },
 						}}
 						className="px-1! py-4!"
 					>

@@ -3,14 +3,14 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import MainLayout from '@/components/layout/main-layout';
-import { Lexend } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import '../globals.css';
 import { notFound } from 'next/navigation';
 
-const lexend = Lexend({
+const montserrat = Montserrat({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-lexend',
+  variable: '--font-montserrat',
   display: 'swap',
 });
 
@@ -127,7 +127,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale} className={lexend.variable} suppressHydrationWarning>
+    <html lang={locale} className={montserrat.variable} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

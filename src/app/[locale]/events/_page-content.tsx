@@ -1,19 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { ArrowRight } from "lucide-react";
-import { useTranslations } from "next-intl";
-import type { EventItem } from "@/app/[locale]/_page-content";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { NewsItem } from "@/@types/news";
 
 interface Props {
-  events: EventItem[];
+  news: NewsItem[];
 }
 
-export default function NewsPageContent({ events }: Props) {
+const PAGE_SIZE = 6;
+
+export default function EventsPageContent({ news }: Props) {
+  const locale = useLocale() as "vi" | "en";
   const t = useTranslations("news");
   const [activeTab, setActiveTab] = useState("all");
+  const [page, setPage] = useState(1);
 
   const TABS = [
     { id: "all", label: t("tab_all") },
@@ -21,8 +25,29 @@ export default function NewsPageContent({ events }: Props) {
     { id: "su-kien", label: t("tab_event") },
   ];
 
-  const displayed =
-    activeTab === "all" ? events : events.filter((e) => e.category === activeTab);
+  const CATEGORY_LABELS: Record<string, string> = {
+    knowledge: t("badge_knowledge"),
+    event: t("badge_event"),
+    tasting: t("badge_knowledge"),
+    news: t("badge_event"),
+  };
+
+  const filtered = useMemo(
+    () => activeTab === "all" ? news : news.filter((item) => item.category === activeTab),
+    [news, activeTab]
+  );
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+
+  const displayed = useMemo(
+    () => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [filtered, page]
+  );
+
+  function handleTabChange(id: string) {
+    setActiveTab(id);
+    setPage(1);
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -53,7 +78,7 @@ export default function NewsPageContent({ events }: Props) {
           {TABS.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
               className={`shrink-0 pb-3 text-[13px] font-semibold tracking-wider transition-colors ${
                 activeTab === tab.id
                   ? "border-b-2 border-brand-primary text-brand-primary"
@@ -67,44 +92,40 @@ export default function NewsPageContent({ events }: Props) {
 
         {/* Grid */}
         {displayed.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-            {displayed.map((event) => (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+            {displayed.map((item) => (
               <Link
-                key={event.id}
-                href={`/news/${event.id}`}
+                key={item.id}
+                href={`/events/${item.id}`}
                 className="group block"
               >
                 {/* Image */}
                 <div className="relative mb-4 aspect-3/2 w-full overflow-hidden rounded-xl bg-gray-100">
-                  {event.thumbnail_url && (
-                    <Image
-                      src={event.thumbnail_url}
-                      alt={event.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  )}
+                  <Image
+                    src={item.image}
+                    alt={item.title[locale]}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                   <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-gray-700 shadow-sm backdrop-blur-sm">
-                    {event.category === "kien-thuc" ? t("badge_knowledge") : t("badge_event")}
+                    {CATEGORY_LABELS[item.category] ?? item.category}
                   </span>
                 </div>
 
                 {/* Meta */}
                 <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-widest text-brand-primary">
-                  {event.date}
+                  {item.date}
                 </p>
 
                 {/* Title */}
                 <h3 className="mb-2 text-[15px] font-bold leading-snug text-gray-900 transition-colors group-hover:text-brand-primary md:text-[16px]">
-                  {event.name}
+                  {item.title[locale]}
                 </h3>
 
-                {/* Description */}
-                {event.description && (
-                  <p className="line-clamp-2 text-[13px] leading-relaxed text-gray-500">
-                    {event.description}
-                  </p>
-                )}
+                {/* Excerpt */}
+                <p className="line-clamp-2 text-[13px] leading-relaxed text-gray-500">
+                  {item.excerpt[locale]}
+                </p>
 
                 {/* Read more */}
                 <div className="mt-3 flex items-center gap-1 text-[12px] font-semibold text-brand-primary">
@@ -117,10 +138,45 @@ export default function NewsPageContent({ events }: Props) {
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <p className="text-sm text-gray-400">{t("empty")}</p>
             <button
-              onClick={() => setActiveTab("all")}
+              onClick={() => handleTabChange("all")}
               className="mt-4 rounded-lg bg-brand-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#a30000]"
             >
               {t("view_all")}
+            </button>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-10 flex items-center justify-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-brand-primary hover:text-brand-primary disabled:opacity-30"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPage(p)}
+                className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-semibold transition ${
+                  p === page
+                    ? "bg-brand-primary text-white"
+                    : "border border-gray-200 text-gray-600 hover:border-brand-primary hover:text-brand-primary"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-brand-primary hover:text-brand-primary disabled:opacity-30"
+            >
+              <ChevronRight size={16} />
             </button>
           </div>
         )}

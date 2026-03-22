@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { HiChevronDown, HiX } from 'react-icons/hi';
+import { HiChevronDown, HiX, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { HiAdjustmentsHorizontal, HiMagnifyingGlass } from 'react-icons/hi2';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Link } from '@/i18n/routing';
@@ -13,8 +13,94 @@ import type { DbProduct } from '@/@types/product';
 
 const CATEGORY_TAB_IDS = ['all', 'wine', 'whisky', 'spirits', 'combo', 'gift'] as const;
 const PRICE_RANGE_IDS = ['all', 'under-5', '5-10', '10-20', 'over-20'] as const;
+const PRODUCTS_PER_PAGE = 12; // TODO: đổi lại 12 sau khi test
 
 type PriceRangeId = (typeof PRICE_RANGE_IDS)[number];
+
+// ─── Pagination ───────────────────────────────────────────────────────────────
+function getPageNumbers(current: number, total: number): (number | '...')[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages: (number | '...')[] = [1];
+  if (current > 3) pages.push('...');
+  for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+    pages.push(i);
+  }
+  if (current < total - 2) pages.push('...');
+  pages.push(total);
+  return pages;
+}
+
+function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  const t = useTranslations('products_page');
+  if (totalPages <= 1) return null;
+  const pages = getPageNumbers(currentPage, totalPages);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex items-center justify-center gap-1.5 pt-8 pb-6"
+    >
+      {/* Prev */}
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-200
+          disabled:opacity-30 disabled:cursor-not-allowed
+          enabled:hover:bg-brand-primary enabled:hover:text-white enabled:hover:shadow-md enabled:hover:shadow-brand-primary/30
+          text-gray-500 border border-gray-200 enabled:hover:border-brand-primary"
+      >
+        <HiChevronLeft size={13} />
+        <span className="hidden sm:inline">{t('pagination.prev')}</span>
+      </button>
+
+      {/* Page numbers */}
+      <div className="flex items-center gap-1">
+        {pages.map((page, i) =>
+          page === '...' ? (
+            <span key={`ellipsis-${i}`} className="w-9 h-9 flex items-center justify-center text-gray-300 text-[12px] select-none">
+              ···
+            </span>
+          ) : (
+            <button
+              key={page}
+              onClick={() => onPageChange(page)}
+              className={`w-9 h-9 rounded-full text-[11px] font-black transition-all duration-200 ${
+                page === currentPage
+                  ? 'bg-brand-primary text-white shadow-md shadow-brand-primary/40 scale-105'
+                  : 'text-gray-500 hover:text-brand-primary hover:bg-brand-primary/8 border border-transparent hover:border-brand-primary/20'
+              }`}
+            >
+              {page}
+            </button>
+          )
+        )}
+      </div>
+
+      {/* Next */}
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-200
+          disabled:opacity-30 disabled:cursor-not-allowed
+          enabled:hover:bg-brand-primary enabled:hover:text-white enabled:hover:shadow-md enabled:hover:shadow-brand-primary/30
+          text-gray-500 border border-gray-200 enabled:hover:border-brand-primary"
+      >
+        <span className="hidden sm:inline">{t('pagination.next')}</span>
+        <HiChevronRight size={13} />
+      </button>
+    </motion.div>
+  );
+}
 
 // ─── Collapsible filter section ──────────────────────────────────────────────
 function FilterSection({
@@ -108,6 +194,7 @@ export default function ProductsPageContent() {
   const [searchInput, setSearchInput] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     supabase
@@ -144,6 +231,23 @@ export default function ProductsPageContent() {
       return matchCat && matchSearch && matchPrice;
     });
   }, [products, categoryFilter, priceFilter, searchInput]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [categoryFilter, priceFilter, searchInput]);
+
+  const paginatedProducts = useMemo(() => {
+    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+    return filteredProducts.slice(start, start + PRODUCTS_PER_PAGE);
+  }, [filteredProducts, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const hasActiveFilters = categoryFilter !== 'all' || priceFilter !== 'all' || searchInput;
 
@@ -304,6 +408,11 @@ export default function ProductsPageContent() {
                 {loading
                   ? t('loading')
                   : `${filteredProducts.length} ${t('count')}`}
+                {!loading && totalPages > 1 && (
+                  <span className="ml-2 normal-case tracking-normal font-normal text-gray-300">
+                    — {t('pagination.page_of', { current: currentPage, total: totalPages })}
+                  </span>
+                )}
               </p>
               {hasActiveFilters && (
                 <button
@@ -327,25 +436,32 @@ export default function ProductsPageContent() {
 
             {/* Product grid */}
             {!loading && filteredProducts.length > 0 && (
-              <motion.div
-                layout
-                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 pb-16"
-              >
-                <AnimatePresence mode="popLayout">
-                  {filteredProducts.map((product) => (
-                    <motion.div
-                      key={product.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.96 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.96 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <CardProduct product={product} isHot={product.is_hot} />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </motion.div>
+              <>
+                <motion.div
+                  layout
+                  className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"
+                >
+                  <AnimatePresence mode="popLayout">
+                    {paginatedProducts.map((product) => (
+                      <motion.div
+                        key={product.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.96 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.96 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <CardProduct product={product} isHot={product.is_hot} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </>
             )}
 
             {/* Empty state */}

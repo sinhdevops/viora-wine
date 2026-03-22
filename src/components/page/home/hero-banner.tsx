@@ -53,7 +53,7 @@ export default function HeroBanner() {
 			>
 				{banners.map((banner) => (
 					<SwiperSlide key={banner.id}>
-						<div className="relative aspect-4/3 sm:aspect-16/7 lg:aspect-1440/634">
+						<div className="relative h-55 w-full sm:h-auto sm:aspect-16/7 lg:aspect-1440/634">
 							<Image
 								src={banner.image_url}
 								alt="Hero Banner"

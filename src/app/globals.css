@@ -6,8 +6,7 @@
   --color-brand-primary: #C80000;
   --color-brand-wine: #8B0000;
   --color-brand-wood: #3F2A1D;
-  
-  --font-lexend: var(--font-lexend), ;
+  --font-montserrat: var(--font-montserrat) ;
 }
 
 :root {
@@ -17,7 +16,7 @@
 }
 
 body {
-  font-family: var(--font-lexend);
+  font-family: var(--font-montserrat);
   font-size: var(--font-size-base);
   font-weight: 300;
   line-height: 1.6;
@@ -28,7 +27,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-lexend);
+  font-family: var(--font-montserrat);
   font-weight: 400; /* Playfair looks better at 400 even if body is 300 */
   letter-spacing: -0.02em;
 }

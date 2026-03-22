@@ -9,13 +9,12 @@ export default function Footer() {
 	const t = useTranslations("footer");
 	const commonT = useTranslations("common");
 
-	const navItems = [
-		{ name: commonT("home"), path: "/" },
-		{ name: commonT("products"), path: "/products" },
-		{ name: commonT("news"), path: "/news" },
-		{ name: commonT("promotion"), path: "/promotion" },
-		{ name: commonT("gifts"), path: "/gifts" },
-		{ name: commonT("contact"), path: "/contact" },
+	const supportItems = [
+		{ name: t("shopping_guide_link"), path: "/shopping-guide" },
+		{ name: t("shipping_policy_link"), path: "/shipping-policy" },
+		{ name: t("inspection_policy_link"), path: "/inspection-policy" },
+		{ name: t("return_policy_link"), path: "/return-policy" },
+		{ name: t("payment_policy_link"), path: "/payment-policy" },
 	];
 
 	const socials = [
@@ -39,7 +38,7 @@ export default function Footer() {
 		<footer className="bg-[#0C0C0C] text-white">
 			{/* Main content */}
 			<div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
-				<div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+				<div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
 
 					{/* Col 1 — Brand */}
 					<div className="space-y-6">
@@ -63,26 +62,28 @@ export default function Footer() {
 						</div>
 					</div>
 
-					{/* Col 2 — Navigation */}
-					<div>
-						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
-							{t("nav_label")}
-						</h4>
-						<ul className="space-y-3">
-							{navItems.map((item) => (
-								<li key={item.path}>
-									<Link
-										href={item.path}
-										className="text-sm text-white/60 transition-colors hover:text-white"
-									>
-										{item.name}
-									</Link>
-								</li>
-							))}
-						</ul>
-					</div>
+					
 
-					{/* Col 3 — Contact */}
+					{/* Col 3 — Support */}
+					<div>
+					<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+						{t("support_label")}
+					</h4>
+					<ul className="space-y-3">
+						{supportItems.map((item) => (
+							<li key={item.path}>
+								<Link
+									href={item.path}
+									className="text-sm text-white/60 transition-colors hover:text-white"
+								>
+									{item.name}
+								</Link>
+							</li>
+						))}
+					</ul>
+				</div>
+
+				{/* Col 4 — Contact */}
 					<div>
 						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
 							{commonT("contact")}
@@ -149,8 +150,7 @@ export default function Footer() {
 						<Link href="/terms" className="text-[11px] uppercase tracking-widest text-white/30 transition-colors hover:text-white/60">
 							{t("terms_link")}
 						</Link>
-					</div>
-				</div>
+					</div>				</div>
 			</div>
 		</footer>
 	);

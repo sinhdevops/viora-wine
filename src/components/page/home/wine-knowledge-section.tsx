@@ -49,6 +49,9 @@ export default function WineKnowledgeSection({ events }: WineKnowledgeSectionPro
 									{event.description}
 								</p>
 							)}
+							<span className="mt-3 inline-block text-[13px] font-semibold text-brand-primary group-hover:underline">
+								Xem chi tiết →
+							</span>
 						</Link>
 					))}
 				</div>
@@ -87,6 +90,9 @@ export default function WineKnowledgeSection({ events }: WineKnowledgeSectionPro
 												{event.description}
 											</p>
 										)}
+										<span className="text-[12px] font-semibold text-brand-primary group-hover:underline">
+											Xem chi tiết →
+										</span>
 									</div>
 								</Link>
 							</SwiperSlide>

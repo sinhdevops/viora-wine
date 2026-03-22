@@ -135,7 +135,9 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 														{event.description}
 													</p>
 												)}
-												
+												<span className="text-[12px] font-semibold text-brand-primary group-hover:underline">
+													Xem chi tiết →
+												</span>
 											</div>
 										</Link>
 									</SwiperSlide>

@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown, Globe, Menu, X } from "lucide-react";
+import { ChevronDown, Globe, Menu } from "lucide-react";
 import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
 
@@ -34,7 +34,7 @@ export default function Header() {
 	const navItems = [
 		{ name: t("home"), path: "/" },
 		{ name: t("products"), path: "/products" },
-		{ name: t("news"), path: "/news" },
+		{ name: t("news"), path: "/events" },
 		{ name: t("promotion"), path: "/promotion" },
 		{ name: t("gifts"), path: "/gifts" },
 	];
@@ -133,7 +133,7 @@ export default function Header() {
 						onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
 						className="text-gray-700 hover:text-black md:hidden"
 					>
-						{isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+						<Menu size={28} />
 					</button>
 				</div>
 			</div>
@@ -141,35 +141,48 @@ export default function Header() {
 			{/* Mobile Navigation */}
 			<AnimatePresence>
 				{isMobileMenuOpen && (
-					<motion.div
-						initial={{ opacity: 0, y: -8 }}
-						animate={{ opacity: 1, y: 0 }}
-						exit={{ opacity: 0, y: -8 }}
-						transition={{ duration: 0.2 }}
-						className="border-t border-gray-100 bg-white md:hidden"
-					>
-						<div className="space-y-1 px-4 py-3">
-							{navItems.map((item) => (
-								<Link
-									key={item.path}
-									href={item.path}
-									onClick={() => setIsMobileMenuOpen(false)}
-									className="block rounded-md px-3 py-4 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-red-600"
-								>
-									{item.name}
-								</Link>
-							))}
-							<div className="px-3 py-4">
-								<Link
-									href="/contact"
-									onClick={() => setIsMobileMenuOpen(false)}
-									className="block w-full rounded-lg bg-[#f43f5e] py-3 text-center text-base font-semibold text-white hover:bg-red-700"
-								>
-									{t("contact")}
-								</Link>
+					<>
+						{/* Backdrop */}
+						<motion.div
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							transition={{ duration: 0.2 }}
+							className="fixed inset-0 z-40 md:hidden"
+							onClick={() => setIsMobileMenuOpen(false)}
+						/>
+
+						{/* Panel trượt từ phải */}
+						<motion.div
+							initial={{ x: "100%" }}
+							animate={{ x: 0 }}
+							exit={{ x: "100%" }}
+							transition={{ duration: 0.25, ease: "easeInOut" }}
+							className="fixed right-0 top-20 z-50 h-full w-72 bg-white shadow-2xl md:hidden"
+						>
+							<div className="space-y-1 px-3 py-3">
+								{navItems.map((item) => (
+									<Link
+										key={item.path}
+										href={item.path}
+										onClick={() => setIsMobileMenuOpen(false)}
+										className="block rounded-md px-3 py-4 font-medium  hover:bg-gray-50 hover:text-red-600"
+									>
+										{item.name}
+									</Link>
+								))}
+								<div className="px-3 py-4">
+									<Link
+										href="/contact"
+										onClick={() => setIsMobileMenuOpen(false)}
+										className="block w-full rounded-lg bg-[#f43f5e] py-3 text-center text-base font-semibold text-white hover:bg-red-700"
+									>
+										{t("contact")}
+									</Link>
+								</div>
 							</div>
-						</div>
-					</motion.div>
+						</motion.div>
+					</>
 				)}
 			</AnimatePresence>
 		</header>

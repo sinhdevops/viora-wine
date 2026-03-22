@@ -1,0 +1,83 @@
+import { createClient } from '@/utils/supabase/server';
+import { getTranslations } from 'next-intl/server';
+import EventsPageContent from "./_page-content";
+import { NewsItem } from '@/@types/news';
+
+type EventRow = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  content: string | null;
+  thumbnail_url: string | null;
+  date: string;
+  category: string;
+  read_time: string | null;
+  author: string | null;
+  featured: boolean | null;
+};
+
+function mapToNewsItem(row: EventRow): NewsItem {
+  return {
+    id: row.id,
+    slug: row.slug,
+    category: row.category as NewsItem['category'],
+    title: { vi: row.name, en: row.name },
+    excerpt: { vi: row.description ?? '', en: row.description ?? '' },
+    content: { vi: row.content ?? '', en: row.content ?? '' },
+    image: row.thumbnail_url ?? '',
+    date: row.date,
+    readTime: row.read_time ?? '',
+    author: row.author ?? '',
+    featured: row.featured ?? false,
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'news' });
+  const common = await getTranslations({ locale, namespace: 'common' });
+
+  return {
+    title: t('meta_title'),
+    description: t('meta_desc'),
+    alternates: {
+      canonical: `https://winehousedanang.vn/${locale}/events`,
+      languages: {
+        vi: 'https://winehousedanang.vn/vi/events',
+        en: 'https://winehousedanang.vn/en/events',
+      },
+    },
+    openGraph: {
+      title: `${t('meta_title')} | ${common('brand')}`,
+      description: t('meta_desc'),
+      url: `https://winehousedanang.vn/${locale}/events`,
+      siteName: common('brand'),
+      locale,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${t('meta_title')} | ${common('brand')}`,
+      description: t('meta_desc'),
+    },
+  };
+}
+
+export default async function EventsPage() {
+  const supabase = await createClient();
+
+  const { data: rows } = await supabase
+    .from('events')
+    .select('id, name, description, content, thumbnail_url, date, category')
+    .order('date', { ascending: false });
+
+
+  const events = (rows ?? []).map((r) => mapToNewsItem(r as EventRow));
+
+  return <EventsPageContent news={events} />;
+}

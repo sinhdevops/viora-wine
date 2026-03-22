@@ -1,7 +1,7 @@
 export interface NewsItem {
   id: string;
   slug: string;
-  category: 'knowledge' | 'event' | 'tasting' | 'news';
+  category: 'kien-thuc' | 'su-kien';
   title: {
     vi: string;
     en: string;

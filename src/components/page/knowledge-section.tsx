@@ -2,18 +2,23 @@ import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
 import { motion } from 'motion/react';
 import { Link } from '@/i18n/routing';
-import { NEWS } from '@/constants/news';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import {  Autoplay } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules';
+import { type EventItem } from '@/app/[locale]/_page-content';
 
-// Import Swiper styles
 import 'swiper/css';
 
-export default function KnowledgeSection() {
+interface Props {
+  events: EventItem[];
+}
+
+export default function KnowledgeSection({ events }: Props) {
   const t = useTranslations('home');
   const locale = useLocale();
 
-  const latestNews = NEWS.slice(0, 4); // Show 4 items for better slider fill
+  if (events.length === 0) return null;
+
+  const desktopItems = events.slice(0, 3);
 
   return (
     <section className="container mx-auto px-4 py-16 md:py-24 overflow-hidden">
@@ -24,31 +29,35 @@ export default function KnowledgeSection() {
       </div>
 
       {/* Desktop Grid (md and up) */}
-      <div className="hidden md:grid grid-cols-3 lg:grid-cols-3 gap-12">
-        {latestNews.slice(0, 3).map((article, idx) => (
+      <div className="hidden md:grid grid-cols-3 gap-12">
+        {desktopItems.map((event, idx) => (
           <motion.div
-            key={article.id}
+            key={event.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
             viewport={{ once: true }}
             className="group hover-lift"
           >
-            <Link href={`/news/${article.slug}`} className="block">
+            <Link href={`/events/${event.id}`} className="block">
               <div className="relative h-72 mb-6 overflow-hidden rounded-3xl shadow-sm group-hover:shadow-xl transition-all">
-                <Image
-                  src={article.image}
-                  alt={article.title[locale as 'vi' | 'en']}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110 px-0"
-                />
+                {event.thumbnail_url && (
+                  <Image
+                    src={event.thumbnail_url}
+                    alt={event.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                )}
                 <div className="absolute top-6 left-6 bg-brand-primary/90 backdrop-blur-md text-white text-[10px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-full font-bold">
-                  {article.category === 'knowledge' ? (locale === 'vi' ? 'Kiến thức' : 'Knowledge') : (locale === 'vi' ? 'Sự kiện' : 'Event')}
+                  {event.category === 'kien-thuc'
+                    ? locale === 'vi' ? 'Kiến thức' : 'Knowledge'
+                    : locale === 'vi' ? 'Sự kiện' : 'Event'}
                 </div>
               </div>
-              <p className="text-gray-400 text-[11px] mb-3 font-medium uppercase tracking-widest">{article.date}</p>
+              <p className="text-gray-400 text-[11px] mb-3 font-medium uppercase tracking-widest">{event.date}</p>
               <h3 className="text-xl font-serif text-gray-900 group-hover:text-brand-primary transition-colors leading-snug font-normal">
-                {article.title[locale as 'vi' | 'en']}
+                {event.name}
               </h3>
             </Link>
           </motion.div>
@@ -66,28 +75,32 @@ export default function KnowledgeSection() {
           autoplay={{ delay: 4000, disableOnInteraction: false }}
           className="pb-12"
         >
-          {latestNews.map((article) => (
-            <SwiperSlide key={article.id}>
-              <Link href={`/news/${article.slug}`} className="block">
+          {events.map((event) => (
+            <SwiperSlide key={event.id}>
+              <Link href={`/events/${event.id}`} className="block">
                 <div className="group active:scale-95 transition-transform duration-300">
                   <div className="relative aspect-4/5 w-full mb-6 overflow-hidden rounded-xl shadow-xl">
-                    <Image
-                      src={article.image}
-                      alt={article.title[locale as 'vi' | 'en']}
-                      fill
-                      className="object-cover"
-                    />
+                    {event.thumbnail_url && (
+                      <Image
+                        src={event.thumbnail_url}
+                        alt={event.name}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
                     <div className="absolute top-5 left-5 bg-brand-primary/95 backdrop-blur-md text-white text-[9px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-full font-black">
-                      {article.category === 'knowledge' ? (locale === 'vi' ? 'Kiến thức' : 'Knowledge') : (locale === 'vi' ? 'Sự kiện' : 'Event')}
+                      {event.category === 'kien-thuc'
+                        ? locale === 'vi' ? 'Kiến thức' : 'Knowledge'
+                        : locale === 'vi' ? 'Sự kiện' : 'Event'}
                     </div>
                   </div>
                   <div className="px-1">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="w-6 h-px bg-brand-primary/30"></span>
-                      <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{article.date}</p>
+                      <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">{event.date}</p>
                     </div>
                     <h3 className="text-lg font-serif text-gray-900 leading-snug font-black line-clamp-2">
-                      {article.title[locale as 'vi' | 'en']}
+                      {event.name}
                     </h3>
                   </div>
                 </div>
@@ -98,8 +111,8 @@ export default function KnowledgeSection() {
       </div>
 
       <div className="mt-8 md:mt-16 text-center">
-        <Link 
-          href="/news" 
+        <Link
+          href="/events"
           className="inline-block border border-brand-primary text-brand-primary font-bold py-3 md:py-4 px-8 md:px-12 rounded-full hover:bg-brand-primary hover:text-white transition-all shadow-lg active:scale-95 text-sm md:text-base"
         >
           {locale === 'vi' ? 'Xem tất cả bài viết' : 'View all articles'}
