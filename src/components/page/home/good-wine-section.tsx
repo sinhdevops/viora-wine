@@ -6,21 +6,23 @@ import { Link } from "@/i18n/routing";
 import { supabase } from "@/lib/supabase-client";
 import CardProduct from "@/components/page/card-product";
 import type { DbProduct } from "@/@types/product";
-
-const tabs = [
-	{ id: "all", label: "TẤT CẢ" },
-	{ id: "red", label: "VANG ĐỎ" },
-	{ id: "white", label: "VANG TRẮNG" },
-	{ id: "rose", label: "VANG HỒNG" },
-	{ id: "sparkling", label: "VANG NỔ" },
-	{ id: "champagne", label: "CHAMPAGNE" },
-	{ id: "sweet", label: "VANG NGỌT" },
-];
+import { useTranslations } from "next-intl";
 
 export default function GoodWineSection() {
+	const t = useTranslations("home");
 	const [activeTab, setActiveTab] = useState("all");
 	const [products, setProducts] = useState<DbProduct[]>([]);
 	const [loading, setLoading] = useState(true);
+
+	const tabs = [
+		{ id: "all", label: t("good_wine_tab_all") },
+		{ id: "red", label: t("good_wine_tab_red") },
+		{ id: "white", label: t("good_wine_tab_white") },
+		{ id: "rose", label: t("good_wine_tab_rose") },
+		{ id: "sparkling", label: t("good_wine_tab_sparkling") },
+		{ id: "champagne", label: t("good_wine_tab_champagne") },
+		{ id: "sweet", label: t("good_wine_tab_sweet") },
+	];
 
 	useEffect(() => {
 		setLoading(true);
@@ -43,18 +45,18 @@ export default function GoodWineSection() {
 	const displayed = products;
 
 	return (
-		<section className="bg-white py-12 md:py-14">
+		<section className="bg-white">
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-5 flex items-center justify-between">
 					<h2 className="text-xl font-black uppercase tracking-tight md:text-[26px]">
-						VANG NGON GIÁ TỐT
+						{t("good_wine_title")}
 					</h2>
 					<Link
 						href="/products?cat=wine"
 						className="flex items-center gap-1 text-sm font-medium text-brand-primary hover:underline"
 					>
-						Xem tất cả <ArrowRight size={15} />
+						{t("good_wine_view_all")} <ArrowRight size={15} />
 					</Link>
 				</div>
 
@@ -90,7 +92,7 @@ export default function GoodWineSection() {
 					</div>
 				) : (
 					<div className="flex flex-col items-center justify-center py-16 text-center">
-						<p className="text-gray-400 text-sm">Chưa có sản phẩm nào trong danh mục này.</p>
+						<p className="text-gray-400 text-sm">{t("good_wine_empty")}</p>
 					</div>
 				)}
 			</div>

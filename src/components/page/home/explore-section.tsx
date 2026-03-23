@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import { type EventItem } from "@/app/[locale]/_page-content";
+import { useTranslations } from "next-intl";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -14,20 +15,22 @@ interface ExploreSectionProps {
 }
 
 export default function ExploreSection({ events }: ExploreSectionProps) {
+	const t = useTranslations("home");
+
 	if (events.length === 0) return null;
 
 	const [featured, ...rest] = events;
 
 	return (
-		<section className="bg-white py-12 md:py-16">
+		<section className="bg-white">
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8 text-center">
 					<h2 className="mb-2 text-xl font-black uppercase tracking-[0.15em] md:text-[28px]">
-						KHÁM PHÁ
+						{t("explore_title")}
 					</h2>
 					<p className="text-sm text-gray-500 md:text-base">
-						Khám phá thế giới rượu vang qua những bài viết và sự kiện đặc sắc.
+						{t("explore_subtitle")}
 					</p>
 				</div>
 
@@ -136,7 +139,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 													</p>
 												)}
 												<span className="text-[12px] font-semibold text-brand-primary group-hover:underline">
-													Xem chi tiết →
+													{t("explore_read_more")}
 												</span>
 											</div>
 										</Link>

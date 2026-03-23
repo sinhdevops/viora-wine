@@ -41,12 +41,14 @@ export default async function HomePageContent() {
 		<div className="flex flex-col gap-0 pb-24">
 			<HeroBanner />
 			<Features />
+			<div className="flex flex-col gap-25">
 			<FeaturedCategories />
 			<BestSellerSlider />
 			<WinePromoBanner />
 			<GoodWineSection />
 			<ExploreSection events={suKienEvents ?? []} />
 			<WineKnowledgeSection events={kienThucEvents ?? []} />
+			</div>
 		</div>
 	);
 }

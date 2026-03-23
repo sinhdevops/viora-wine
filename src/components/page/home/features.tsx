@@ -1,30 +1,33 @@
 import { Headset, ShieldCheck, Gift } from "lucide-react";
 import { TbTruckDelivery } from "react-icons/tb";
-
-const features = [
-	{
-		icon: TbTruckDelivery,
-		title: "GIAO HÀNG TOÀN QUỐC",
-		description: "Đóng gói cẩn thận",
-	},
-	{
-		icon: Headset,
-		title: "TƯ VẤN MIỄN PHÍ",
-		description: "Hỗ trợ tư vấn 24/7",
-	},
-	{
-		icon: ShieldCheck,
-		title: "CAM KẾT CHÍNH HÃNG",
-		description: "100% nhập khẩu",
-	},
-	{
-		icon: Gift,
-		title: "QUÀ TẶNG TINH TẾ",
-		description: "Gói quà nghệ thuật",
-	},
-];
+import { useTranslations } from "next-intl";
 
 export default function Features() {
+	const t = useTranslations("home");
+
+	const features = [
+		{
+			icon: TbTruckDelivery,
+			title: t("features_delivery_title"),
+			description: t("features_delivery_desc"),
+		},
+		{
+			icon: Headset,
+			title: t("features_consult_title"),
+			description: t("features_consult_desc"),
+		},
+		{
+			icon: ShieldCheck,
+			title: t("features_authentic_title"),
+			description: t("features_authentic_desc"),
+		},
+		{
+			icon: Gift,
+			title: t("features_gift_title"),
+			description: t("features_gift_desc"),
+		},
+	];
+
 	return (
 		<section className="bg-[#0B0E1F] py-6 lg:py-7.5">
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">

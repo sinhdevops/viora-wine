@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import { type EventItem } from "@/app/[locale]/_page-content";
+import { useTranslations } from "next-intl";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -14,17 +15,19 @@ interface WineKnowledgeSectionProps {
 }
 
 export default function WineKnowledgeSection({ events }: WineKnowledgeSectionProps) {
+	const t = useTranslations("home");
+
 	if (events.length === 0) return null;
 
 	return (
-		<section className="bg-white py-12 md:py-16">
+		<section className="bg-white">
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<h2 className="mb-1.5 text-xl font-black uppercase tracking-[0.05em] md:text-[28px]">
-					KIẾN THỨC VỀ RƯỢU VANG
+					{t("knowledge_title")}
 				</h2>
 				<p className="mb-8 text-sm text-gray-500 md:text-[15px]">
-					Khám phá thế giới rượu vang qua những bài viết và sự kiện đặc sắc.
+					{t("knowledge_subtitle")}
 				</p>
 
 				{/* Desktop: 3 columns */}
@@ -50,7 +53,7 @@ export default function WineKnowledgeSection({ events }: WineKnowledgeSectionPro
 								</p>
 							)}
 							<span className="mt-3 inline-block text-[13px] font-semibold text-brand-primary group-hover:underline">
-								Xem chi tiết →
+								{t("knowledge_read_more")}
 							</span>
 						</Link>
 					))}
@@ -91,7 +94,7 @@ export default function WineKnowledgeSection({ events }: WineKnowledgeSectionPro
 											</p>
 										)}
 										<span className="text-[12px] font-semibold text-brand-primary group-hover:underline">
-											Xem chi tiết →
+											{t("knowledge_read_more")}
 										</span>
 									</div>
 								</Link>

@@ -8,11 +8,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase-client";
 import type { DbProduct } from "@/@types/product";
 import CardProduct from "@/components/page/card-product";
+import { useTranslations } from "next-intl";
 
 import "swiper/css";
 import "swiper/css/grid";
 
 export default function BestSellerSlider() {
+	const t = useTranslations("home");
 	const swiperRef = useRef<SwiperType | null>(null);
 	const [products, setProducts] = useState<DbProduct[]>([]);
 
@@ -28,11 +30,11 @@ export default function BestSellerSlider() {
 	}, []);
 
 	return (
-		<section className="bg-white py-12 md:py-16">
+		<section className="bg-white">
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Title */}
 				<h2 className="mb-7.5 text-center text-xl font-semibold uppercase tracking-[0.15em] md:text-[28px]">
-					SẢN PHẨM BÁN CHẠY NHẤT
+					{t("bestseller_title")}
 				</h2>
 
 				{/* Slider wrapper with side arrows */}
@@ -57,7 +59,7 @@ export default function BestSellerSlider() {
 							1024: { slidesPerView: 4, spaceBetween: 20, grid: { rows: 1 }, slidesPerGroup: 1 },
 							1280: { slidesPerView: 5, spaceBetween: 20, grid: { rows: 1 }, slidesPerGroup: 1 },
 						}}
-						className="px-1! py-4!"
+						className="px-1!"
 					>
 						{products.map((product) => (
 							<SwiperSlide key={product.id}>

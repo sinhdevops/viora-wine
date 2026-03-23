@@ -67,12 +67,12 @@ const organizationJsonLd = {
   image: 'https://winehousedanang.vn/statics/images/og-home.jpg',
   description:
     'Cửa hàng rượu vang nhập khẩu chính hãng tại Đà Nẵng. Rượu vang Úc, Pháp, Ý, Whisky cao cấp.',
-  telephone: '+84-905-123-456',
+  telephone: '+84-338-909-973',
   email: 'contact@winehousedanang.vn',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: '123 Bạch Đằng',
-    addressLocality: 'Hải Châu',
+    streetAddress: 'Đường Tố Hữu',
+    addressLocality: 'Đà Nẵng',
     addressRegion: 'Đà Nẵng',
     postalCode: '550000',
     addressCountry: 'VN',

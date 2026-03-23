@@ -1,7 +1,10 @@
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function WinePromoBanner() {
+	const t = useTranslations("home");
+
 	return (
 		<section className="relative overflow-hidden">
 			{/* Full background image */}
@@ -19,17 +22,16 @@ export default function WinePromoBanner() {
 			<div className="relative z-10 mx-auto flex min-h-48 max-w-360 items-center px-8 py-10 sm:min-h-65 sm:px-12 lg:min-h-90 lg:px-16 lg:py-16">
 				<div className="w-full text-center sm:text-left sm:max-w-1/2">
 					<h2 className="mb-3 text-xl font-black leading-tight tracking-tight uppercase md:mb-4 md:text-[28px]">
-						QUY TRÌNH SẢN XUẤT RƯỢU VANG
+						{t("promo_title")}
 					</h2>
 					<p className="mb-6 text-[13px] leading-relaxed text-gray-700 md:mb-8 md:text-sm lg:text-[16px]">
-						Rượu vang là một loại đồ uống có cồn được lên men từ nho. Sự cân
-						bằng hóa học tự nhiên cho phép nho lên men mà không cần thêm đường.
+						{t("promo_desc")}
 					</p>
 					<Link
 						href="/products"
 						className="inline-block rounded-lg bg-brand-primary px-6 py-3 text-xs font-bold tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#A30000] md:px-8 md:py-3.5 md:text-sm"
 					>
-						MUA NGAY
+						{t("promo_cta")}
 					</Link>
 				</div>
 			</div>

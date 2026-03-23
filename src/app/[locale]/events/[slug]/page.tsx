@@ -97,8 +97,8 @@ export default async function NewsDetailPage({ params }: Props) {
       .single(),
     supabase
       .from('events')
-      .select('id,  name, description, content, thumbnail_url,  category')
-      .neq('id', slug)
+      .select('id, name, description, content, thumbnail_url, category')
+      .eq('id', slug)
       .order('date', { ascending: false })
       .limit(3),
   ]);

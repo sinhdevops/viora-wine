@@ -1,42 +1,45 @@
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { WINE_IMAGES } from "../../../../public/statics/images";
-
-const categories = [
-	{
-		name: "RƯỢU MẠNH",
-		image: WINE_IMAGES.categoryWine1,
-		path: "/products?cat=spirits",
-	},
-	{
-		name: "RƯỢU VANG",
-		image: WINE_IMAGES.categoryWine2,
-		path: "/products?cat=wine",
-	},
-	{
-		name: "CHAMPAGNE",
-		image: WINE_IMAGES.categoryWine3,
-		path: "/products?cat=champagne",
-	},
-	{
-		name: "WHISKY",
-		image: WINE_IMAGES.categoryWine4,
-		path: "/products?cat=whisky",
-	},
-	{
-		name: "QUÀ TẶNG",
-		image: WINE_IMAGES.categoryWine5,
-		path: "/products?cat=gift",
-	},
-];
+import { useTranslations } from "next-intl";
 
 export default function FeaturedCategories() {
+	const t = useTranslations("home");
+
+	const categories = [
+		{
+			name: t("cat_spirits"),
+			image: WINE_IMAGES.categoryWine1,
+			path: "/products?cat=spirits",
+		},
+		{
+			name: t("cat_wine"),
+			image: WINE_IMAGES.categoryWine2,
+			path: "/products?cat=wine",
+		},
+		{
+			name: t("cat_champagne"),
+			image: WINE_IMAGES.categoryWine3,
+			path: "/products?cat=champagne",
+		},
+		{
+			name: t("cat_whisky"),
+			image: WINE_IMAGES.categoryWine4,
+			path: "/products?cat=whisky",
+		},
+		{
+			name: t("cat_gift"),
+			image: WINE_IMAGES.categoryWine5,
+			path: "/products?cat=gift",
+		},
+	];
+
 	return (
-		<section className="bg-white py-12 md:py-16">
+		<section className="bg-white pt-25">
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Title */}
-				<h2 className="mb-8 text-center text-xl font-black tracking-[0.2em] text-gray-900 uppercase md:mb-10 md:text-2xl">
-					DANH MỤC NỔI BẬT
+				<h2 className="mb-8 text-center text-xl font-semibold tracking-[0.2em] uppercase md:mb-10 md:text-2xl">
+					{t("categories_title")}
 				</h2>
 
 				{/* Mobile: first item full width, rest 2 cols | Desktop: 5 columns */}
