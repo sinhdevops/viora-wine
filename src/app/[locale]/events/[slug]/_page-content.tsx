@@ -1,5 +1,6 @@
 "use client";
 
+import DOMPurify from "isomorphic-dompurify";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
@@ -143,7 +144,7 @@ export default function NewsDetailPageContent({ newsItem, relatedNews }: NewsDet
         <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
           <div
             className="prose prose-gray max-w-none wrap-break-word prose-headings:font-black prose-headings:tracking-tight prose-headings:text-gray-900 prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-xl prose-h3:uppercase prose-p:mb-5 prose-p:text-[15px] prose-p:leading-relaxed prose-p:text-gray-600 prose-strong:font-bold prose-strong:text-gray-900 prose-ul:pl-5 prose-li:mb-1 prose-li:text-[15px] prose-li:text-gray-600 prose-img:rounded-xl"
-            dangerouslySetInnerHTML={{ __html: newsItem.content[locale] }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(newsItem.content[locale]) }}
           />
 
           {/* Tags */}

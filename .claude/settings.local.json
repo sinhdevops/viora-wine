@@ -9,7 +9,9 @@
       "Bash(ls -la /e/Works/EmSinhKay-company/wine-house/src/app/[locale]/)",
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:d[k] for k in [''''news'''',''''news_detail''''] if k in d}, ensure_ascii=False, indent=2\\)\\)\")",
       "Bash(find /e/Works/EmSinhKay-company/wine-house/src/app/[locale] -name \"_page-content.tsx\" -o -name \"layout.tsx\")",
-      "Bash(grep -E \"\\\\.\\(json|ts\\)$\")"
+      "Bash(grep -E \"\\\\.\\(json|ts\\)$\")",
+      "Bash(grep -rn \"eval\\\\|Function\\\\s*\\(\" e:/Works/EmSinhKay-company/wine-house/src --include=*.ts --include=*.tsx)",
+      "Bash(grep -rn \"dangerouslySetInnerHTML\\\\|innerHTML\\\\|__html\" e:/Works/EmSinhKay-company/wine-house/src --include=*.tsx --include=*.ts)"
     ]
   }
 }

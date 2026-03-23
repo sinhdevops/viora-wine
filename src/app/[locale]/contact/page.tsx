@@ -14,16 +14,16 @@ export async function generateMetadata({
     title: t('meta_title'),
     description: t('meta_desc'),
     alternates: {
-      canonical: `https://winehousedanang.vn/${locale}/contact`,
+      canonical: `/${locale}/contact`,
       languages: {
-        vi: 'https://winehousedanang.vn/vi/contact',
-        en: 'https://winehousedanang.vn/en/contact',
+        vi: '/vi/contact',
+        en: '/en/contact',
       },
     },
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
       description: t('meta_desc'),
-      url: `https://winehousedanang.vn/${locale}/contact`,
+      url: `/${locale}/contact`,
       siteName: common('brand'),
       locale,
       type: 'website',

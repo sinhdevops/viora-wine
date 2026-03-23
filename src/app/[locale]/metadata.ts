@@ -18,7 +18,7 @@ export async function generateMetadata({
     openGraph: {
       title: t('brand'),
       description: t('slogan'),
-      url: 'https://winehousedanang.vn',
+      url: '/',
       siteName: t('brand'),
       locale: locale,
       type: 'website',

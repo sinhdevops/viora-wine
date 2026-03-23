@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { supabase } from "@/lib/supabase-client";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -16,19 +14,11 @@ interface Banner {
 	image_url: string;
 }
 
-export default function HeroBanner() {
-	const [banners, setBanners] = useState<Banner[]>([]);
+interface HeroBannerProps {
+	banners: Banner[];
+}
 
-	useEffect(() => {
-		supabase
-			.from("hero_banners")
-			.select("id, image_url")
-			.order("created_at", { ascending: true })
-			.then(({ data }) => {
-				if (data && data.length > 0) setBanners(data);
-			});
-	}, []);
-
+export default function HeroBanner({ banners }: HeroBannerProps) {
 	if (banners.length === 0) return null;
 
 	return (

@@ -59,16 +59,16 @@ export async function generateMetadata({ params }: Props) {
     title,
     description,
     alternates: {
-      canonical: `https://winehousedanang.vn/${locale}/news/${slug}`,
+      canonical: `/${locale}/events/${slug}`,
       languages: {
-        vi: `https://winehousedanang.vn/vi/news/${slug}`,
-        en: `https://winehousedanang.vn/en/news/${slug}`,
+        vi: `/vi/events/${slug}`,
+        en: `/en/events/${slug}`,
       },
     },
     openGraph: {
       title: `${title} | ${common('brand')}`,
       description,
-      url: `https://winehousedanang.vn/${locale}/news/${slug}`,
+      url: `/${locale}/events/${slug}`,
       siteName: common('brand'),
       locale,
       type: 'article',

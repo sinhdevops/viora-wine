@@ -1,13 +1,7 @@
-import "swiper/css";
-import "swiper/css/pagination";
 import HeroBanner from "@/components/page/home/hero-banner";
 import Features from "@/components/page/home/features";
 import FeaturedCategories from "@/components/page/home/featured-categories";
-import BestSellerSlider from "@/components/page/home/best-seller-slider";
-import WinePromoBanner from "@/components/page/home/wine-promo-banner";
-import GoodWineSection from "@/components/page/home/good-wine-section";
-import ExploreSection from "@/components/page/home/explore-section";
-import WineKnowledgeSection from "@/components/page/home/wine-knowledge-section";
+import BelowFoldSections from "@/components/page/home/below-fold-sections";
 import { createClient } from "@/utils/supabase/server";
 
 export type EventItem = {
@@ -22,7 +16,11 @@ export type EventItem = {
 export default async function HomePageContent() {
 	const supabase = await createClient();
 
-	const [{ data: suKienEvents }, { data: kienThucEvents }] = await Promise.all([
+	const [{ data: banners }, { data: suKienEvents }, { data: kienThucEvents }] = await Promise.all([
+		supabase
+			.from("hero_banners")
+			.select("id, image_url")
+			.order("created_at", { ascending: true }),
 		supabase
 			.from("events")
 			.select("id, name, description, thumbnail_url, date, category")
@@ -39,16 +37,12 @@ export default async function HomePageContent() {
 
 	return (
 		<div className="flex flex-col gap-0 pb-24">
-			<HeroBanner />
+			<HeroBanner banners={banners ?? []} />
 			<Features />
-			<div className="flex flex-col gap-25">
-			<FeaturedCategories />
-			<BestSellerSlider />
-			<WinePromoBanner />
-			<GoodWineSection />
-			<ExploreSection events={suKienEvents ?? []} />
-			<WineKnowledgeSection events={kienThucEvents ?? []} />
+			<div className="mb-25">
+				<FeaturedCategories />
 			</div>
+			<BelowFoldSections suKienEvents={suKienEvents ?? []} kienThucEvents={kienThucEvents ?? []} />
 		</div>
 	);
 }

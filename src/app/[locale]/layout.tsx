@@ -28,7 +28,7 @@ export async function generateMetadata({
   const homeT = await getTranslations({ locale, namespace: 'home' });
 
   return {
-    metadataBase: new URL('https://winehousedanang.vn'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'https://winehousedanang.vn'),
     title: {
       default: homeT('meta_title'),
       template: `%s | ${t('brand')}`,
@@ -42,7 +42,7 @@ export async function generateMetadata({
     openGraph: {
       title: homeT('meta_title'),
       description: homeT('meta_desc'),
-      url: 'https://winehousedanang.vn',
+      url: '/',
       siteName: t('brand'),
       locale,
       type: 'website',
