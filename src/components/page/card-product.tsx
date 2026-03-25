@@ -45,14 +45,22 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 						{product.name}
 					</p>
 					<div className="flex flex-wrap items-baseline gap-x-2.5">
-						{originalPrice && (
-							<span className="text-[13px] text-[#3D3D3D] line-through">
-								{formatCurrency(originalPrice, locale)}
+						{product.price === 0 ? (
+							<span className="text-[15px] font-semibold text-brand-primary">
+								Liên hệ
 							</span>
+						) : (
+							<>
+								{originalPrice && (
+									<span className="text-[13px] text-[#3D3D3D] line-through">
+										{formatCurrency(originalPrice, locale)}
+									</span>
+								)}
+								<span className="text-[15px] font-semibold text-brand-primary">
+									{formatCurrency(product.price, locale)}
+								</span>
+							</>
 						)}
-						<span className="text-[15px] font-semibold text-brand-primary">
-							{formatCurrency(product.price, locale)}
-						</span>
 					</div>
 				</div>
 			</div>

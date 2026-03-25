@@ -218,6 +218,8 @@
     "filters": "Bộ lọc",
     "filter": "Lọc",
     "price_range": "Mức giá",
+    "hot_filter": "Sản phẩm nổi bật",
+    "hot_filter_label": "Chỉ sản phẩm Hot",
     "loading": "Đang tải...",
     "count": "sản phẩm",
     "clear": "Xóa",

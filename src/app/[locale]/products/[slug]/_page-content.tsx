@@ -99,13 +99,21 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 
             {/* Price */}
             <div className="mb-6 flex items-baseline gap-3">
-              <span className="text-3xl font-black text-brand-primary">
-                {formatCurrency(product.price, locale)}
-              </span>
-              {originalPrice && (
-                <span className="text-lg text-gray-400 line-through">
-                  {formatCurrency(originalPrice, locale)}
+              {product.price === 0 ? (
+                <span className="text-3xl font-black text-brand-primary">
+                  Liên hệ
                 </span>
+              ) : (
+                <>
+                  <span className="text-3xl font-black text-brand-primary">
+                    {formatCurrency(product.price, locale)}
+                  </span>
+                  {originalPrice && (
+                    <span className="text-lg text-gray-400 line-through">
+                      {formatCurrency(originalPrice, locale)}
+                    </span>
+                  )}
+                </>
               )}
             </div>
 

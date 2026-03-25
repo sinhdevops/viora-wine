@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Modal } from "@/components/ui/modal";
 import { ProductForm } from "@/components/admin/product-form";
+import { TablePagination } from "@/components/admin/table-pagination";
 import { createClient } from "@/lib/supabase";
 import { type ProductFormValues } from "@/lib/schemas/product-schema";
 
@@ -22,6 +23,8 @@ export default function ProductsPage() {
 	const [products, setProducts] = useState<Product[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [deletingId, setDeletingId] = useState<string | null>(null);
+	const [page, setPage] = useState(1);
+	const PER_PAGE = 10;
 
 	const fetchProducts = useCallback(async () => {
 		const supabase = createClient();
@@ -31,7 +34,7 @@ export default function ProductsPage() {
 			.order("created_at", { ascending: false });
 
 		if (error) toast.error("Không thể tải danh sách sản phẩm");
-		else setProducts(data ?? []);
+		else { setProducts(data ?? []); setPage(1); }
 
 		setLoading(false);
 	}, []);
@@ -54,11 +57,11 @@ export default function ProductsPage() {
 	};
 
 	return (
-		<div className="min-h-screen p-8">
+		<div className="min-h-screen p-4 md:p-8">
 			{/* Page header */}
-			<div className="mb-8 flex items-end justify-between">
+			<div className="mb-6 flex flex-wrap items-center justify-between gap-3 md:mb-8">
 				<div>
-					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+					<h1 className="text-2xl font-extrabold tracking-tight text-gray-900 md:text-3xl">
 						Products
 					</h1>
 					<p className="mt-1 text-xs font-semibold uppercase tracking-widest text-gray-400">
@@ -68,7 +71,7 @@ export default function ProductsPage() {
 
 				<button
 					onClick={() => setOpen(true)}
-					className="flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-gray-700"
+					className="flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-gray-700"
 				>
 					<Plus size={16} />
 					Add Product
@@ -86,7 +89,9 @@ export default function ProductsPage() {
 						Chưa có sản phẩm nào. Nhấn <strong>+ Add Product</strong> để tạo.
 					</div>
 				) : (
-					<table className="w-full text-sm">
+					<>
+					<div className="overflow-x-auto">
+					<table className="w-full min-w-160 text-sm">
 						<thead>
 							<tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-widest text-gray-400">
 								<th className="px-5 py-4">Product</th>
@@ -98,7 +103,7 @@ export default function ProductsPage() {
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-gray-50">
-							{products.map((product) => (
+							{products.slice((page - 1) * PER_PAGE, page * PER_PAGE).map((product) => (
 								<tr
 									key={product.id}
 									className="transition-colors hover:bg-gray-50/60"
@@ -106,7 +111,7 @@ export default function ProductsPage() {
 									{/* Product */}
 									<td className="px-5 py-4">
 										<div className="flex items-center gap-3">
-											<div className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-xl bg-gray-100">
+											<div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-gray-100">
 												{product.thumbnail_url ? (
 													<Image
 														src={product.thumbnail_url}
@@ -140,7 +145,7 @@ export default function ProductsPage() {
 											{formatPrice(product.price)}
 										</p>
 										{product.discount_percentage > 0 && (
-											<p className="text-xs font-medium text-[#C80000]">
+											<p className="text-xs font-medium text-brand-primary">
 												-{product.discount_percentage}% OFF
 											</p>
 										)}
@@ -200,6 +205,14 @@ export default function ProductsPage() {
 							))}
 						</tbody>
 					</table>
+					</div>
+					<TablePagination
+						total={products.length}
+						page={page}
+						perPage={PER_PAGE}
+						onChange={setPage}
+					/>
+				</>
 				)}
 			</div>
 

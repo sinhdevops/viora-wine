@@ -20,6 +20,7 @@ export default async function HomePageContent() {
 		supabase
 			.from("hero_banners")
 			.select("id, image_url")
+			.eq("is_active", true)
 			.order("created_at", { ascending: true }),
 		supabase
 			.from("events")

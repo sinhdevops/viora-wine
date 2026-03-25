@@ -2,6 +2,7 @@
 create table hero_banners (
   id uuid primary key default gen_random_uuid(),
   image_url text not null,
+  is_active boolean default false,
   created_at timestamptz default now()
 );
 

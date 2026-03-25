@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Modal } from "@/components/ui/modal";
 import { EventForm } from "@/components/admin/event-form";
+import { TablePagination } from "@/components/admin/table-pagination";
 import { createClient } from "@/lib/supabase";
 import { type EventFormValues } from "@/lib/schemas/event-schema";
 
@@ -31,6 +32,8 @@ export default function EventsPage() {
 	const [events, setEvents] = useState<Event[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [deletingId, setDeletingId] = useState<string | null>(null);
+	const [page, setPage] = useState(1);
+	const PER_PAGE = 10;
 
 	const fetchEvents = useCallback(async () => {
 		const supabase = createClient();
@@ -40,7 +43,7 @@ export default function EventsPage() {
 			.order("date", { ascending: false });
 
 		if (error) toast.error("Không thể tải danh sách sự kiện");
-		else setEvents(data ?? []);
+		else { setEvents(data ?? []); setPage(1); }
 
 		setLoading(false);
 	}, []);
@@ -63,11 +66,11 @@ export default function EventsPage() {
 	};
 
 	return (
-		<div className="min-h-screen p-8">
+		<div className="min-h-screen p-4 md:p-8">
 			{/* Header */}
-			<div className="mb-8 flex items-end justify-between">
+			<div className="mb-6 flex flex-wrap items-center justify-between gap-3 md:mb-8">
 				<div>
-					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+					<h1 className="text-2xl font-extrabold tracking-tight text-gray-900 md:text-3xl">
 						Sự kiện & Kiến thức
 					</h1>
 					<p className="mt-1 text-xs font-semibold uppercase tracking-widest text-gray-400">
@@ -77,7 +80,7 @@ export default function EventsPage() {
 
 				<button
 					onClick={() => setOpen(true)}
-					className="flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-gray-700"
+					className="flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-gray-700"
 				>
 					<Plus size={16} />
 					Thêm mới
@@ -95,7 +98,9 @@ export default function EventsPage() {
 						Chưa có sự kiện nào. Nhấn <strong>+ Thêm mới</strong> để tạo.
 					</div>
 				) : (
-					<table className="w-full text-sm">
+					<>
+					<div className="overflow-x-auto">
+					<table className="w-full min-w-120 text-sm">
 						<thead>
 							<tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-widest text-gray-400">
 								<th className="px-5 py-4">Sự kiện</th>
@@ -105,7 +110,7 @@ export default function EventsPage() {
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-gray-50">
-							{events.map((event) => (
+							{events.slice((page - 1) * PER_PAGE, page * PER_PAGE).map((event) => (
 								<tr
 									key={event.id}
 									className="transition-colors hover:bg-gray-50/60"
@@ -113,7 +118,7 @@ export default function EventsPage() {
 									{/* Event */}
 									<td className="px-5 py-4">
 										<div className="flex items-center gap-3">
-											<div className="relative h-12 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+											<div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100">
 												{event.thumbnail_url ? (
 													<Image
 														src={event.thumbnail_url}
@@ -138,7 +143,7 @@ export default function EventsPage() {
 										<span
 											className={`rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider ${
 												event.category === "su-kien"
-													? "border border-[#C80000]/30 bg-[#C80000]/10 text-[#C80000]"
+													? "border border-brand-primary/30 bg-brand-primary/10 text-brand-primary"
 													: "border border-blue-200 bg-blue-50 text-blue-600"
 											}`}
 										>
@@ -177,6 +182,14 @@ export default function EventsPage() {
 							))}
 						</tbody>
 					</table>
+					</div>
+					<TablePagination
+						total={events.length}
+						page={page}
+						perPage={PER_PAGE}
+						onChange={setPage}
+					/>
+				</>
 				)}
 			</div>
 

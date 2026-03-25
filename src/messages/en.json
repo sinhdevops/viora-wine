@@ -218,6 +218,8 @@
     "filters": "Filters",
     "filter": "Filter",
     "price_range": "Price range",
+    "hot_filter": "Featured products",
+    "hot_filter_label": "Hot products only",
     "loading": "Loading...",
     "count": "products",
     "clear": "Clear",

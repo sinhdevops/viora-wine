@@ -59,7 +59,7 @@ export default function BestSellerSlider() {
 							1024: { slidesPerView: 4, spaceBetween: 20, grid: { rows: 1 }, slidesPerGroup: 1 },
 							1280: { slidesPerView: 5, spaceBetween: 20, grid: { rows: 1 }, slidesPerGroup: 1 },
 						}}
-						className="px-1!"
+						className="px-1! pt-4!"
 					>
 						{products.map((product) => (
 							<SwiperSlide key={product.id}>

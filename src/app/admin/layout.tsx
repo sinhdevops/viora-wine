@@ -26,7 +26,7 @@ export default function AdminLayout({
 				suppressHydrationWarning
 			>
 				<AdminSidebar />
-				<main className="flex-1 overflow-y-auto">{children}</main>
+				<main className="flex-1 overflow-y-auto pt-14 md:pt-0 pb-16 md:pb-0">{children}</main>
 				<Toaster position="top-right" richColors />
 			</body>
 		</html>

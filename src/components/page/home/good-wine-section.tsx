@@ -87,7 +87,7 @@ export default function GoodWineSection() {
 				) : displayed.length > 0 ? (
 					<div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:gap-x-5 lg:grid-cols-5">
 						{displayed.map((product) => (
-							<CardProduct key={product.id} product={product} />
+							<CardProduct key={product.id} product={product} isHot={product.is_hot} />
 						))}
 					</div>
 				) : (

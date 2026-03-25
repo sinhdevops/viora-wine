@@ -13,6 +13,9 @@ import type { DbProduct } from '@/@types/product';
 
 const CATEGORY_TAB_IDS = ['all', 'wine', 'whisky', 'spirits', 'combo', 'gift'] as const;
 const PRICE_RANGE_IDS = ['all', 'under-5', '5-10', '10-20', 'over-20'] as const;
+const HOT_FILTER_IDS = ['all', 'hot'] as const;
+
+type HotFilterId = (typeof HOT_FILTER_IDS)[number];
 const PRODUCTS_PER_PAGE = 12; // TODO: đổi lại 12 sau khi test
 
 type PriceRangeId = (typeof PRICE_RANGE_IDS)[number];
@@ -180,6 +183,46 @@ function RadioOption({
   );
 }
 
+// ─── Checkbox option ──────────────────────────────────────────────────────────
+function CheckboxOption({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: () => void;
+  label: string;
+}) {
+  return (
+    <label className="flex items-center gap-3 cursor-pointer group">
+      <div className="relative flex items-center justify-center shrink-0">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+          className="peer appearance-none w-4 h-4 rounded border border-gray-300 checked:border-brand-primary checked:bg-brand-primary transition-all"
+        />
+        <svg
+          className="absolute w-2.5 h-2.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none"
+          viewBox="0 0 10 10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <polyline points="1.5,5 4,7.5 8.5,2.5" />
+        </svg>
+      </div>
+      <span
+        className={`text-[13px] transition-colors ${
+          checked ? 'text-brand-primary font-medium' : 'text-gray-600 group-hover:text-brand-primary'
+        }`}
+      >
+        {label}
+      </span>
+    </label>
+  );
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function ProductsPageContent() {
   const t = useTranslations('products_page');
@@ -188,12 +231,14 @@ export default function ProductsPageContent() {
 
   const categoryFilter = searchParams.get('cat') || 'all';
   const priceFilter = (searchParams.get('price') || 'all') as PriceRangeId;
+  const hotFilter = (searchParams.get('hot') || 'all') as HotFilterId;
 
   const [products, setProducts] = useState<DbProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(true);
+  const [hotOpen, setHotOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -228,16 +273,17 @@ export default function ProductsPageContent() {
       else if (priceFilter === '5-10') matchPrice = p.price >= 5_000_000 && p.price <= 10_000_000;
       else if (priceFilter === '10-20') matchPrice = p.price > 10_000_000 && p.price <= 20_000_000;
       else if (priceFilter === 'over-20') matchPrice = p.price > 20_000_000;
-      return matchCat && matchSearch && matchPrice;
+      const matchHot = hotFilter === 'all' || p.is_hot === true;
+      return matchCat && matchSearch && matchPrice && matchHot;
     });
-  }, [products, categoryFilter, priceFilter, searchInput]);
+  }, [products, categoryFilter, priceFilter, hotFilter, searchInput]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
 
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [categoryFilter, priceFilter, searchInput]);
+  }, [categoryFilter, priceFilter, hotFilter, searchInput]);
 
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -249,27 +295,43 @@ export default function ProductsPageContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const hasActiveFilters = categoryFilter !== 'all' || priceFilter !== 'all' || searchInput;
+  const hasActiveFilters = categoryFilter !== 'all' || priceFilter !== 'all' || hotFilter !== 'all' || searchInput;
 
   const filterContent = (isMobile = false) => (
-    <FilterSection
-      title={t('price_range')}
-      isOpen={priceOpen}
-      onToggle={() => setPriceOpen((v) => !v)}
-    >
-      {PRICE_RANGE_IDS.map((id) => (
-        <RadioOption
-          key={id}
-          name="price"
-          checked={priceFilter === id}
+    <>
+      <FilterSection
+        title={t('price_range')}
+        isOpen={priceOpen}
+        onToggle={() => setPriceOpen((v) => !v)}
+      >
+        {PRICE_RANGE_IDS.map((id) => (
+          <RadioOption
+            key={id}
+            name="price"
+            checked={priceFilter === id}
+            onChange={() => {
+              updateFilter('price', id);
+              if (isMobile) setIsFilterOpen(false);
+            }}
+            label={t(`price_range_tabs.${id}`)}
+          />
+        ))}
+      </FilterSection>
+      <FilterSection
+        title={t('hot_filter')}
+        isOpen={hotOpen}
+        onToggle={() => setHotOpen((v) => !v)}
+      >
+        <CheckboxOption
+          checked={hotFilter === 'hot'}
           onChange={() => {
-            updateFilter('price', id);
+            updateFilter('hot', hotFilter === 'hot' ? 'all' : 'hot');
             if (isMobile) setIsFilterOpen(false);
           }}
-          label={t(`price_range_tabs.${id}`)}
+          label={t('hot_filter_label')}
         />
-      ))}
-    </FilterSection>
+      </FilterSection>
+    </>
   );
 
   return (
@@ -351,7 +413,7 @@ export default function ProductsPageContent() {
             >
               <HiAdjustmentsHorizontal size={17} />
               {t('filter')}
-              {priceFilter !== 'all' && (
+              {(priceFilter !== 'all' || hotFilter !== 'all') && (
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
               )}
             </button>
@@ -387,9 +449,9 @@ export default function ProductsPageContent() {
               <span className="text-[11px] uppercase tracking-widest font-black text-gray-900">
                 {t('filters')}
               </span>
-              {priceFilter !== 'all' && (
+              {(priceFilter !== 'all' || hotFilter !== 'all') && (
                 <button
-                  onClick={() => updateFilter('price', 'all')}
+                  onClick={() => { updateFilter('price', 'all'); updateFilter('hot', 'all'); }}
                   className="text-[10px] text-brand-primary hover:underline uppercase tracking-wider font-bold"
                 >
                   {t('clear')}
