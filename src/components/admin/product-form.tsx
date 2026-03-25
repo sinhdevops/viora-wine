@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -70,6 +71,13 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 	const category     = watch("category");
 	const isWine       = category === "wine";
 
+	useEffect(() => {
+		if (!isEdit) {
+			const num = Date.now().toString().slice(-6);
+			setValue("id", `vw-${num}`);
+		}
+	}, [isEdit, setValue]);
+
 	const onSubmit = async (data: ProductFormValues) => {
 
 		if (isEdit) {
@@ -106,12 +114,8 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 					</label>
 					<input
 						{...register("id")}
-						className={
-							cls.input +
-							(isEdit ? " cursor-not-allowed bg-gray-50 text-gray-400" : "")
-						}
-						placeholder="vd: chateau-margaux-2015"
-						disabled={isEdit}
+						className={cls.input + " cursor-not-allowed bg-gray-50 text-gray-400"}
+						disabled
 					/>
 					{errors.id && <p className={cls.error}>{errors.id.message}</p>}
 				</div>
