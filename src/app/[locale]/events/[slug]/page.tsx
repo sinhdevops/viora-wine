@@ -58,6 +58,14 @@ export async function generateMetadata({ params }: Props) {
   return {
     title,
     description,
+    keywords: [
+      title,
+      'Kiến thức rượu vang',
+      'Tin tức Viora Wine',
+      'Rượu vang Đà Nẵng',
+      'Văn hóa rượu vang',
+      'Học về rượu vang',
+    ],
     alternates: {
       canonical: `/${locale}/events/${slug}`,
       languages: {
@@ -86,19 +94,19 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function NewsDetailPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const supabase = await createClient();
 
   const [{ data: row }, { data: relatedRows }] = await Promise.all([
     supabase
       .from('events')
-      .select('id,  name, description, content, thumbnail_url,  category')
+      .select('id,  name, description, content, thumbnail_url,  category, date')
       .eq('id', slug)
       .single(),
     supabase
       .from('events')
-      .select('id, name, description, content, thumbnail_url, category')
-      .eq('id', slug)
+      .select('id, name, description, content, thumbnail_url, category, date')
+      .neq('id', slug)
       .order('date', { ascending: false })
       .limit(3),
   ]);
@@ -109,5 +117,60 @@ export default async function NewsDetailPage({ params }: Props) {
   const newsItem = mapToNewsItem(row as EventRow);
   const relatedNews = (relatedRows ?? []).map((r) => mapToNewsItem(r as EventRow));
 
-  return <NewsDetailPageContent newsItem={newsItem} relatedNews={relatedNews} />;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://viorawine.vn';
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: newsItem.title[locale as 'vi' | 'en'],
+    image: [newsItem.image],
+    datePublished: newsItem.date,
+    dateModified: newsItem.date,
+    author: [
+      {
+        '@type': 'Person',
+        name: 'Viora Wine',
+        url: baseUrl,
+      },
+    ],
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Trang chủ',
+        item: `${baseUrl}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Kiến thức',
+        item: `${baseUrl}/events`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: newsItem.title[locale as 'vi' | 'en'],
+        item: `${baseUrl}/events/${slug}`,
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <NewsDetailPageContent newsItem={newsItem} relatedNews={relatedNews} />
+    </>
+  );
 }

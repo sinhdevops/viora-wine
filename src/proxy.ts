@@ -2,15 +2,23 @@ import createMiddleware from 'next-intl/middleware';
 import {routing} from './i18n/routing';
 import { NextRequest } from 'next/server';
 
+import { updateSession } from '@/utils/supabase/middleware';
+
 const intlMiddleware = createMiddleware(routing);
 
-export default function proxy(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
+  // Update session for all requests
+  const supabaseResponse = await updateSession(request);
+
   const { pathname } = request.nextUrl;
 
+  // If it's an admin route, the Supabase middleware handles redirection/protection
   if (pathname.startsWith("/admin")) {
-    return;
+    return supabaseResponse;
   }
 
+  // For other routes, apply internationalization middleware
+  // Note: we might need to preserve cookies updated by Supabase
   return intlMiddleware(request);
 }
 

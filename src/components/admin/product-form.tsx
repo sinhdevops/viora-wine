@@ -10,8 +10,12 @@ import "react-quill-new/dist/quill.snow.css";
 
 import {
 	CATEGORIES,
+	CATEGORY_LABELS,
 	WINE_TYPES,
 	WINE_TYPE_LABELS,
+	GRAPE_VARIETIES,
+	COUNTRIES,
+	PRODUCERS,
 	productSchema,
 	type ProductFormValues,
 } from "@/lib/schemas/product-schema";
@@ -62,6 +66,11 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 			discount_percentage: 0,
 			category: CATEGORIES[0],
 			wine_type: null,
+			volume: "750ml",
+			alcohol: "",
+			grape_variety: "",
+			country: "",
+			producer: "",
 			stock: 0,
 			is_hot: false,
 		},
@@ -106,196 +115,190 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-			{/* Row 1: ID + Name */}
-			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-				<div>
-					<label className={cls.label}>
-						ID <span className="text-red-500">*</span>
-					</label>
-					<input
-						{...register("id")}
-						className={cls.input + " cursor-not-allowed bg-gray-50 text-gray-400"}
-						disabled
-					/>
-					{errors.id && <p className={cls.error}>{errors.id.message}</p>}
-				</div>
-
-				<div>
-					<label className={cls.label}>
-						Tên sản phẩm <span className="text-red-500">*</span>
-					</label>
-					<input
-						{...register("name")}
-						className={cls.input}
-						placeholder="Château Margaux 2015"
-					/>
-					{errors.name && <p className={cls.error}>{errors.name.message}</p>}
-				</div>
-			</div>
-
-			{/* Description */}
-			<div>
-				<label className={cls.label}>
-					Mô tả ngắn <span className="text-red-500">*</span>
-				</label>
-				<textarea
-					{...register("description")}
-					rows={3}
-					className={cls.input}
-					placeholder="Mô tả ngắn về sản phẩm..."
-				/>
-				{errors.description && (
-					<p className={cls.error}>{errors.description.message}</p>
-				)}
-			</div>
-
-			{/* Thumbnail */}
-			<div>
-				<label className={cls.label}>
-					Ảnh sản phẩm <span className="text-red-500">*</span>
-				</label>
-				<ImageUploader
-					value={thumbnailUrl}
-					onChange={(url) =>
-						setValue("thumbnail_url", url, { shouldValidate: true })
-					}
-					error={errors.thumbnail_url?.message}
-				/>
-			</div>
-
-			{/* Content - Quill */}
-			<div>
-				<label className={cls.label}>
-					Nội dung chi tiết <span className="text-red-500">*</span>
-				</label>
-				<Controller
-					name="content"
-					control={control}
-					render={({ field }) => (
-						<QuillEditor
-							theme="snow"
-							value={field.value}
-							onChange={field.onChange}
-							modules={{
-								toolbar: [
-									[{ header: [1, 2, 3, false] }],
-									["bold", "italic", "underline", "strike"],
-									[{ list: "ordered" }, { list: "bullet" }],
-									["blockquote", "code-block"],
-									["link", "image"],
-									["clean"],
-								],
-							}}
+			{/* --- Basic Information --- */}
+			<div className="space-y-4 rounded-xl border border-gray-100 bg-gray-50/30 p-4">
+				<h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Thông tin cơ bản</h3>
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+					<div>
+						<label className={cls.label}>
+							ID <span className="text-red-500">*</span>
+						</label>
+						<input
+							{...register("id")}
+							className={cls.input + " cursor-not-allowed bg-gray-50 text-gray-400"}
+							disabled
 						/>
-					)}
-				/>
-				{errors.content && (
-					<p className={cls.error}>{errors.content.message}</p>
-				)}
+						{errors.id && <p className={cls.error}>{errors.id.message}</p>}
+					</div>
+
+					<div>
+						<label className={cls.label}>
+							Tên sản phẩm <span className="text-red-500">*</span>
+						</label>
+						<input
+							{...register("name")}
+							className={cls.input}
+							placeholder="Château Margaux 2015"
+						/>
+						{errors.name && <p className={cls.error}>{errors.name.message}</p>}
+					</div>
+				</div>
+
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+					<div>
+						<label className={cls.label}>Danh mục</label>
+						<select {...register("category")} className={cls.input}>
+							{CATEGORIES.map((cat) => (
+								<option key={cat} value={cat}>
+									{CATEGORY_LABELS[cat]}
+								</option>
+							))}
+						</select>
+					</div>
+
+					<div>
+						<label className={cls.label}>
+							Giá (VNĐ) <span className="text-red-500">*</span>
+						</label>
+						<input
+							type="number"
+							{...register("price", { valueAsNumber: true })}
+							className={cls.input}
+							min={0}
+						/>
+					</div>
+
+					<div>
+						<label className={cls.label}>Kho <span className="text-red-500">*</span></label>
+						<input
+							type="number"
+							{...register("stock", { valueAsNumber: true })}
+							className={cls.input}
+							min={0}
+						/>
+					</div>
+				</div>
+				
+				<div className="flex flex-wrap items-center gap-6">
+					<div>
+						<label className={cls.label}>Giảm giá (%)</label>
+						<input
+							type="number"
+							{...register("discount_percentage", { valueAsNumber: true })}
+							className={cls.input + " w-32"}
+							min={0}
+							max={100}
+						/>
+					</div>
+					<div className="flex items-center gap-3 pt-6">
+						<input
+							type="checkbox"
+							id="is_hot"
+							{...register("is_hot")}
+							className="h-4 w-4 rounded border-gray-300 accent-brand-primary"
+						/>
+						<label htmlFor="is_hot" className="text-sm font-medium text-gray-700">
+							Sản phẩm nổi bật (Hot)
+						</label>
+					</div>
+				</div>
 			</div>
 
-			{/* Row: Price + Discount + Stock */}
-			<div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-				<div>
-					<label className={cls.label}>
-						Giá (VNĐ) <span className="text-red-500">*</span>
-					</label>
-					<input
-						type="number"
-						{...register("price", { valueAsNumber: true })}
-						className={cls.input}
-						min={0}
-						placeholder="0"
-					/>
-					{errors.price && <p className={cls.error}>{errors.price.message}</p>}
-				</div>
+			{/* --- Product Specifications --- */}
+			<div className="space-y-4 rounded-xl border border-gray-100 bg-gray-50/30 p-4">
+				<h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Thông số kỹ thuật</h3>
+				<div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+					<div>
+						<label className={`${cls.label} ${!isWine ? "text-gray-400" : ""}`}>Loại vang</label>
+						<select
+							{...register("wine_type")}
+							disabled={!isWine}
+							className={cls.input + (!isWine ? " cursor-not-allowed opacity-60" : "")}
+						>
+							<option value="">-- Chọn loại --</option>
+							{WINE_TYPES.map((type) => (
+								<option key={type} value={type}>{WINE_TYPE_LABELS[type]}</option>
+							))}
+						</select>
+					</div>
 
-				<div>
-					<label className={cls.label}>Giảm giá (%)</label>
-					<input
-						type="number"
-						{...register("discount_percentage", { valueAsNumber: true })}
-						className={cls.input}
-						min={0}
-						max={100}
-						placeholder="0"
-					/>
-					{errors.discount_percentage && (
-						<p className={cls.error}>{errors.discount_percentage.message}</p>
-					)}
-				</div>
+					<div>
+						<label className={cls.label}>Giống nho</label>
+						<select {...register("grape_variety")} className={cls.input}>
+							<option value="">-- Chọn giống nho --</option>
+							{GRAPE_VARIETIES.map((v) => <option key={v} value={v}>{v}</option>)}
+						</select>
+					</div>
 
-				<div>
-					<label className={cls.label}>
-						Kho <span className="text-red-500">*</span>
-					</label>
-					<input
-						type="number"
-						{...register("stock", { valueAsNumber: true })}
-						className={cls.input}
-						min={0}
-						placeholder="0"
-					/>
-					{errors.stock && (
-						<p className={cls.error}>{errors.stock.message}</p>
-					)}
+					<div>
+						<label className={cls.label}>Quốc gia</label>
+						<select {...register("country")} className={cls.input}>
+							<option value="">-- Chọn quốc gia --</option>
+							{COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
+						</select>
+					</div>
+
+					<div>
+						<label className={cls.label}>Nhà sản xuất</label>
+						<select {...register("producer")} className={cls.input}>
+							<option value="">-- Chọn nhà sản xuất --</option>
+							{PRODUCERS.map((p) => <option key={p} value={p}>{p}</option>)}
+						</select>
+					</div>
+
+					<div>
+						<label className={cls.label}>Dung tích</label>
+						<input {...register("volume")} className={cls.input} placeholder="750ml" />
+					</div>
+
+					<div>
+						<label className={cls.label}>Nồng độ (%)</label>
+						<input {...register("alcohol")} className={cls.input} placeholder="13.5%" />
+					</div>
 				</div>
 			</div>
 
-			{/* Row: Category + Wine type */}
-			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+			{/* --- Content & Media --- */}
+			<div className="space-y-4 rounded-xl border border-gray-100 bg-white p-4">
+				<h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">Nội dung & Hình ảnh</h3>
 				<div>
-					<label className={cls.label}>Danh mục</label>
-					<select {...register("category")} className={cls.input}>
-						{CATEGORIES.map((cat) => (
-							<option key={cat} value={cat}>
-								{{ wine: "Rượu vang", whisky: "Whisky", spirits: "Rượu mạnh", combo: "Combo", gift: "Quà tặng" }[cat]}
-							</option>
-						))}
-					</select>
-					{errors.category && (
-						<p className={cls.error}>{errors.category.message}</p>
-					)}
+					<label className={cls.label}>Mô tả ngắn <span className="text-red-500">*</span></label>
+					<textarea {...register("description")} rows={2} className={cls.input} placeholder="Mô tả..." />
 				</div>
 
 				<div>
-					<label className={`${cls.label} ${!isWine ? "text-gray-400" : ""}`}>
-						Loại vang
-						{!isWine && (
-							<span className="ml-1.5 text-xs font-normal text-gray-400">
-								(chỉ dùng cho Rượu vang)
-							</span>
+					<label className={cls.label}>Ảnh sản phẩm <span className="text-red-500">*</span></label>
+					<ImageUploader
+						value={thumbnailUrl}
+						onChange={(url) => setValue("thumbnail_url", url, { shouldValidate: true })}
+						error={errors.thumbnail_url?.message}
+					/>
+				</div>
+
+				<div>
+					<label className={cls.label}>Nội dung chi tiết <span className="text-red-500">*</span></label>
+					<Controller
+						name="content"
+						control={control}
+						render={({ field }) => (
+							<QuillEditor
+								theme="snow"
+								value={field.value}
+								onChange={field.onChange}
+								modules={{
+									toolbar: [
+										[{ header: [1, 2, 3, false] }],
+										["bold", "italic", "underline", "strike"],
+										[{ list: "ordered" }, { list: "bullet" }],
+										["blockquote", "image"],
+										["clean"],
+									],
+								}}
+							/>
 						)}
-					</label>
-					<select
-						{...register("wine_type")}
-						disabled={!isWine}
-						className={
-							cls.input +
-							(!isWine ? " cursor-not-allowed bg-gray-50 text-gray-400 opacity-60" : "")
-						}
-					>
-						<option value="">-- Chọn loại vang --</option>
-						{WINE_TYPES.map((type) => (
-							<option key={type} value={type}>
-								{WINE_TYPE_LABELS[type]}
-							</option>
-						))}
-					</select>
+					/>
+					{errors.content && <p className={cls.error}>{errors.content.message}</p>}
 				</div>
-			</div>
-
-			{/* Is Hot */}
-			<div className="flex items-center gap-3">
-				<input
-					type="checkbox"
-					id="is_hot"
-					{...register("is_hot")}
-					className="h-4 w-4 rounded border-gray-300 accent-brand-primary"
-				/>
-				<label htmlFor="is_hot" className="text-sm font-medium text-gray-700">
-					Sản phẩm nổi bật (Hot)
-				</label>
 			</div>
 
 			{/* Actions */}

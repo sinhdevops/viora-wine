@@ -97,7 +97,7 @@ export default function ContactPageContent() {
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
-                title="WineHouse Da Nang Map"
+                title="Viora Wine Da Nang Map"
               ></iframe>
             </div>
           </motion.div>

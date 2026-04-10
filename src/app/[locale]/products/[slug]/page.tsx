@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import ProductDetailPageContent from "./_page-content";
 export { generateMetadata } from "./metadata";
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { slug } = await params;
   const supabase = await createClient();
 
@@ -22,5 +22,60 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     .neq("id", product.id)
     .limit(5);
 
-  return <ProductDetailPageContent product={product} related={related ?? []} />;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://viorawine.vn';
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.thumbnail_url,
+    description: product.description,
+    sku: product.id,
+    offers: {
+      '@type': 'Offer',
+      url: `${baseUrl}/products/${slug}`,
+      priceCurrency: 'VND',
+      price: product.price,
+      availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Trang chủ',
+        item: `${baseUrl}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Sản phẩm',
+        item: `${baseUrl}/products`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: product.name,
+        item: `${baseUrl}/products/${slug}`,
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <ProductDetailPageContent product={product} related={related ?? []} />
+    </>
+  );
 }

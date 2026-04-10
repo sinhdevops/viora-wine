@@ -5,7 +5,7 @@ export const EVENT_CATEGORIES = [
 	{ value: "kien-thuc", label: "Kiến thức" },
 ] as const;
 
-export type EventCategory = (typeof EVENT_CATEGORIES)[number]["value"];
+
 
 export const eventSchema = z.object({
 	name: z.string().min(1, "Tên sự kiện là bắt buộc"),

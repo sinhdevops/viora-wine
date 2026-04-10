@@ -28,6 +28,12 @@ create table products (
   price numeric default 0,
   discount_percentage numeric default 0,
   category text,
+  wine_type text,
+  volume text,
+  grape_variety text,
+  producer text,
+  alcohol text,
+  country text,
   stock integer default 0,
   is_hot boolean default false,
   created_at timestamptz default now()

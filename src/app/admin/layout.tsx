@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
 import { Toaster } from "sonner";
-import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import "../globals.css";
 
 const lexend = Lexend({
@@ -22,11 +21,10 @@ export default function AdminLayout({
 	return (
 		<html lang="vi" className={lexend.variable} suppressHydrationWarning>
 			<body
-				className="flex bg-gray-50 font-[family-name:var(--font-lexend)]"
+				className="flex bg-gray-50 font-(family-name:--font-lexend) min-h-screen"
 				suppressHydrationWarning
 			>
-				<AdminSidebar />
-				<main className="flex-1 overflow-y-auto pt-14 md:pt-0 pb-16 md:pb-0">{children}</main>
+				{children}
 				<Toaster position="top-right" richColors />
 			</body>
 		</html>

@@ -27,6 +27,15 @@ export async function generateMetadata({
   return {
     title,
     description,
+    keywords: [
+      product.name,
+      product.category,
+      t('wine'),
+      common('brand'),
+      'Rượu vang Đà Nẵng',
+      'Rượu vang nhập khẩu',
+      'Quà tặng rượu vang',
+    ],
     alternates: {
       canonical: `/${locale}/products/${slug}`,
       languages: {

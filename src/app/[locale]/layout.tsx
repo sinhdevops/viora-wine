@@ -28,12 +28,22 @@ export async function generateMetadata({
   const homeT = await getTranslations({ locale, namespace: 'home' });
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'https://winehousedanang.vn'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'https://viorawine.vn'),
     title: {
       default: homeT('meta_title'),
       template: `%s | ${t('brand')}`,
     },
     description: homeT('meta_desc'),
+    keywords: [
+      'Viora Wine',
+      'Viora Wine Đà Nẵng',
+      'Rượu vang Đà Nẵng',
+      'Rượu vang nhập khẩu',
+      'Whisky Đà Nẵng',
+      'Quà tặng Tết Đà Nẵng',
+      'Hộp quà rượu vang',
+      'Rượu vang chính hãng',
+    ],
     robots: {
       index: true,
       follow: true,
@@ -49,7 +59,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@winehousedanang',
+      site: '@viorawine',
     },
     verification: {
       google: 'your-google-site-verification-token',
@@ -60,15 +70,15 @@ export async function generateMetadata({
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  name: 'WineHouse Đà Nẵng',
-  alternateName: 'WineHouse Da Nang',
-  url: 'https://winehousedanang.vn',
-  logo: 'https://winehousedanang.vn/statics/images/logo.svg',
-  image: 'https://winehousedanang.vn/statics/images/og-home.jpg',
+  name: 'Viora Wine Đà Nẵng',
+  alternateName: 'Viora Wine Da Nang',
+  url: 'https://viorawine.vn',
+  logo: 'https://viorawine.vn/statics/images/logo.svg',
+  image: 'https://viorawine.vn/statics/images/og-home.jpg',
   description:
     'Cửa hàng rượu vang nhập khẩu chính hãng tại Đà Nẵng. Rượu vang Úc, Pháp, Ý, Whisky cao cấp.',
   telephone: '+84-338-909-973',
-  email: 'contact@winehousedanang.vn',
+  email: 'contact@viorawine.vn',
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Đường Tố Hữu',
@@ -91,8 +101,8 @@ const organizationJsonLd = {
     },
   ],
   sameAs: [
-    'https://www.facebook.com/winehousedanang',
-    'https://www.instagram.com/winehousedanang',
+    'https://www.facebook.com/viorawine',
+    'https://www.instagram.com/viorawine',
   ],
   priceRange: '$$',
 };
@@ -100,13 +110,13 @@ const organizationJsonLd = {
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'WineHouse Đà Nẵng',
-  url: 'https://winehousedanang.vn',
+  name: 'Viora Wine Đà Nẵng',
+  url: 'https://viorawine.vn',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://winehousedanang.vn/vi/products?cat={search_term_string}',
+      urlTemplate: 'https://viorawine.vn/vi/products?cat={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },

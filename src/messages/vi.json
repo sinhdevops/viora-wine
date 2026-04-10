@@ -1,6 +1,6 @@
 {
   "common": {
-    "brand": "WineHouse Đà Nẵng",
+    "brand": "Viora Wine Đà Nẵng",
     "slogan": "Rượu ngon – Giao nhanh – Tư vấn tận tình",
     "buy_now": "Mua ngay",
     "contact_us": "Liên hệ ngay",
@@ -33,7 +33,7 @@
   "home": {
     "hero_title": "RƯỢU VANG\nVIORA WINE",
     "hero_subtitle": "Website chuyên cung cấp rượu vang Úc nhập khẩu chính hãng, đa dạng từ phổ thông đến cao cấp. Cam kết chất lượng, giá tốt và tư vấn tận tâm, giúp bạn dễ dàng chọn chai vang phù hợp cho mọi dịp. 🍷",
-    "meta_title": "WineHouse Đà Nẵng | Rượu Vang Nhập Khẩu Chính Hãng",
+    "meta_title": "Viora Wine Đà Nẵng | Rượu Vang Nhập Khẩu Chính Hãng",
     "meta_desc": "Cửa hàng rượu vang nhập khẩu chính hãng tại Đà Nẵng. Rượu vang Úc, Pháp, Ý, Whisky cao cấp. Giao hàng toàn quốc, tư vấn 24/7.",
     "bestseller": "Sản Phẩm Bán Chạy",
     "categories": "Danh Mục Nổi Bật",
@@ -116,10 +116,10 @@
     "commitment_delivery": "Giao hàng toàn quốc",
     "commitment_payment": "Nhận hàng - Thanh toán",
     "commitment_support": "Tư vấn 24/7",
-    "meta_desc_suffix": "Mua ngay tại WineHouse Đà Nẵng. Chính hãng, giao hàng toàn quốc."
+    "meta_desc_suffix": "Mua ngay tại Viora Wine Đà Nẵng. Chính hãng, giao hàng toàn quốc."
   },
   "zalo": {
-    "message": "Chào anh, em xem sản phẩm {name} trên web WineHouse Đà Nẵng, anh báo giá và tư vấn giúp em nhé!"
+    "message": "Chào anh, em xem sản phẩm {name} trên web Viora Wine Đà Nẵng, anh báo giá và tư vấn giúp em nhé!"
   },
   "age_verify": {
     "title": "Xác Minh Độ Tuổi",
@@ -130,7 +130,7 @@
   "footer": {
     "address": "Địa chỉ: Đường Tố Hữu, Đà Nẵng",
     "phone": "Hotline: 033.890.9973",
-    "email": "Email: contact@winehousedanang.vn",
+    "email": "Email: contact@viorawine.vn",
     "follow": "Theo dõi chúng tôi",
     "nav_label": "Thông tin",
     "hours_label": "Giờ hoạt động",
@@ -151,20 +151,20 @@
   },
   "about": {
     "meta_title": "Về Chúng Tôi",
-    "meta_desc": "Khám phá hành trình 25 năm của WineHouse Đà Nẵng — đam mê rượu vang, quy trình tuyển chọn nghiêm ngặt và cam kết chất lượng tuyệt đối.",
+    "meta_desc": "Khám phá hành trình 25 năm của Viora Wine Đà Nẵng — đam mê rượu vang, quy trình tuyển chọn nghiêm ngặt và cam kết chất lượng tuyệt đối.",
     "established": "THÀNH LẬP TỪ 1998",
     "hero_title": "Nghệ Thuật Trồng Nho & Di Sản",
     "hero_subtitle": "Từ những sườn đồi ngập nắng của vùng Tuscany đến làn gió biển của Đà Nẵng, chúng tôi mang những dòng rượu vang tốt nhất thế giới đến bàn tiệc của bạn.",
     "journey_label": "HÀNH TRÌNH CỦA CHÚNG TÔI",
     "journey_title": "Một Phần Tư Thế Kỷ Đam Mê",
-    "journey_p1": "Được thành lập tại trung tâm Đà Nẵng, WineHouse bắt đầu với một sứ mệnh duy nhất: mang những dòng rượu vang tinh tế nhất thế giới đến bờ biển Việt Nam. Hành trình của chúng tôi là một trong những sự lựa chọn khắt khe, sự hiểu biết sâu sắc và cam kết không lay chuyển đối với nghệ thuật chọn rượu.",
+    "journey_p1": "Được thành lập tại trung tâm Đà Nẵng, Viora Wine bắt đầu với một sứ mệnh duy nhất: mang những dòng rượu vang tinh tế nhất thế giới đến bờ biển Việt Nam. Hành trình của chúng tôi là một trong những sự lựa chọn khắt khe, sự hiểu biết sâu sắc và cam kết không lay chuyển đối với nghệ thuật chọn rượu.",
     "journey_p2": "Chúng tôi không chỉ bán những chai rượu; chúng tôi kiến tạo những trải nghiệm. Mỗi chai rượu trong bộ sưu tập của chúng tôi đều được nếm thử và lựa chọn kỹ lưỡng, đảm bảo rằng mỗi ngụm rượu đều kể một câu chuyện về vùng đất, khí hậu và bàn tay tài hoa của người làm rượu.",
     "stat_years": "Năm kinh nghiệm",
     "stat_labels": "Nhãn rượu",
     "stat_regions": "Vùng quốc gia",
     "certified_quality": "Cam Kết Chất Lượng Chứng Nhận",
     "selection_title": "Quy Trình Lựa Chọn Của Chúng Tôi",
-    "selection_subtitle": "Chỉ 1 trong số 50 chai rượu được nếm thử mới có thể lọt vào hầm rượu riêng của WineHouse Đà Nẵng.",
+    "selection_subtitle": "Chỉ 1 trong số 50 chai rượu được nếm thử mới có thể lọt vào hầm rượu riêng của Viora Wine Đà Nẵng.",
     "terroir_title": "Khám phá thổ nhưỡng",
     "terroir_desc": "Chúng tôi đi đến những vùng đất xa xôi để tìm ra những nhà làm rượu tôn trọng đất đai và phương pháp truyền thống.",
     "blind_title": "Nếm thử mù",
@@ -183,13 +183,13 @@
     "hours_value": "Thứ 2 – Chủ nhật: 10:00 – 23:00",
     "inquiries_label": "Liên hệ",
     "inquiries_phone": "+84 338 909 973",
-    "inquiries_email": "contact@winehousedanang.com",
+    "inquiries_email": "contact@viorawine.com",
     "book_tasting": "Đặt Lịch Hẹn",
     "download_catalog": "Tải Catalogue"
   },
   "contact": {
     "meta_title": "Liên Hệ",
-    "meta_desc": "Liên hệ với WineHouse Đà Nẵng để được tư vấn rượu vang, đặt hàng và hỗ trợ 24/7. Hotline: 033.890.9973.",
+    "meta_desc": "Liên hệ với Viora Wine Đà Nẵng để được tư vấn rượu vang, đặt hàng và hỗ trợ 24/7. Hotline: 033.890.9973.",
     "info_title": "Thông Tin Liên Hệ",
     "form_title": "Gửi Tin Nhắn",
     "address_label": "Địa chỉ",
@@ -210,7 +210,7 @@
   },
   "products_page": {
     "meta_title": "Sản Phẩm",
-    "meta_desc": "Khám phá bộ sưu tập rượu vang, whisky và rượu mạnh nhập khẩu cao cấp tại WineHouse Đà Nẵng. Chính hãng, đa dạng, giá tốt.",
+    "meta_desc": "Khám phá bộ sưu tập rượu vang, whisky và rượu mạnh nhập khẩu cao cấp tại Viora Wine Đà Nẵng. Chính hãng, đa dạng, giá tốt.",
     "home": "Trang chủ",
     "shop": "Cửa hàng",
     "exclusive_collection": "Bộ sưu tập độc quyền",
@@ -253,7 +253,7 @@
   },
   "news": {
     "meta_title": "Kiến Thức & Sự Kiện",
-    "meta_desc": "Khám phá thế giới rượu vang qua những bài viết kiến thức và sự kiện nổi bật từ WineHouse Đà Nẵng.",
+    "meta_desc": "Khám phá thế giới rượu vang qua những bài viết kiến thức và sự kiện nổi bật từ Viora Wine Đà Nẵng.",
     "breadcrumb_home": "Trang chủ",
     "breadcrumb_current": "Kiến thức & Sự kiện",
     "title": "KIẾN THỨC & SỰ KIỆN",
@@ -283,7 +283,7 @@
   },
   "gifts": {
     "meta_title": "Quà Tặng & Combo",
-    "meta_desc": "Bộ quà tặng rượu vang cao cấp tại WineHouse Đà Nẵng. Hộp gỗ thủ công, khắc laser theo yêu cầu. Hoàn hảo cho mọi dịp lễ tết.",
+    "meta_desc": "Bộ quà tặng rượu vang cao cấp tại Viora Wine Đà Nẵng. Hộp gỗ thủ công, khắc laser theo yêu cầu. Hoàn hảo cho mọi dịp lễ tết.",
     "breadcrumb_home": "Trang chủ",
     "breadcrumb_current": "Quà tặng",
     "title": "QUÀ TẶNG & COMBO",
@@ -307,7 +307,7 @@
   },
   "promotion": {
     "meta_title": "Khuyến Mãi",
-    "meta_desc": "Khuyến mãi rượu vang hấp dẫn tại WineHouse Đà Nẵng. Mã giảm giá, ưu đãi thành viên và sản phẩm đang giảm giá.",
+    "meta_desc": "Khuyến mãi rượu vang hấp dẫn tại Viora Wine Đà Nẵng. Mã giảm giá, ưu đãi thành viên và sản phẩm đang giảm giá.",
     "breadcrumb_home": "Trang chủ",
     "breadcrumb_current": "Khuyến mãi",
     "vouchers_title": "Mã ưu đãi",
@@ -341,7 +341,7 @@
     "back_home": "Quay lại trang chủ"
   },
   "loading": {
-    "text": "WineHouse đang chuẩn bị..."
+    "text": "Viora Wine đang chuẩn bị..."
   },
   "privacy_policy": {
     "meta_title": "Chính Sách Bảo Mật",

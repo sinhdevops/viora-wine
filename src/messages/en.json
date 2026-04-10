@@ -1,6 +1,6 @@
 {
   "common": {
-    "brand": "WineHouse Da Nang",
+    "brand": "Viora Wine Da Nang",
     "slogan": "Fine Wines – Fast Delivery – Dedicated Advice",
     "buy_now": "Buy Now",
     "contact_us": "Contact Us",
@@ -33,7 +33,7 @@
   "home": {
     "hero_title": "The Art of True Wine Appreciation",
     "hero_subtitle": "Discover the finest collection of wines, whiskies, and premium spirits in Da Nang.",
-    "meta_title": "WineHouse Da Nang | Premium Imported Wine",
+    "meta_title": "Viora Wine Da Nang | Premium Imported Wine",
     "meta_desc": "Premium imported wine store in Da Nang. Australian, French, Italian wines and fine whisky. Nationwide delivery, 24/7 expert advice.",
     "bestseller": "Best Sellers",
     "categories": "Featured Categories",
@@ -116,10 +116,10 @@
     "commitment_delivery": "Nationwide Delivery",
     "commitment_payment": "Pay on Delivery",
     "commitment_support": "24/7 Support",
-    "meta_desc_suffix": "Buy now at WineHouse Da Nang. Authentic, nationwide delivery."
+    "meta_desc_suffix": "Buy now at Viora Wine Da Nang. Authentic, nationwide delivery."
   },
   "zalo": {
-    "message": "Hi, I saw the {name} product on WineHouse Da Nang website, could you please provide the price and advice?"
+    "message": "Hi, I saw the {name} product on Viora Wine Da Nang website, could you please provide the price and advice?"
   },
   "age_verify": {
     "title": "Age Verification",
@@ -130,7 +130,7 @@
   "footer": {
     "address": "Address: To Huu Street, Da Nang",
     "phone": "Hotline: 033.890.9973",
-    "email": "Email: contact@winehousedanang.vn",
+    "email": "Email: contact@viorawine.vn",
     "follow": "Follow Us",
     "nav_label": "Information",
     "hours_label": "Opening Hours",
@@ -151,20 +151,20 @@
   },
   "about": {
     "meta_title": "About Us",
-    "meta_desc": "Discover WineHouse Da Nang's 25-year journey — a passion for wine, rigorous selection process, and an unwavering commitment to quality.",
+    "meta_desc": "Discover Viora Wine Da Nang's 25-year journey — a passion for wine, rigorous selection process, and an unwavering commitment to quality.",
     "established": "ESTABLISHED 1998",
     "hero_title": "The Art of Viticulture & Heritage",
     "hero_subtitle": "From the sun-drenched slopes of Tuscany to the coastal breeze of Da Nang, we bring the world's finest vintages to your table.",
     "journey_label": "OUR JOURNEY",
     "journey_title": "A Quarter Century of Passion",
-    "journey_p1": "Founded in the heart of Da Nang, WineHouse began with a single mission: to bring the world's most exquisite vintages to the shores of Vietnam. Our journey is one of master sommeliers, ensuring that every unwavering commitment to the art of wine selection.",
+    "journey_p1": "Founded in the heart of Da Nang, Viora Wine began with a single mission: to bring the world's most exquisite vintages to the shores of Vietnam. Our journey is one of master sommeliers, ensuring that every unwavering commitment to the art of wine selection.",
     "journey_p2": "We don't just sell bottles; we curate experiences. Each vintage in our collection is hand-selected by our master sommeliers, ensuring that every sip tells a story of the soil, the climate, and the craft of the winemaker.",
     "stat_years": "Years Experience",
     "stat_labels": "Wine Labels",
     "stat_regions": "Global Regions",
     "certified_quality": "Certified Quality Assurance",
     "selection_title": "Our Selection Process",
-    "selection_subtitle": "Only 1 in every 50 wines tasted makes it into the WineHouse Da Nang private cellar.",
+    "selection_subtitle": "Only 1 in every 50 wines tasted makes it into the Viora Wine Da Nang private cellar.",
     "terroir_title": "Terroir Exploration",
     "terroir_desc": "We travel to remote estates to find winemakers who respect the land and traditional methods.",
     "blind_title": "Blind Tasting",
@@ -183,13 +183,13 @@
     "hours_value": "Mon – Sun: 10:00 AM – 11:00 PM",
     "inquiries_label": "Inquiries",
     "inquiries_phone": "+84 338 909 973",
-    "inquiries_email": "contact@winehousedanang.com",
+    "inquiries_email": "contact@viorawine.com",
     "book_tasting": "Book a Tasting",
     "download_catalog": "Download Catalog"
   },
   "contact": {
     "meta_title": "Contact Us",
-    "meta_desc": "Contact WineHouse Da Nang for wine consultation, ordering and 24/7 support. Hotline: 033.890.9973.",
+    "meta_desc": "Contact Viora Wine Da Nang for wine consultation, ordering and 24/7 support. Hotline: 033.890.9973.",
     "info_title": "Contact Information",
     "form_title": "Send a Message",
     "address_label": "Address",
@@ -210,7 +210,7 @@
   },
   "products_page": {
     "meta_title": "Products",
-    "meta_desc": "Discover our collection of premium imported wines, whisky, and spirits at WineHouse Da Nang. Authentic, diverse, great prices.",
+    "meta_desc": "Discover our collection of premium imported wines, whisky, and spirits at Viora Wine Da Nang. Authentic, diverse, great prices.",
     "home": "Home",
     "shop": "Shop",
     "exclusive_collection": "Exclusive Collection",
@@ -253,7 +253,7 @@
   },
   "news": {
     "meta_title": "Knowledge & Events",
-    "meta_desc": "Explore the world of wine through knowledge articles and featured events from WineHouse Da Nang.",
+    "meta_desc": "Explore the world of wine through knowledge articles and featured events from Viora Wine Da Nang.",
     "breadcrumb_home": "Home",
     "breadcrumb_current": "Knowledge & Events",
     "title": "KNOWLEDGE & EVENTS",
@@ -283,7 +283,7 @@
   },
   "gifts": {
     "meta_title": "Gift Sets & Combos",
-    "meta_desc": "Premium wine gift sets at WineHouse Da Nang. Handcrafted wooden boxes, custom laser engraving. Perfect for every occasion.",
+    "meta_desc": "Premium wine gift sets at Viora Wine Da Nang. Handcrafted wooden boxes, custom laser engraving. Perfect for every occasion.",
     "breadcrumb_home": "Home",
     "breadcrumb_current": "Gifts",
     "title": "GIFT SETS & COMBOS",
@@ -307,7 +307,7 @@
   },
   "promotion": {
     "meta_title": "Promotions",
-    "meta_desc": "Attractive wine promotions at WineHouse Da Nang. Discount codes, member benefits, and products on sale.",
+    "meta_desc": "Attractive wine promotions at Viora Wine Da Nang. Discount codes, member benefits, and products on sale.",
     "breadcrumb_home": "Home",
     "breadcrumb_current": "Promotions",
     "vouchers_title": "Discount Codes",
@@ -341,7 +341,7 @@
     "back_home": "Back to Homepage"
   },
   "loading": {
-    "text": "WineHouse is preparing..."
+    "text": "Viora Wine is preparing..."
   },
   "privacy_policy": {
     "meta_title": "Privacy Policy",

@@ -29,7 +29,7 @@ export async function generateMetadata({
       type: 'website',
       images: [
         {
-          url: 'https://winehousedanang.vn/statics/images/og-home.jpg',
+          url: 'https://viorawine.vn/statics/images/og-home.jpg',
           width: 1200,
           height: 630,
           alt: common('brand'),
