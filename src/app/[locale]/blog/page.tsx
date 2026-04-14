@@ -46,11 +46,11 @@ export async function generateMetadata({
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
-    alternates: buildAlternates(locale, '/events'),
+    alternates: buildAlternates(locale, '/blog'),
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
       description: t('meta_desc'),
-      url: `${SITE_URL}/${locale}/events`,
+      url: `${SITE_URL}/${locale}/blog`,
       siteName: common('brand'),
       locale,
       type: 'website',

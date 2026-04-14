@@ -24,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/products': 0.95, // Products listing — key landing page for target keywords
     '/gifts': 0.9,     // Gift sets — target keyword "rượu vang Úc làm quà tặng"
     '/promotion': 0.85, // Promotions — target keyword "dưới 1 triệu"
-    '/events': 0.85,   // Blog/Knowledge — target keyword "cho người mới"
+    '/blog': 0.85,   // Blog/Knowledge — target keyword "cho người mới"
     '/about': 0.7,
     '/contact': 0.7,
     '/shopping-guide': 0.65,
@@ -68,7 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (events) {
       for (const event of events) {
         sitemapEntries.push({
-          url: `${SITE_URL}/${locale}/events/${event.slug}`,
+          url: `${SITE_URL}/${locale}/blog/${event.slug}`,
           lastModified: new Date(event.created_at || new Date()),
           changeFrequency: 'weekly',
           priority: 0.75,

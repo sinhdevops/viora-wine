@@ -200,3 +200,79 @@ p {
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
 }
+
+/* ── Article body: table ──────────────────────────────────── */
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.75rem 0;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: auto;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  border: none !important;
+  outline: none;
+}
+
+@media (min-width: 640px) {
+  .article-body table {
+    display: table;
+  }
+}
+
+.article-body thead {
+  background: #8B0000;
+}
+
+.article-body thead th {
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  text-align: left;
+  padding: 10px 14px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.article-body tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+}
+
+.article-body tbody tr:nth-child(even) {
+  background: #fdf6f6;
+}
+
+.article-body tbody tr:hover {
+  background: #fff0f0;
+}
+
+.article-body td {
+  padding: 9px 14px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.article-body td:first-child {
+  font-weight: 600;
+  color: #8B0000;
+  white-space: nowrap;
+}
+
+.article-body td strong {
+  color: #111;
+}
+
+.article-body th,
+.article-body td {
+  border: 1px solid #e8e8e8 !important;
+}
+
+/* Remove black outline from table element with border attribute */
+.article-body table[border],
+.article-body table[style] {
+  border: none !important;
+  outline: none !important;
+}

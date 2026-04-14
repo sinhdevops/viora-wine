@@ -1,4 +1,24 @@
 /**
+ * Sanitizes HTML content to prevent mid-word line breaks caused by:
+ * – Newlines/tabs inside text nodes (from rich-text editors saving raw \n)
+ * – Zero-width spaces (U+200B) and soft hyphens (U+00AD)
+ * – <wbr> tags
+ * – &nbsp; entities that should be normal spaces
+ *
+ * Only collapses whitespace inside text nodes (between > and <),
+ * never inside tag attributes.
+ */
+export function sanitizeHtmlContent(html: string): string {
+  return html
+    .replace(/&nbsp;/g, ' ')                          // &nbsp; → normal space
+    .replace(/[\u200B\u200C\u200D\u00AD]/g, '')       // zero-width & soft-hyphen
+    .replace(/<wbr\s*\/?>/gi, '')                     // remove <wbr>
+    .replace(/>([^<]*)</g, (_, text) =>               // collapse whitespace in text nodes only
+      '>' + text.replace(/\s+/g, ' ') + '<'
+    );
+}
+
+/**
  * Processes raw HTML content for blog/article pages:
  * – Injects unique `id` attributes into every <h2> and <h3> element
  *   (so anchor links and the IntersectionObserver can target them).

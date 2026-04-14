@@ -20,7 +20,7 @@ import "swiper/css/pagination";
 
 import { NewsItem } from "@/@types/news";
 import type { DbProduct } from "@/@types/product";
-import { processContent, splitAtSecondH2, calculateReadingTime } from "@/utils/content-processor";
+import { processContent, splitAtSecondH2, calculateReadingTime, sanitizeHtmlContent } from "@/utils/content-processor";
 import { injectInternalLinks } from "@/utils/internal-links";
 
 import TableOfContents from "@/components/page/blog/table-of-contents";
@@ -130,7 +130,7 @@ export default function NewsDetailPageContent({
       : [t("tag_wine"), t("tag_enjoyment")];
 
   // ── Process HTML content: inject heading IDs + extract TOC + internal links ──
-  const rawHtml = DOMPurify.sanitize(newsItem.content[locale]);
+  const rawHtml = sanitizeHtmlContent(DOMPurify.sanitize(newsItem.content[locale]));
   const withLinks = injectInternalLinks(rawHtml);
   const { processedHtml, headings } = processContent(withLinks);
   const [firstSection, restSection] = splitAtSecondH2(processedHtml);
@@ -157,7 +157,7 @@ export default function NewsDetailPageContent({
               {t("breadcrumb_home")}
             </Link>
             <ChevronRight size={12} />
-            <Link href="/events" className="hover:text-gray-700">
+            <Link href="/blog" className="hover:text-gray-700">
               {t("breadcrumb_news")}
             </Link>
             <ChevronRight size={12} />
@@ -299,7 +299,7 @@ export default function NewsDetailPageContent({
               {/* Back link */}
               <div className="mt-10 border-t border-gray-100 pt-8">
                 <Link
-                  href="/events"
+                  href="/blog"
                   className="inline-flex items-center gap-2 text-[13px] font-semibold text-gray-500 transition-colors hover:text-brand-primary"
                 >
                   <ArrowLeft size={15} />
@@ -358,7 +358,7 @@ export default function NewsDetailPageContent({
                 {t("related_title")}
               </h2>
               <Link
-                href="/events"
+                href="/blog"
                 className="flex items-center gap-1 text-[12px] font-semibold text-brand-primary hover:underline"
               >
                 {t("view_all")} <ArrowRight size={13} />
@@ -379,7 +379,7 @@ export default function NewsDetailPageContent({
             >
               {relatedNews.map((item) => (
                 <SwiperSlide key={item.id}>
-                  <Link href={`/events/${item.slug}`} className="group block">
+                  <Link href={`/blog/${item.slug}`} className="group block">
                     <div className="relative mb-4 aspect-3/2 w-full overflow-hidden rounded-xl bg-gray-100">
                       <Image
                         src={item.image}

@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/server";
 
 export type EventItem = {
 	id: string;
+	slug: string;
 	name: string;
 	description: string | null;
 	thumbnail_url: string | null;
@@ -24,13 +25,13 @@ export default async function HomePageContent() {
 			.order("created_at", { ascending: true }),
 		supabase
 			.from("events")
-			.select("id, name, description, thumbnail_url, date, category")
+			.select("id, slug, name, description, thumbnail_url, date, category")
 			.eq("category", "su-kien")
 			.order("date", { ascending: false })
 			.limit(5),
 		supabase
 			.from("events")
-			.select("id, name, description, thumbnail_url, date, category")
+			.select("id, slug, name, description, thumbnail_url, date, category")
 			.eq("category", "kien-thuc")
 			.order("date", { ascending: false })
 			.limit(3),
@@ -43,7 +44,7 @@ export default async function HomePageContent() {
 			<div className="mb-25">
 				<FeaturedCategories />
 			</div>
-			<BelowFoldSections suKienEvents={suKienEvents ?? []} kienThucEvents={kienThucEvents ?? []} />
+			<BelowFoldSections suKienEvents={(suKienEvents ?? []) as EventItem[]} kienThucEvents={(kienThucEvents ?? []) as EventItem[]} />
 		</div>
 	);
 }

@@ -41,7 +41,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 				>
 					{/* Left: tall card spanning 2 rows */}
 					<Link
-						href={`/events/${featured.id}`}
+						href={`/blog/${featured.slug}`}
 						className="group relative row-span-2 overflow-hidden rounded-xl"
 					>
 						{featured.thumbnail_url && (
@@ -62,7 +62,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 					{rest.map((event) => (
 						<Link
 							key={event.id}
-							href={`/events/${event.id}`}
+							href={`/blog/${event.slug}`}
 							className="group relative overflow-hidden rounded-xl"
 						>
 							{event.thumbnail_url && (
@@ -85,7 +85,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 				<div className="md:hidden">
 					{/* Featured item — full width image overlay */}
 					<Link
-						href={`/events/${featured.id}`}
+						href={`/blog/${featured.slug}`}
 						className="group relative mb-4 block overflow-hidden rounded-xl"
 						style={{ height: 260 }}
 					>
@@ -116,7 +116,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 								{rest.map((event) => (
 									<SwiperSlide key={event.id} style={{ height: "auto" }}>
 										<Link
-											href={`/events/${event.id}`}
+											href={`/blog/${event.slug}`}
 											className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 shadow-sm"
 										>
 											<div className="relative aspect-video w-full overflow-hidden">
