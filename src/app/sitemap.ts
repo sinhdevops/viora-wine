@@ -40,6 +40,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
+  // Root homepage — canonical entry for the bare domain
+  sitemapEntries.push({
+    url: SITE_URL,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: 1.0,
+  });
+
   // Static pages for each locale
   for (const locale of locales) {
     for (const page of staticPages) {
