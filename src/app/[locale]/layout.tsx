@@ -6,6 +6,7 @@ import MainLayout from '@/components/layout/main-layout';
 import { Montserrat } from 'next/font/google';
 import '../globals.css';
 import { notFound } from 'next/navigation';
+import { SITE_URL } from '@/lib/seo';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -28,7 +29,7 @@ export async function generateMetadata({
   const homeT = await getTranslations({ locale, namespace: 'home' });
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? 'https://viorawine.vn'),
+    metadataBase: new URL(SITE_URL),
     title: {
       default: homeT('meta_title'),
       template: `%s | ${t('brand')}`,
@@ -37,12 +38,22 @@ export async function generateMetadata({
     keywords: [
       'Viora Wine',
       'Viora Wine Đà Nẵng',
+      'rượu vang Úc Hà Nội',
+      'rượu vang Úc Đà Nẵng',
+      'shop rượu vang Úc Hà Nội',
+      'shop rượu vang Úc Đà Nẵng',
+      'rượu vang Úc nhập khẩu chính hãng',
+      'rượu vang Úc Shiraz',
+      'rượu vang Úc Cabernet Sauvignon',
+      'rượu vang Úc cho người mới',
+      'rượu vang Úc dưới 1 triệu',
+      'rượu vang Úc làm quà tặng',
       'Rượu vang Đà Nẵng',
       'Rượu vang nhập khẩu',
-      'Whisky Đà Nẵng',
       'Quà tặng Tết Đà Nẵng',
       'Hộp quà rượu vang',
       'Rượu vang chính hãng',
+      'Whisky Đà Nẵng',
     ],
     robots: {
       index: true,
@@ -71,12 +82,12 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: 'Viora Wine Đà Nẵng',
-  alternateName: 'Viora Wine Da Nang',
-  url: 'https://viorawine.vn',
-  logo: 'https://viorawine.vn/statics/images/logo.svg',
-  image: 'https://viorawine.vn/statics/images/og-home.jpg',
+  alternateName: ['Viora Wine Da Nang', 'Shop Rượu Vang Úc Viora Wine'],
+  url: SITE_URL,
+  logo: `${SITE_URL}/statics/images/logo.svg`,
+  image: `${SITE_URL}/statics/images/og-home.jpg`,
   description:
-    'Cửa hàng rượu vang nhập khẩu chính hãng tại Đà Nẵng. Rượu vang Úc, Pháp, Ý, Whisky cao cấp.',
+    'Shop rượu vang Úc nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Rượu vang Úc Shiraz, Cabernet Sauvignon, Pháp, Ý, Whisky cao cấp. Giao hàng toàn quốc, tư vấn 24/7.',
   telephone: '+84-338-909-973',
   email: 'contact@viorawine.vn',
   address: {
@@ -92,6 +103,11 @@ const organizationJsonLd = {
     latitude: 16.0470797,
     longitude: 108.19163245,
   },
+  areaServed: [
+    { '@type': 'City', name: 'Đà Nẵng' },
+    { '@type': 'City', name: 'Hà Nội' },
+    { '@type': 'Country', name: 'Việt Nam' },
+  ],
   openingHoursSpecification: [
     {
       '@type': 'OpeningHoursSpecification',
@@ -100,23 +116,32 @@ const organizationJsonLd = {
       closes: '23:00',
     },
   ],
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: '2000',
+    bestRating: '5',
+    worstRating: '1',
+  },
   sameAs: [
     'https://www.facebook.com/viorawine',
     'https://www.instagram.com/viorawine',
   ],
   priceRange: '$$',
+  servesCuisine: 'Rượu vang Úc nhập khẩu',
+  hasMap: 'https://maps.google.com/?q=Viora+Wine+Da+Nang',
 };
 
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Viora Wine Đà Nẵng',
-  url: 'https://viorawine.vn',
+  url: SITE_URL,
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://viorawine.vn/vi/products?cat={search_term_string}',
+      urlTemplate: `${SITE_URL}/vi/products?cat={search_term_string}`,
     },
     'query-input': 'required name=search_term_string',
   },

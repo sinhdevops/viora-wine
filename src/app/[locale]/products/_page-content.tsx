@@ -240,11 +240,12 @@ export default function ProductsPageContent() {
   const [priceOpen, setPriceOpen] = useState(true);
   const [hotOpen, setHotOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState('default');
 
   useEffect(() => {
     supabase
       .from('products')
-      .select('id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot')
+      .select('id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, rating, sold_count')
       .order('created_at', { ascending: false })
       .then(({ data }) => {
         if (data) setProducts(data as DbProduct[]);
@@ -265,7 +266,7 @@ export default function ProductsPageContent() {
   };
 
   const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
+    let result = products.filter((p) => {
       const matchCat = categoryFilter === 'all' || p.category === categoryFilter;
       const matchSearch = !searchInput || p.name.toLowerCase().includes(searchInput.toLowerCase());
       let matchPrice = true;
@@ -276,14 +277,22 @@ export default function ProductsPageContent() {
       const matchHot = hotFilter === 'all' || p.is_hot === true;
       return matchCat && matchSearch && matchPrice && matchHot;
     });
-  }, [products, categoryFilter, priceFilter, hotFilter, searchInput]);
+
+    if (sortOrder === 'price_asc') {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortOrder === 'price_desc') {
+      result.sort((a, b) => b.price - a.price);
+    }
+
+    return result;
+  }, [products, categoryFilter, priceFilter, hotFilter, searchInput, sortOrder]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
 
-  // Reset to page 1 when filters change
+  // Reset to page 1 when filters or sorting change
   useEffect(() => {
     setCurrentPage(1);
-  }, [categoryFilter, priceFilter, hotFilter, searchInput]);
+  }, [categoryFilter, priceFilter, hotFilter, searchInput, sortOrder]);
 
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -464,27 +473,43 @@ export default function ProductsPageContent() {
           {/* Product area */}
           <main className="flex-1 min-w-0">
 
-            {/* Count + clear row */}
-            <div className="flex items-center justify-between mb-8">
-              <p className="text-[11px] text-gray-400 uppercase tracking-widest font-bold">
-                {loading
-                  ? t('loading')
-                  : `${filteredProducts.length} ${t('count')}`}
-                {!loading && totalPages > 1 && (
-                  <span className="ml-2 normal-case tracking-normal font-normal text-gray-300">
-                    — {t('pagination.page_of', { current: currentPage, total: totalPages })}
-                  </span>
+            {/* Count + clear row + sort */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+              <div className="flex items-center gap-4">
+                <p className="text-[11px] text-gray-400 uppercase tracking-widest font-bold">
+                  {loading
+                    ? t('loading')
+                    : `${filteredProducts.length} ${t('count')}`}
+                  {!loading && totalPages > 1 && (
+                    <span className="ml-2 normal-case tracking-normal font-normal text-gray-300">
+                      — {t('pagination.page_of', { current: currentPage, total: totalPages })}
+                    </span>
+                  )}
+                </p>
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearAll}
+                    className="flex items-center gap-1 text-[11px] text-brand-primary hover:underline uppercase tracking-wider font-bold"
+                  >
+                    <HiX size={12} />
+                    {t('clear_filters')}
+                  </button>
                 )}
-              </p>
-              {hasActiveFilters && (
-                <button
-                  onClick={clearAll}
-                  className="flex items-center gap-1 text-[11px] text-brand-primary hover:underline uppercase tracking-wider font-bold"
+              </div>
+
+              <div className="relative shrink-0 w-full md:w-[180px]">
+                <select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
+                  className="w-full appearance-none border border-gray-200 rounded-full px-4 py-2 pl-4 pr-10 text-[13px] text-gray-700 bg-white outline-none focus:border-brand-primary hover:border-gray-300 transition-colors cursor-pointer"
                 >
-                  <HiX size={12} />
-                  {t('clear_filters')}
-                </button>
-              )}
+                  <option value="default">Sắp xếp: Mặc định</option>
+                  <option value="price_asc">Giá: Thấp đến Cao</option>
+                  <option value="price_desc">Giá: Cao đến Thấp</option>
+                  <option value="newest">Mới nhất</option>
+                </select>
+                <HiChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
             </div>
 
             {/* Loading skeleton */}

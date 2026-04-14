@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { getTranslations } from 'next-intl/server';
 import EventsPageContent from "./_page-content";
 import { NewsItem } from '@/@types/news';
+import { buildAlternates, SITE_URL } from '@/lib/seo';
 
 type EventRow = {
   id: string;
@@ -45,17 +46,11 @@ export async function generateMetadata({
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
-    alternates: {
-      canonical: `/${locale}/events`,
-      languages: {
-        vi: '/vi/events',
-        en: '/en/events',
-      },
-    },
+    alternates: buildAlternates(locale, '/events'),
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
       description: t('meta_desc'),
-      url: `/${locale}/events`,
+      url: `${SITE_URL}/${locale}/events`,
       siteName: common('brand'),
       locale,
       type: 'website',

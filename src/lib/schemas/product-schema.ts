@@ -60,6 +60,8 @@ export const productSchema = z.object({
 	country: z.string().optional().nullable(),
 	stock: z.number().int("Phải là số nguyên").min(0, "Kho phải ≥ 0"),
 	is_hot: z.boolean(),
+	rating: z.number().min(1, "Tối thiểu 1.0").max(5, "Tối đa 5.0").default(5.0).optional(),
+	sold_count: z.number().int("Phải là số nguyên").min(0, "Phải ≥ 0").default(0).optional(),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;

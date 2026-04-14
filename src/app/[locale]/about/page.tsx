@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import AboutPageContent from './_page-content';
+import { buildAlternates, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -13,17 +14,11 @@ export async function generateMetadata({
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
-    alternates: {
-      canonical: `/${locale}/about`,
-      languages: {
-        vi: '/vi/about',
-        en: '/en/about',
-      },
-    },
+    alternates: buildAlternates(locale, '/about'),
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
       description: t('meta_desc'),
-      url: `/${locale}/about`,
+      url: `${SITE_URL}/${locale}/about`,
       siteName: common('brand'),
       locale,
       type: 'website',

@@ -125,10 +125,11 @@ export default function Footer() {
 
 						<div className="mt-8">
 							<Link
-								href="/contact"
+							target="_blank"
+								href={`https://zalo.me/0338909973`}
 								className="inline-block rounded-lg bg-brand-primary px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#A30000]"
 							>
-								{commonT("contact_us")}
+								{commonT("contact_zalo")}
 							</Link>
 						</div>
 					</div>

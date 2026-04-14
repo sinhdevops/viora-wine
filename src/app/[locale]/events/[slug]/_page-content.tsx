@@ -4,17 +4,46 @@ import DOMPurify from "isomorphic-dompurify";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { ArrowLeft, ArrowRight, Calendar, Clock, ChevronRight, Share2, User } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  Clock,
+  ChevronRight,
+  Share2,
+  User,
+} from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+
 import { NewsItem } from "@/@types/news";
+import type { DbProduct } from "@/@types/product";
+import { processContent, splitAtSecondH2, calculateReadingTime } from "@/utils/content-processor";
+import { injectInternalLinks } from "@/utils/internal-links";
+
+import TableOfContents from "@/components/page/blog/table-of-contents";
+import ProductSuggestionBlock from "@/components/page/blog/product-suggestion-block";
+import FaqSection from "@/components/page/blog/faq-section";
+import { DEFAULT_FAQ_ITEMS } from "@/components/page/blog/faq-data";
+import ZaloCtaBlock from "@/components/page/blog/zalo-cta-block";
+import AuthorBlock from "@/components/page/blog/author-block";
+import CommentSection from "@/components/page/blog/comment-section";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────────────────────────────────────
 
 interface NewsDetailPageContentProps {
   newsItem: NewsItem;
   relatedNews: NewsItem[];
+  suggestedProducts: DbProduct[];
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Share Buttons
+// ─────────────────────────────────────────────────────────────────────────────
 
 function ShareButtons() {
   const handleCopy = () => {
@@ -26,7 +55,9 @@ function ShareButtons() {
   const handleFacebook = () => {
     if (typeof window !== "undefined") {
       window.open(
-        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,
+        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          window.location.href
+        )}`,
         "_blank",
         "noopener,noreferrer,width=600,height=400"
       );
@@ -56,34 +87,79 @@ function ShareButtons() {
   );
 }
 
-export default function NewsDetailPageContent({ newsItem, relatedNews }: NewsDetailPageContentProps) {
+// ─────────────────────────────────────────────────────────────────────────────
+// Prose renderer
+// ─────────────────────────────────────────────────────────────────────────────
+
+function ArticleBody({ html }: { html: string }) {
+  return (
+    <div
+      className="article-body wrap-break-word"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main component
+// ─────────────────────────────────────────────────────────────────────────────
+
+export default function NewsDetailPageContent({
+  newsItem,
+  relatedNews,
+  suggestedProducts,
+}: NewsDetailPageContentProps) {
   const locale = useLocale() as "vi" | "en";
   const t = useTranslations("news_detail");
   const tNews = useTranslations("news");
 
+  // ── Category labels ──
   const CATEGORY_LABELS: Record<string, string> = {
     knowledge: tNews("badge_knowledge"),
     event: tNews("badge_event"),
     tasting: tNews("badge_knowledge"),
     news: tNews("badge_event"),
   };
+  const categoryLabel =
+    CATEGORY_LABELS[newsItem.category] ?? newsItem.category;
 
-  const categoryLabel = CATEGORY_LABELS[newsItem.category] ?? newsItem.category;
-
+  // ── Tags ──
   const TAGS =
     newsItem.category === "kien-thuc"
       ? [t("tag_wine"), t("tag_knowledge"), t("tag_enjoyment")]
       : [t("tag_wine"), t("tag_enjoyment")];
 
+  // ── Process HTML content: inject heading IDs + extract TOC + internal links ──
+  const rawHtml = DOMPurify.sanitize(newsItem.content[locale]);
+  const withLinks = injectInternalLinks(rawHtml);
+  const { processedHtml, headings } = processContent(withLinks);
+  const [firstSection, restSection] = splitAtSecondH2(processedHtml);
+
+  // ── Reading time: use stored value or auto-calculate from content ──
+  const readTime = newsItem.readTime || calculateReadingTime(rawHtml);
+
+  // ── Sidebar: only show 2-col layout when TOC has enough headings ──
+  const hasToc = headings.length >= 3;
+
+  // ── Author bio (full EEAT version) ──
+  const authorBio = t("author_bio_full");
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Breadcrumb */}
+      {/* ①  Breadcrumb ─────────────────────────────────────────────────────── */}
       <div className="border-b border-gray-100">
         <div className="mx-auto max-w-360 px-4 py-3 sm:px-6 lg:px-8">
-          <nav className="flex items-center gap-1.5 text-[12px] text-gray-400" aria-label="breadcrumb">
-            <Link href="/" className="hover:text-gray-700">{t("breadcrumb_home")}</Link>
+          <nav
+            className="flex items-center gap-1.5 text-[12px] text-gray-400"
+            aria-label="breadcrumb"
+          >
+            <Link href="/" className="hover:text-gray-700">
+              {t("breadcrumb_home")}
+            </Link>
             <ChevronRight size={12} />
-            <Link href="/events" className="hover:text-gray-700">{t("breadcrumb_news")}</Link>
+            <Link href="/events" className="hover:text-gray-700">
+              {t("breadcrumb_news")}
+            </Link>
             <ChevronRight size={12} />
             <span className="max-w-[180px] truncate text-gray-700 md:max-w-none">
               {newsItem.title[locale]}
@@ -93,16 +169,19 @@ export default function NewsDetailPageContent({ newsItem, relatedNews }: NewsDet
       </div>
 
       <article>
-        {/* Header */}
+        {/* ①  Title Section ────────────────────────────────────────────────── */}
         <div className="mx-auto max-w-360 px-4 pb-6 pt-8 sm:px-6 lg:px-8">
+          {/* Category badge */}
           <span className="mb-4 inline-block rounded-full bg-brand-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand-primary">
             {categoryLabel}
           </span>
 
+          {/* H1 – SEO-primary heading */}
           <h1 className="mb-5 text-2xl font-black leading-tight tracking-tight text-gray-900 md:text-[36px] lg:text-[42px]">
             {newsItem.title[locale]}
           </h1>
 
+          {/* Meta row: date · read-time · author · share */}
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-100 pb-6">
             <div className="flex flex-wrap items-center gap-4 text-[13px] text-gray-500">
               <div className="flex items-center gap-1.5">
@@ -111,85 +190,166 @@ export default function NewsDetailPageContent({ newsItem, relatedNews }: NewsDet
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock size={14} className="text-brand-primary" />
-                <span>{newsItem.readTime}</span>
+                <span>{readTime}</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <User size={14} className="text-brand-primary" />
-                <span>{newsItem.author}</span>
-              </div>
+              {newsItem.author && (
+                <div className="flex items-center gap-1.5">
+                  <User size={14} className="text-brand-primary" />
+                  <span>{newsItem.author}</span>
+                </div>
+              )}
             </div>
 
             {/* Share — desktop */}
             <div className="hidden items-center gap-2 sm:flex">
-              <span className="text-[12px] font-semibold text-gray-400">{t("share_label")}</span>
+              <span className="text-[12px] font-semibold text-gray-400">
+                {t("share_label")}
+              </span>
               <ShareButtons />
             </div>
           </div>
         </div>
 
-        {/* Featured Image */}
-        <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
-          <div className="relative h-55 w-full overflow-hidden rounded-xl sm:aspect-21/9 sm:h-auto">
-            <Image
-              src={newsItem.image}
-              alt={newsItem.title[locale]}
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-        </div>
+        {/* ②③④  Two-column layout: 70% content | 30% sidebar ─────────────── */}
+        <div className="mx-auto max-w-360 px-4 pt-6 pb-10 sm:px-6 lg:px-8">
+          <div className={hasToc ? "lg:grid lg:grid-cols-[1fr_300px] lg:gap-10 xl:grid-cols-[1fr_320px]" : ""}>
 
-        {/* Article Body */}
-        <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
-          <div
-            className="prose prose-gray max-w-none wrap-break-word prose-headings:font-black prose-headings:tracking-tight prose-headings:text-gray-900 prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-xl prose-h3:uppercase prose-p:mb-5 prose-p:text-[15px] prose-p:leading-relaxed prose-p:text-gray-600 prose-strong:font-bold prose-strong:text-gray-900 prose-ul:pl-5 prose-li:mb-1 prose-li:text-[15px] prose-li:text-gray-600 prose-img:rounded-xl"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(newsItem.content[locale]) }}
-          />
+            {/* ── LEFT COLUMN: main content (70%) ─────────────────────────── */}
+            <div className="min-w-0">
 
-          {/* Tags */}
-          <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-8">
-            {TAGS.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-gray-200 px-3 py-1 text-[12px] font-medium text-gray-500 hover:border-brand-primary hover:text-brand-primary transition-colors cursor-default"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
+              {/* Mobile TOC – collapsible pill, hidden on desktop */}
+              <TableOfContents
+                headings={headings}
+                tocTitle={t("toc_title")}
+                mode="mobile"
+              />
 
-          {/* Share — mobile */}
-          <div className="mt-6 flex items-center gap-3 sm:hidden">
-            <span className="text-[12px] font-semibold text-gray-400">{t("share_mobile_label")}</span>
-            <ShareButtons />
-          </div>
+              {/* Featured Image */}
+              {newsItem.image && (
+                <div className="mb-8">
+                  <div className="relative h-55 w-full overflow-hidden rounded-xl sm:aspect-21/9 sm:h-auto">
+                    <Image
+                      src={newsItem.image}
+                      alt={newsItem.title[locale]}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                </div>
+              )}
 
-          {/* Author */}
-          <div className="mt-8 flex items-start gap-4 rounded-2xl border border-gray-100 bg-gray-50 p-5">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
-              <User size={22} />
+              {/* Intro box */}
+              {newsItem.excerpt[locale] && (
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+                  <p className="mb-1 text-[11px] font-bold uppercase tracking-widest text-amber-600">
+                    {t("intro_label")}
+                  </p>
+                  <p className="text-[15px] leading-relaxed text-gray-700">
+                    {newsItem.excerpt[locale]}
+                  </p>
+                </div>
+              )}
+
+              {/* First article section (up to 2nd H2) */}
+              <ArticleBody html={firstSection} />
+
+              {/* Product Suggestion Block */}
+              <ProductSuggestionBlock
+                products={suggestedProducts}
+                title={t("product_suggestion_title")}
+                ctaLabel={t("product_suggestion_zalo")}
+              />
+
+              {/* Remaining article sections */}
+              {restSection && <ArticleBody html={restSection} />}
+
+              {/* Zalo CTA */}
+              <ZaloCtaBlock
+                title={t("zalo_cta_title")}
+                buttonLabel={t("zalo_cta_button")}
+              />
+
+              {/* Food Pairing */}
+              {/* <FoodPairingBlock
+                title={t("food_pairing_title")}
+                items={DEFAULT_FOOD_ITEMS}
+              /> */}
+
+              {/* Tags */}
+              <div className="mt-10 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-8">
+                {TAGS.map((tag) => (
+                  <span
+                    key={tag}
+                    className="cursor-default rounded-full border border-gray-200 px-3 py-1 text-[12px] font-medium text-gray-500 transition-colors hover:border-brand-primary hover:text-brand-primary"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Share — mobile */}
+              <div className="mt-6 flex items-center gap-3 sm:hidden">
+                <span className="text-[12px] font-semibold text-gray-400">
+                  {t("share_mobile_label")}
+                </span>
+                <ShareButtons />
+              </div>
+
+              {/* Back link */}
+              <div className="mt-10 border-t border-gray-100 pt-8">
+                <Link
+                  href="/events"
+                  className="inline-flex items-center gap-2 text-[13px] font-semibold text-gray-500 transition-colors hover:text-brand-primary"
+                >
+                  <ArrowLeft size={15} />
+                  {t("back_to_news")}
+                </Link>
+              </div>
             </div>
-            <div>
-              <p className="mb-1 text-[13px] font-bold text-gray-900">{newsItem.author}</p>
-              <p className="text-[13px] leading-relaxed text-gray-500">{t("author_bio")}</p>
-            </div>
-          </div>
 
-          {/* Back */}
-          <div className="mt-10 border-t border-gray-100 pt-8">
-            <Link
-              href="/events"
-              className="inline-flex items-center gap-2 text-[13px] font-semibold text-gray-500 transition-colors hover:text-brand-primary"
-            >
-              <ArrowLeft size={15} />
-              {t("back_to_news")}
-            </Link>
+            {/* ── RIGHT COLUMN: sticky sidebar (30%, desktop only, TOC ≥ 3) ── */}
+            {hasToc && (
+              <aside className="hidden lg:block">
+                <div className="sticky top-24 space-y-6">
+                  <TableOfContents
+                    headings={headings}
+                    tocTitle={t("toc_title")}
+                    mode="desktop"
+                  />
+                </div>
+              </aside>
+            )}
+
           </div>
         </div>
       </article>
 
-      {/* Related Posts */}
+      {/* ⑦  FAQ Section ──────────────────────────────────────────────────── */}
+      <FaqSection 
+        title={t("faq_title")} 
+        items={t.raw("faq_items") || DEFAULT_FAQ_ITEMS} 
+      />
+
+      {/* ⑩  Author Authority Block ──────────────────────────────────────── */}
+      {newsItem.author && (
+        <AuthorBlock
+          name={newsItem.author}
+          bio={authorBio}
+          label={t("author_label")}
+          title={t("author_title")}
+          viewMoreLabel={t("author_view_more")}
+          socialLinks={{
+            facebook: "https://www.facebook.com/viorawine",
+            zalo: "https://zalo.me/0338909973",
+          }}
+        />
+      )}
+
+      {/* ⑪  Comment Section ─────────────────────────────────────────────── */}
+      <CommentSection articleId={newsItem.id} />
+
+      {/* ⑨  Related Posts ────────────────────────────────────────────────── */}
       {relatedNews.length > 0 && (
         <section className="border-t border-gray-100 bg-gray-50 py-12 md:py-16">
           <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
@@ -227,7 +387,7 @@ export default function NewsDetailPageContent({ newsItem, relatedNews }: NewsDet
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <span className="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 shadow-sm backdrop-blur-sm">
+                      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 shadow-sm backdrop-blur-sm">
                         {CATEGORY_LABELS[item.category] ?? item.category}
                       </span>
                     </div>

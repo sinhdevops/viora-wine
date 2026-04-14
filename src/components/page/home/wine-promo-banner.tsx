@@ -31,7 +31,7 @@ export default function WinePromoBanner() {
 						href="/products"
 						className="inline-block rounded-lg bg-brand-primary px-6 py-3 text-xs font-bold tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#A30000] md:px-8 md:py-3.5 md:text-sm"
 					>
-						{t("promo_cta")}
+						{t("all_product")}
 					</Link>
 				</div>
 			</div>

@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import HomePageContent from './_page-content';
+import { buildAlternates, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -13,23 +14,17 @@ export async function generateMetadata({
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
-    alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        vi: '/vi',
-        en: '/en',
-      },
-    },
+    alternates: buildAlternates(locale),
     openGraph: {
       title: t('meta_title'),
       description: t('meta_desc'),
-      url: `/${locale}`,
+      url: `${SITE_URL}/${locale}`,
       siteName: common('brand'),
       locale,
       type: 'website',
       images: [
         {
-          url: 'https://viorawine.vn/statics/images/og-home.jpg',
+          url: `${SITE_URL}/statics/images/og-home.jpg`,
           width: 1200,
           height: 630,
           alt: common('brand'),

@@ -3,38 +3,38 @@ import { getTranslations } from 'next-intl/server';
 import NewsDetailPageContent from './_page-content';
 import { notFound } from 'next/navigation';
 import { NewsItem } from '@/@types/news';
+import type { DbProduct } from '@/@types/product';
+import { buildAlternates, SITE_URL } from '@/lib/seo';
+import { DEFAULT_FAQ_ITEMS } from '@/components/page/blog/faq-data';
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
 }
 
+// Only columns that actually exist in the events table
 type EventRow = {
   id: string;
-  slug: string;
   name: string;
   description: string | null;
   content: string | null;
   thumbnail_url: string | null;
   date: string;
   category: string;
-  read_time: string | null;
-  author: string | null;
-  featured: boolean | null;
 };
 
 function mapToNewsItem(row: EventRow): NewsItem {
   return {
     id: row.id,
-    slug: row.slug,
+    slug: row.id, // events table uses UUID id as the URL slug
     category: row.category as NewsItem['category'],
     title: { vi: row.name, en: row.name },
     excerpt: { vi: row.description ?? '', en: row.description ?? '' },
     content: { vi: row.content ?? '', en: row.content ?? '' },
     image: row.thumbnail_url ?? '',
     date: row.date,
-    readTime: row.read_time ?? '',
-    author: row.author ?? '',
-    featured: row.featured ?? false,
+    readTime: '',
+    author: 'Viora Wine',
+    featured: false,
   };
 }
 
@@ -42,7 +42,6 @@ export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
   const supabase = await createClient();
   const common = await getTranslations({ locale, namespace: 'common' });
-
 
   const { data } = await supabase
     .from('events')
@@ -66,17 +65,11 @@ export async function generateMetadata({ params }: Props) {
       'Văn hóa rượu vang',
       'Học về rượu vang',
     ],
-    alternates: {
-      canonical: `/${locale}/events/${slug}`,
-      languages: {
-        vi: `/vi/events/${slug}`,
-        en: `/en/events/${slug}`,
-      },
-    },
+    alternates: buildAlternates(locale, `/events/${slug}`),
     openGraph: {
       title: `${title} | ${common('brand')}`,
       description,
-      url: `/${locale}/events/${slug}`,
+      url: `${SITE_URL}/${locale}/events/${slug}`,
       siteName: common('brand'),
       locale,
       type: 'article',
@@ -97,29 +90,37 @@ export default async function NewsDetailPage({ params }: Props) {
   const { slug, locale } = await params;
   const supabase = await createClient();
 
-  const [{ data: row }, { data: relatedRows }] = await Promise.all([
-    supabase
-      .from('events')
-      .select('id,  name, description, content, thumbnail_url,  category, date')
-      .eq('id', slug)
-      .single(),
-    supabase
-      .from('events')
-      .select('id, name, description, content, thumbnail_url, category, date')
-      .neq('id', slug)
-      .order('date', { ascending: false })
-      .limit(3),
-  ]);
-
+  // Fetch article, related news and suggested products in parallel
+  const [{ data: row }, { data: relatedRows }, { data: productRows }] =
+    await Promise.all([
+      supabase
+        .from('events')
+        .select('id, name, description, content, thumbnail_url, category, date')
+        .eq('id', slug)
+        .single(),
+      supabase
+        .from('events')
+        .select('id, name, description, content, thumbnail_url, category, date')
+        .neq('id', slug)
+        .order('date', { ascending: false })
+        .limit(3),
+      supabase
+        .from('products')
+        .select('id, name, description, thumbnail_url, price, discount_percentage, category, stock, is_hot')
+        .eq('category', 'wine')
+        .gt('stock', 0)
+        .order('created_at', { ascending: false })
+        .limit(3),
+    ]);
 
   if (!row) notFound();
 
   const newsItem = mapToNewsItem(row as EventRow);
   const relatedNews = (relatedRows ?? []).map((r) => mapToNewsItem(r as EventRow));
+  const suggestedProducts = (productRows ?? []) as DbProduct[];
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://viorawine.vn';
-
-  const jsonLd = {
+  // ── JSON-LD: Article ──
+  const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: newsItem.title[locale as 'vi' | 'en'],
@@ -129,12 +130,22 @@ export default async function NewsDetailPage({ params }: Props) {
     author: [
       {
         '@type': 'Person',
-        name: 'Viora Wine',
-        url: baseUrl,
+        name: newsItem.author || 'Viora Wine',
+        url: SITE_URL,
       },
     ],
+    publisher: {
+      '@type': 'Organization',
+      name: 'Viora Wine',
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
   };
 
+  // ── JSON-LD: Breadcrumb ──
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -143,34 +154,56 @@ export default async function NewsDetailPage({ params }: Props) {
         '@type': 'ListItem',
         position: 1,
         name: 'Trang chủ',
-        item: `${baseUrl}`,
+        item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Kiến thức',
-        item: `${baseUrl}/events`,
+        item: `${SITE_URL}/events`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: newsItem.title[locale as 'vi' | 'en'],
-        item: `${baseUrl}/events/${slug}`,
+        item: `${SITE_URL}/events/${slug}`,
       },
     ],
+  };
+
+  // ── JSON-LD: FAQPage ──
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: DEFAULT_FAQ_ITEMS.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
   };
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <NewsDetailPageContent newsItem={newsItem} relatedNews={relatedNews} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <NewsDetailPageContent
+        newsItem={newsItem}
+        relatedNews={relatedNews}
+        suggestedProducts={suggestedProducts}
+      />
     </>
   );
 }

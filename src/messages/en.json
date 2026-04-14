@@ -11,6 +11,9 @@
     "promotion": "Promotions",
     "gifts": "Gifts",
     "contact": "Contact",
+    "contact_zalo": "ZALO CONTACT",
+    "chat_messenger": "Messenger",
+    "chat_zalo": "Chat on Zalo",
     "about": "About Us",
     "search": "Search...",
     "all": "All",
@@ -33,11 +36,48 @@
   "home": {
     "hero_title": "The Art of True Wine Appreciation",
     "hero_subtitle": "Discover the finest collection of wines, whiskies, and premium spirits in Da Nang.",
-    "meta_title": "Viora Wine Da Nang | Premium Imported Wine",
-    "meta_desc": "Premium imported wine store in Da Nang. Australian, French, Italian wines and fine whisky. Nationwide delivery, 24/7 expert advice.",
+    "meta_title": "Australian Wine Shop – Imported Shiraz & Cabernet Sauvignon | Viora Wine",
+    "meta_desc": "Shop authentic imported Australian wine in Da Nang & Hanoi. Australian Shiraz, Cabernet Sauvignon, wines under 1M VND. Expert advice 24/7, nationwide delivery.",
     "bestseller": "Best Sellers",
     "categories": "Featured Categories",
     "testimonials": "What Clients Say",
+    "testimonials_subtitle": "Customer satisfaction is the clearest proof of wine quality and dedicated service at Viora Wine.",
+    "metrics": [
+      { "label": "Star Rating", "value": "4.9/5", "suffix": "★" },
+      { "label": "Trusted Customers", "value": "2,000", "suffix": "+" },
+      { "label": "Authenticity Guarantee", "value": "100", "suffix": "%" }
+    ],
+    "bought_label": "Bought: ",
+    "reviews": [
+      {
+        "id": "rev-1",
+        "name": "Nguyen Hai",
+        "initials": "NH",
+        "review": "Chilean red wine is excellent. Enthusiastic consulting shop, fast delivery in Da Nang, careful packaging.",
+        "productName": "Chilean G7 Classic"
+      },
+      {
+        "id": "rev-2",
+        "name": "Tran Van",
+        "initials": "TV",
+        "review": "Bought a gift box for a partner, very luxurious appearance. Received many compliments, will come back to support.",
+        "productName": "French Wine Gift Box"
+      },
+      {
+        "id": "rev-3",
+        "name": "Le Minh",
+        "initials": "LM",
+        "review": "Reasonable price, authentic goods. Comes with a very beautiful set of glasses. Completely peace of mind when buying here.",
+        "productName": "Italian Luccarelli"
+      },
+      {
+        "id": "rev-4",
+        "name": "Hoang Oanh",
+        "initials": "HO",
+        "review": "24/7 service is truly professional. Calling at 9 PM and there is still someone to carefully consult to choose the right sweet wine flavor.",
+        "productName": "Italian Moscato Sweet Wine"
+      }
+    ],
     "cta_title": "Need help choosing?",
     "cta_subtitle": "Our experts are available 24/7 to assist you.",
     "combos": "Special Combos",
@@ -78,7 +118,8 @@
     "cat_wine": "WINE",
     "cat_champagne": "CHAMPAGNE",
     "cat_whisky": "WHISKY",
-    "cat_gift": "GIFTS"
+    "cat_gift": "GIFTS",
+    "all_product": "All products"
   },
   "product": {
     "price": "Price: ",
@@ -116,7 +157,7 @@
     "commitment_delivery": "Nationwide Delivery",
     "commitment_payment": "Pay on Delivery",
     "commitment_support": "24/7 Support",
-    "meta_desc_suffix": "Buy now at Viora Wine Da Nang. Authentic, nationwide delivery."
+    "meta_desc_suffix": "Authentic imported Australian wine at Viora Wine – trusted shop in Hanoi & Da Nang. Nationwide delivery."
   },
   "zalo": {
     "message": "Hi, I saw the {name} product on Viora Wine Da Nang website, could you please provide the price and advice?"
@@ -150,8 +191,8 @@
     "payment_policy_link": "Payment Policy"
   },
   "about": {
-    "meta_title": "About Us",
-    "meta_desc": "Discover Viora Wine Da Nang's 25-year journey — a passion for wine, rigorous selection process, and an unwavering commitment to quality.",
+    "meta_title": "About Us – Trusted Australian Wine Shop in Da Nang & Hanoi | Viora Wine",
+    "meta_desc": "Viora Wine — trusted Australian wine importer in Da Nang & Hanoi. Rigorous selection process and an unwavering commitment to quality.",
     "established": "ESTABLISHED 1998",
     "hero_title": "The Art of Viticulture & Heritage",
     "hero_subtitle": "From the sun-drenched slopes of Tuscany to the coastal breeze of Da Nang, we bring the world's finest vintages to your table.",
@@ -188,8 +229,8 @@
     "download_catalog": "Download Catalog"
   },
   "contact": {
-    "meta_title": "Contact Us",
-    "meta_desc": "Contact Viora Wine Da Nang for wine consultation, ordering and 24/7 support. Hotline: 033.890.9973.",
+    "meta_title": "Contact – Free Australian Wine Consultation | Viora Wine",
+    "meta_desc": "Contact Viora Wine for free Australian wine consultation. Australian wine shop in Da Nang & Hanoi. Hotline: 033.890.9973. 24/7 support.",
     "info_title": "Contact Information",
     "form_title": "Send a Message",
     "address_label": "Address",
@@ -209,8 +250,8 @@
     "error_message_short": "Message is too short"
   },
   "products_page": {
-    "meta_title": "Products",
-    "meta_desc": "Discover our collection of premium imported wines, whisky, and spirits at Viora Wine Da Nang. Authentic, diverse, great prices.",
+    "meta_title": "Australian Wine – Imported Shiraz & Cabernet Sauvignon | Viora Wine",
+    "meta_desc": "Buy authentic imported Australian wine: Shiraz, Cabernet Sauvignon, wines under 1M VND — perfect for beginners. Trusted Australian wine shop in Hanoi & Da Nang.",
     "home": "Home",
     "shop": "Shop",
     "exclusive_collection": "Exclusive Collection",
@@ -252,8 +293,8 @@
     }
   },
   "news": {
-    "meta_title": "Knowledge & Events",
-    "meta_desc": "Explore the world of wine through knowledge articles and featured events from Viora Wine Da Nang.",
+    "meta_title": "Australian Wine Guide – Shiraz & Cabernet Sauvignon for Beginners | Viora Wine",
+    "meta_desc": "Australian wine guide: how to choose Shiraz, Cabernet Sauvignon for beginners, wines under 1M VND, and how to identify authentic imported wine.",
     "breadcrumb_home": "Home",
     "breadcrumb_current": "Knowledge & Events",
     "title": "KNOWLEDGE & EVENTS",
@@ -277,13 +318,47 @@
     "tag_knowledge": "Knowledge",
     "tag_enjoyment": "Enjoyment",
     "author_bio": "Wine expert with over 10 years of experience in the industry. Passionate about sharing wine knowledge and culture with everyone.",
+    "author_bio_full": "Wine consultant at Viora Wine with over 10 years of experience serving more than 2,000 customers across Hanoi & Da Nang. Member of the Vietnam Wine Association, specialising in pairing recommendations by taste, occasion and budget.",
     "related_title": "Related Articles",
     "view_all": "View All",
-    "back_to_news": "Back to News"
+    "back_to_news": "Back to News",
+    "intro_label": "Article summary",
+    "toc_title": "Table of Contents",
+    "product_suggestion_title": "3 wines perfect for beginners",
+    "product_suggestion_zalo": "Chat on Zalo for advice",
+    "food_pairing_title": "Suggested food pairings",
+    "faq_title": "Frequently asked questions about wine",
+    "zalo_cta_title": "Not sure which wine to choose?",
+    "zalo_cta_button": "Chat on Zalo — free advice",
+    "author_label": "About the author",
+    "author_title": "Wine Consultant",
+    "author_view_more": "View author profile →",
+    "faq_items": [
+      {
+        "question": "Should beginners drink red or white wine?",
+        "answer": "Beginners usually find white or rosé wines more approachable due to their lighter body and lower tannins. Varieties like Sauvignon Blanc or Pinot Grigio are very popular. A light red like Pinot Noir is also a good choice if you want to explore red wines."
+      },
+      {
+        "question": "Can red wine be served chilled?",
+        "answer": "Yes, but not too cold. The ideal temperature for red wine is 16–18°C. Chilling it too much will make the tannins harsh and mute the aromas. In contrast, white and rosé wines are best enjoyed at 8–12°C."
+      },
+      {
+        "question": "How long does an open bottle of wine last?",
+        "answer": "Once opened, a bottle of wine should ideally be consumed within 3–5 days if stored in the refrigerator with the cork tightly sealed. Red wine left at room temperature will last maximum 2–3 days. Champagne and sparkling wines should be finished within 1–2 days."
+      },
+      {
+        "question": "Which wine is suitable as a gift?",
+        "answer": "Wines from Bordeaux (France), Barossa Valley (Australia), or Tuscany (Italy) are always elegant choices. Champagne is also highly favored during the holidays. Viora Wine offers a variety of gift sets featuring handcrafted wooden boxes perfect for special occasions."
+      },
+      {
+        "question": "Where can I buy authentic wine in Da Nang?",
+        "answer": "Viora Wine is an authentic imported wine store in Da Nang with over 10 years of experience. All our products come with full import documentation, anti-counterfeit stamps, and are stored according to international standards. Contact Zalo at 0338.909.973 for a free consultation."
+      }
+    ]
   },
   "gifts": {
-    "meta_title": "Gift Sets & Combos",
-    "meta_desc": "Premium wine gift sets at Viora Wine Da Nang. Handcrafted wooden boxes, custom laser engraving. Perfect for every occasion.",
+    "meta_title": "Australian Wine Gift Sets – Luxury Gift Boxes | Viora Wine",
+    "meta_desc": "Premium Australian wine gift sets at Viora Wine. Handcrafted wooden boxes, custom laser engraving. Perfect for corporate gifts and special occasions.",
     "breadcrumb_home": "Home",
     "breadcrumb_current": "Gifts",
     "title": "GIFT SETS & COMBOS",
@@ -306,8 +381,8 @@
     "view_all": "View All"
   },
   "promotion": {
-    "meta_title": "Promotions",
-    "meta_desc": "Attractive wine promotions at Viora Wine Da Nang. Discount codes, member benefits, and products on sale.",
+    "meta_title": "Australian Wine Deals – Wines Under 1M VND | Viora Wine",
+    "meta_desc": "Australian wine deals at Viora Wine. Wines under 1M VND, discount codes, member benefits — trusted Australian wine shop in Da Nang & Hanoi.",
     "breadcrumb_home": "Home",
     "breadcrumb_current": "Promotions",
     "vouchers_title": "Discount Codes",
@@ -537,5 +612,22 @@
     "contact_phone": "033.890.9973",
     "contact_address_label": "Address:",
     "contact_address": "Da Nang, Vietnam"
+  },
+  "comment": {
+    "title": "Comments",
+    "leave_comment": "Leave your comment",
+    "fullname": "Full Name",
+    "email_opt": "Email (optional)",
+    "content": "Comment content",
+    "submit": "Submit comment",
+    "success": "Your comment has been posted!",
+    "empty": "No comments yet. Be the first to comment!",
+    "view_more": "View {count} more comments",
+    "err_name": "Please enter your name",
+    "err_email": "Invalid email",
+    "err_body_req": "Please enter your comment",
+    "err_body_short": "Comment is too short",
+    "placeholder_name": "John Doe",
+    "placeholder_body": "Share your thoughts about this article..."
   }
 }

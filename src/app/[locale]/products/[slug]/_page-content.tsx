@@ -133,6 +133,10 @@ export default function ProductDetailPageContent({ product, related }: Props) {
                 href={getZaloLink(product.name)}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => {
+                  // Fire-and-forget: increment sold_count, does not block Zalo opening
+                  fetch(`/api/products/${product.id}/increment-sold`, { method: 'POST' });
+                }}
                 className="flex items-center justify-center gap-2 rounded-xl bg-brand-primary py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#A30000] active:scale-95"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

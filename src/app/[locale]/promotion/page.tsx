@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { createClient } from "@/utils/supabase/server";
 import PromotionPageContent from "./_page-content";
 import type { DbProduct } from "@/@types/product";
+import { buildAlternates, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -15,17 +16,11 @@ export async function generateMetadata({
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
-    alternates: {
-      canonical: `/${locale}/promotion`,
-      languages: {
-        vi: '/vi/promotion',
-        en: '/en/promotion',
-      },
-    },
+    alternates: buildAlternates(locale, '/promotion'),
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
       description: t('meta_desc'),
-      url: `/${locale}/promotion`,
+      url: `${SITE_URL}/${locale}/promotion`,
       siteName: common('brand'),
       locale,
       type: 'website',

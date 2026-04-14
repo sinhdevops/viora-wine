@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import ContactPageContent from './_page-content';
+import { buildAlternates, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -13,17 +14,11 @@ export async function generateMetadata({
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
-    alternates: {
-      canonical: `/${locale}/contact`,
-      languages: {
-        vi: '/vi/contact',
-        en: '/en/contact',
-      },
-    },
+    alternates: buildAlternates(locale, '/contact'),
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
       description: t('meta_desc'),
-      url: `/${locale}/contact`,
+      url: `${SITE_URL}/${locale}/contact`,
       siteName: common('brand'),
       locale,
       type: 'website',

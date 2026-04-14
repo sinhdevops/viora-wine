@@ -9,7 +9,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
   const { data: product } = await supabase
     .from("products")
-    .select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot")
+    .select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, rating, sold_count")
     .eq("id", slug)
     .single();
 
@@ -17,12 +17,12 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
   const { data: related } = await supabase
     .from("products")
-    .select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot")
+    .select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, rating, sold_count")
     .eq("category", product.category)
     .neq("id", product.id)
     .limit(5);
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://viorawine.vn';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://viorawine.com';
 
   const jsonLd = {
     '@context': 'https://schema.org',

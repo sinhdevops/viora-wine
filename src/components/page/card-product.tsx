@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { formatCurrency } from "@/utils/format-currency";
 import type { DbProduct } from "@/@types/product";
 import { WINE_IMAGES } from "../../../public/statics/images";
+import { HiStar } from "react-icons/hi";
 
 interface CardProductProps {
 	product: DbProduct;
@@ -13,6 +14,7 @@ interface CardProductProps {
 }
 
 export default function CardProduct({ product, isHot = false }: CardProductProps) {
+	const t = useTranslations("common");
 	const locale = useLocale();
 	const originalPrice =
 		product.discount_percentage > 0
@@ -20,50 +22,82 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 			: null;
 
 	return (
-		<Link href={`/products/${product.id}`} className="group block">
-			<div>
+		<div className="group block h-full">
+			<div className="flex flex-col h-full">
 				{/* Image area */}
-				<div className="relative aspect-216/290 rounded-xl bg-[#ECECEC]">
-					<Image
-						src={product.thumbnail_url}
-						alt={product.name}
-						fill
-						className="object-contain transition-transform duration-500"
-					/>
+				<Link href={`/products/${product.id}`} className="block">
+					<div className="relative aspect-216/290 rounded-xl bg-[#ECECEC]">
+						<Image
+							src={product.thumbnail_url}
+							alt={product.name}
+							fill
+							className="object-contain transition-transform duration-500"
+						/>
 
-					{/* HOT badge */}
-					{isHot && (
-						<div className="absolute -top-5 -left-3">
-							<Image src={WINE_IMAGES.hot} alt="hot product" />
-						</div>
-					)}
-				</div>
-
-				{/* Info */}
-				<div className="py-3">
-					<p className="mb-1.5 line-clamp-2 min-h-11 wrap-break-word text-[14px] font-medium md:text-[15px]">
-						{product.name}
-					</p>
-					<div className="flex flex-wrap items-baseline gap-x-2.5">
-						{product.price === 0 ? (
-							<span className="text-[15px] font-semibold text-brand-primary">
-								Liên hệ
-							</span>
-						) : (
-							<>
-								{originalPrice && (
-									<span className="text-[13px] text-[#3D3D3D] line-through">
-										{formatCurrency(originalPrice, locale)}
-									</span>
-								)}
-								<span className="text-[15px] font-semibold text-brand-primary">
-									{formatCurrency(product.price, locale)}
-								</span>
-							</>
+						{/* HOT badge */}
+						{isHot && (
+							<div className="absolute -top-5 -left-3">
+								<Image src={WINE_IMAGES.hot} alt="hot product" />
+							</div>
 						)}
 					</div>
+				</Link>
+
+				{/* Info */}
+				<div className="py-3 flex flex-col flex-1">
+					<Link href={`/products/${product.id}`} className="block">
+						<div className="flex items-center gap-3 mb-2 justify-between">
+							<div className="flex items-center gap-1">
+								<HiStar className="text-yellow-400" size={14} />
+								<span className="text-[12px] font-bold text-gray-700">{product.rating || 5.0}</span>
+							</div>
+							<div className="w-1 h-1 rounded-full bg-gray-300" />
+							<span className="text-[12px] text-gray-400 font-medium">
+								{t("sold")} {product.sold_count || 0}+
+							</span>
+						</div>
+						<p className="mb-1.5 line-clamp-2 min-h-11 wrap-break-word text-[14px] font-medium md:text-[15px]">
+							{product.name}
+						</p>
+						<div className="flex flex-wrap items-baseline mb-3 gap-x-2.5">
+							{product.price === 0 ? (
+								<span className="text-[15px] font-semibold text-brand-primary">
+									{t("contact")}
+								</span>
+							) : (
+								<>
+									{originalPrice && (
+										<span className="text-[13px] text-[#3D3D3D] line-through">
+											{formatCurrency(originalPrice, locale)}
+										</span>
+									)}
+									<span className="text-[15px] font-semibold text-brand-primary">
+										{formatCurrency(product.price, locale)}
+									</span>
+								</>
+							)}
+						</div>
+					</Link>
+					<div className="mt-auto pt-2">
+						<a
+							href="https://zalo.me/0338909973"
+							target="_blank"
+							rel="noopener noreferrer"
+							onClick={(e) => {
+								e.stopPropagation();
+								// Fire-and-forget: increment sold_count, do not block navigation
+								fetch(`/api/products/${product.id}/increment-sold`, { method: 'POST' });
+							}}
+							className="inline-block"
+						>
+							<button className="rounded-lg bg-brand-primary px-6 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-red-200">
+								{t("contact_zalo")}
+							</button>
+						</a>
+					</div>
 				</div>
+				
 			</div>
-		</Link>
+		</div>
 	);
 }

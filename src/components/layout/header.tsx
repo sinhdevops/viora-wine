@@ -8,6 +8,7 @@ import { ChevronDown, Globe, Menu } from "lucide-react";
 import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
 
+const phone = '0338909973';
 const languages = [
 	{ code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
 	{ code: "en", name: "English", flag: "🇺🇸" },
@@ -37,6 +38,7 @@ export default function Header() {
 		{ name: t("news"), path: "/events" },
 		{ name: t("promotion"), path: "/promotion" },
 		{ name: t("gifts"), path: "/gifts" },
+		{ name: t("contact"), path: "/contact" },
 	];
 
 	return (
@@ -121,10 +123,10 @@ export default function Header() {
 
 						{/* Contact Button */}
 						<Link
-							href="/contact"
+							href={`https://zalo.me/${phone}`}
 							className="rounded-lg bg-brand-primary px-6 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-red-200"
 						>
-							{t("contact")}
+							{t("contact_zalo")}
 						</Link>
 					</div>
 
@@ -173,11 +175,12 @@ export default function Header() {
 								))}
 								<div className="px-3 py-4">
 									<Link
-										href="/contact"
+										target="_blank"
+										href={`https://zalo.me/${phone}`}
 										onClick={() => setIsMobileMenuOpen(false)}
 										className="block w-full rounded-lg bg-[#f43f5e] py-3 text-center text-base font-semibold text-white hover:bg-red-700"
 									>
-										{t("contact")}
+										{t("contact_zalo")}
 									</Link>
 								</div>
 							</div>

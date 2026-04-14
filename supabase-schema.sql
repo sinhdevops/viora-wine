@@ -36,5 +36,21 @@ create table products (
   country text,
   stock integer default 0,
   is_hot boolean default false,
+  rating decimal(2,1) default 5.0,
+  sold_count integer default 0,
   created_at timestamptz default now()
 );
+
+-- Migration (run if table already exists):
+-- ALTER TABLE products ADD COLUMN IF NOT EXISTS rating DECIMAL(2,1) DEFAULT 5.0;
+-- ALTER TABLE products ADD COLUMN IF NOT EXISTS sold_count INTEGER DEFAULT 0;
+-- UPDATE products SET rating = 5.0 WHERE rating IS NULL;
+-- UPDATE products SET sold_count = 0 WHERE sold_count IS NULL;
+
+-- Supabase RPC to safely increment sold_count:
+-- CREATE OR REPLACE FUNCTION increment_sold_count(product_id TEXT)
+-- RETURNS void LANGUAGE plpgsql AS $$
+-- BEGIN
+--   UPDATE products SET sold_count = sold_count + 1 WHERE id = product_id;
+-- END;
+-- $$;

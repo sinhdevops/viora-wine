@@ -73,6 +73,8 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 			producer: "",
 			stock: 0,
 			is_hot: false,
+			rating: 5.0,
+			sold_count: 0,
 		},
 	});
 
@@ -189,6 +191,31 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 							min={0}
 							max={100}
 						/>
+					</div>
+					<div>
+						<label className={cls.label}>Đánh giá ★ (1.0 – 5.0)</label>
+						<input
+							type="number"
+							{...register("rating", { valueAsNumber: true })}
+							className={cls.input + " w-28"}
+							min={1}
+							max={5}
+							step={0.1}
+							placeholder="5.0"
+						/>
+						{errors.rating && <p className={cls.error}>{errors.rating.message}</p>}
+					</div>
+					<div>
+						<label className={cls.label}>Đã bán (seed)</label>
+						<input
+							type="number"
+							{...register("sold_count", { valueAsNumber: true })}
+							className={cls.input + " w-28"}
+							min={0}
+							step={1}
+							placeholder="0"
+						/>
+						{errors.sold_count && <p className={cls.error}>{errors.sold_count.message}</p>}
 					</div>
 					<div className="flex items-center gap-3 pt-6">
 						<input
