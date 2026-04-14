@@ -13,6 +13,18 @@ import {
 	eventSchema,
 	type EventFormValues,
 } from "@/lib/schemas/event-schema";
+
+function toSlug(text: string): string {
+	return text
+		.toLowerCase()
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.replace(/đ/g, "d")
+		.replace(/[^a-z0-9\s-]/g, "")
+		.trim()
+		.replace(/\s+/g, "-")
+		.replace(/-+/g, "-");
+}
 import { ImageUploader } from "./image-uploader";
 import { supabase } from "@/lib/supabase-client";
 
@@ -52,6 +64,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 		resolver: zodResolver(eventSchema),
 		defaultValues: initialData ?? {
 			name: "",
+			slug: "",
 			description: "",
 			thumbnail_url: "",
 			content: "",
@@ -64,6 +77,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 		reset(
 			initialData ?? {
 				name: "",
+				slug: "",
 				description: "",
 				thumbnail_url: "",
 				content: "",
@@ -72,6 +86,16 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 			}
 		);
 	}, [initialData?.id, reset]);
+
+	const nameValue = watch("name");
+	const slugValue = watch("slug");
+
+	// Auto-generate slug from name only when creating new (not editing)
+	useEffect(() => {
+		if (!isEdit && nameValue) {
+			setValue("slug", toSlug(nameValue), { shouldValidate: false });
+		}
+	}, [nameValue, isEdit, setValue]);
 
 	const thumbnailUrl = watch("thumbnail_url");
 
@@ -113,6 +137,14 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 				/>
 				{errors.name && <p className={cls.error}>{errors.name.message}</p>}
 			</div>
+
+			{/* Slug - auto-generated, read-only */}
+			{slugValue && (
+				<div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-500">
+					<span className="text-gray-400">URL:</span>
+					<span className="font-mono">/events/{slugValue}</span>
+				</div>
+			)}
 
 			{/* Description */}
 			<div>

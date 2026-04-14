@@ -72,9 +72,6 @@ export async function generateMetadata({
       card: 'summary_large_image',
       site: '@viorawine',
     },
-    verification: {
-      google: 'your-google-site-verification-token',
-    },
   };
 }
 

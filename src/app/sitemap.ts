@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch all events
   const { data: events } = await supabase
     .from('events')
-    .select('id, created_at')
+    .select('slug, created_at')
     .order('created_at', { ascending: false });
 
   // Priority map: higher priority pages for target keywords
@@ -68,7 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (events) {
       for (const event of events) {
         sitemapEntries.push({
-          url: `${SITE_URL}/${locale}/events/${event.id}`,
+          url: `${SITE_URL}/${locale}/events/${event.slug}`,
           lastModified: new Date(event.created_at || new Date()),
           changeFrequency: 'weekly',
           priority: 0.75,

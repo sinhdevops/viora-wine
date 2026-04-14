@@ -11,9 +11,9 @@ interface Props {
   params: Promise<{ locale: string; slug: string }>;
 }
 
-// Only columns that actually exist in the events table
 type EventRow = {
   id: string;
+  slug: string;
   name: string;
   description: string | null;
   content: string | null;
@@ -25,7 +25,7 @@ type EventRow = {
 function mapToNewsItem(row: EventRow): NewsItem {
   return {
     id: row.id,
-    slug: row.id, // events table uses UUID id as the URL slug
+    slug: row.slug,
     category: row.category as NewsItem['category'],
     title: { vi: row.name, en: row.name },
     excerpt: { vi: row.description ?? '', en: row.description ?? '' },
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props) {
   const { data } = await supabase
     .from('events')
     .select('name, description, thumbnail_url')
-    .eq('id', slug)
+    .eq('slug', slug)
     .single();
 
   if (!data) return {};
@@ -95,13 +95,13 @@ export default async function NewsDetailPage({ params }: Props) {
     await Promise.all([
       supabase
         .from('events')
-        .select('id, name, description, content, thumbnail_url, category, date')
-        .eq('id', slug)
+        .select('id, slug, name, description, content, thumbnail_url, category, date')
+        .eq('slug', slug)
         .single(),
       supabase
         .from('events')
-        .select('id, name, description, content, thumbnail_url, category, date')
-        .neq('id', slug)
+        .select('id, slug, name, description, content, thumbnail_url, category, date')
+        .neq('slug', slug)
         .order('date', { ascending: false })
         .limit(3),
       supabase

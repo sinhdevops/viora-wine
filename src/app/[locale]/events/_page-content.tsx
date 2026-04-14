@@ -96,7 +96,7 @@ export default function EventsPageContent({ news }: Props) {
             {displayed.map((item) => (
               <Link
                 key={item.id}
-                href={`/events/${item.id}`}
+                href={`/events/${item.slug}`}
                 className="group block"
               >
                 {/* Image */}

@@ -68,7 +68,7 @@ export default async function EventsPage() {
 
   const { data: rows } = await supabase
     .from('events')
-    .select('id, name, description, content, thumbnail_url, date, category')
+    .select('id, slug, name, description, content, thumbnail_url, date, category')
     .order('date', { ascending: false });
 
 
