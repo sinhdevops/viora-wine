@@ -4,7 +4,7 @@ import NewsDetailPageContent from './_page-content';
 import { notFound } from 'next/navigation';
 import { NewsItem } from '@/@types/news';
 import type { DbProduct } from '@/@types/product';
-import { buildAlternates, SITE_URL } from '@/lib/seo';
+import { buildAlternates, buildPageUrl, SITE_URL } from '@/lib/seo';
 import { DEFAULT_FAQ_ITEMS } from '@/components/page/blog/faq-data';
 
 interface Props {
@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: Props) {
     openGraph: {
       title: `${title} | ${common('brand')}`,
       description,
-      url: `${SITE_URL}/${locale}/blog/${slug}`,
+      url: buildPageUrl(locale, `/blog/${slug}`),
       siteName: common('brand'),
       locale,
       type: 'article',

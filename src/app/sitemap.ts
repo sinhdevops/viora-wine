@@ -40,20 +40,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  // Root homepage — canonical entry for the bare domain
-  sitemapEntries.push({
-    url: SITE_URL,
-    lastModified: new Date(),
-    changeFrequency: 'daily',
-    priority: 1.0,
-  });
+  // localePrefix: 'as-needed' — vi (default) has no prefix, en has /en prefix
+  const localePrefix = (locale: string) => locale === 'vi' ? '' : `/${locale}`;
 
   // Static pages for each locale
   for (const locale of locales) {
+    const prefix = localePrefix(locale);
+
     for (const page of staticPages) {
       const priority = staticPagePriorities[page] ?? 0.5;
+      // Homepage vi → SITE_URL/, homepage en → SITE_URL/en
+      const url = page === ''
+        ? `${SITE_URL}${prefix || '/'}`
+        : `${SITE_URL}${prefix}${page}`;
       sitemapEntries.push({
-        url: `${SITE_URL}/${locale}${page}`,
+        url,
         lastModified: new Date(),
         changeFrequency: priority >= 0.85 ? 'daily' : 'weekly',
         priority,
@@ -64,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (products) {
       for (const product of products) {
         sitemapEntries.push({
-          url: `${SITE_URL}/${locale}/products/${product.id}`,
+          url: `${SITE_URL}${prefix}/products/${product.id}`,
           lastModified: new Date(product.created_at || new Date()),
           changeFrequency: 'weekly',
           priority: 0.8,
@@ -76,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (events) {
       for (const event of events) {
         sitemapEntries.push({
-          url: `${SITE_URL}/${locale}/blog/${event.slug}`,
+          url: `${SITE_URL}${prefix}/blog/${event.slug}`,
           lastModified: new Date(event.created_at || new Date()),
           changeFrequency: 'weekly',
           priority: 0.75,

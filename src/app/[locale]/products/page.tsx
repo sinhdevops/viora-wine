@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import ProductsPageContent from './_page-content';
-import { buildAlternates, SITE_URL } from '@/lib/seo';
+import { buildAlternates, buildPageUrl, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -31,7 +31,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
       description: t('meta_desc'),
-      url: `${SITE_URL}/${locale}/products`,
+      url: buildPageUrl(locale, '/products'),
       siteName: common('brand'),
       locale,
       type: 'website',

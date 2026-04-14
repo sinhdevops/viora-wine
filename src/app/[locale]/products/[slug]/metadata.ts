@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { getTranslations } from 'next-intl/server';
-import { buildAlternates, SITE_URL } from '@/lib/seo';
+import { buildAlternates, buildPageUrl, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -77,7 +77,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${title} | ${common('brand')}`,
       description,
-      url: `${SITE_URL}/${locale}/products/${slug}`,
+      url: buildPageUrl(locale, `/products/${slug}`),
       siteName: common('brand'),
       locale,
       type: 'website',

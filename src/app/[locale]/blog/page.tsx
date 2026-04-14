@@ -2,7 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { getTranslations } from 'next-intl/server';
 import EventsPageContent from "./_page-content";
 import { NewsItem } from '@/@types/news';
-import { buildAlternates, SITE_URL } from '@/lib/seo';
+import { buildAlternates, buildPageUrl } from '@/lib/seo';
 
 type EventRow = {
   id: string;
@@ -50,7 +50,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
       description: t('meta_desc'),
-      url: `${SITE_URL}/${locale}/blog`,
+      url: buildPageUrl(locale, '/blog'),
       siteName: common('brand'),
       locale,
       type: 'website',
