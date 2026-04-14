@@ -138,7 +138,7 @@ const websiteJsonLd = {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: `${SITE_URL}/vi/products?cat={search_term_string}`,
+      urlTemplate: `${SITE_URL}/products?cat={search_term_string}`,
     },
     'query-input': 'required name=search_term_string',
   },

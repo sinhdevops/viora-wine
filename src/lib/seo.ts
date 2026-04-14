@@ -28,7 +28,7 @@ export function buildPageUrl(locale: string, path: string = '') {
 
 export function buildAlternates(locale: string, path: string = '') {
   const viUrl = `${SITE_URL}${path || '/'}`;
-  const enUrl = `${SITE_URL}/en${path}`;
+  const enUrl = `${SITE_URL}${path}`;
   const canonical = locale === DEFAULT_LOCALE ? viUrl : enUrl;
 
   return {
