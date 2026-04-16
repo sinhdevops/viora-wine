@@ -70,6 +70,8 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 			content: "",
 			date: "",
 			category: "su-kien",
+			seo_title: "",
+			seo_description: "",
 		},
 	});
 
@@ -83,6 +85,8 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 				content: "",
 				date: "",
 				category: "su-kien",
+				seo_title: "",
+				seo_description: "",
 			}
 		);
 	}, [initialData?.id, reset]);
@@ -236,6 +240,40 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 				{errors.content && (
 					<p className={cls.error}>{errors.content.message}</p>
 				)}
+			</div>
+
+			{/* SEO */}
+			<div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-4">
+				<p className="text-sm font-semibold text-gray-700">SEO (tùy chọn)</p>
+
+				<div>
+					<label className={cls.label}>
+						Meta Title
+						<span className="ml-1 font-normal text-gray-400">(để trống sẽ dùng Tên sự kiện)</span>
+					</label>
+					<input
+						{...register("seo_title")}
+						className={cls.input}
+						placeholder="Tiêu đề hiển thị trên Google..."
+						maxLength={70}
+					/>
+					<p className="mt-1 text-xs text-gray-400">Tối đa 70 ký tự</p>
+				</div>
+
+				<div>
+					<label className={cls.label}>
+						Meta Description
+						<span className="ml-1 font-normal text-gray-400">(để trống sẽ dùng Mô tả ngắn)</span>
+					</label>
+					<textarea
+						{...register("seo_description")}
+						rows={2}
+						className={cls.input}
+						placeholder="Mô tả hiển thị trên Google..."
+						maxLength={160}
+					/>
+					<p className="mt-1 text-xs text-gray-400">Tối đa 160 ký tự</p>
+				</div>
 			</div>
 
 			{/* Actions */}

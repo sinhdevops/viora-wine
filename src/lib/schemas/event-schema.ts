@@ -17,6 +17,8 @@ export const eventSchema = z.object({
 	category: z.enum(["su-kien", "kien-thuc"], {
 		error: "Chọn danh mục hợp lệ",
 	}),
+	seo_title: z.string().optional(),
+	seo_description: z.string().optional(),
 });
 
 export type EventFormValues = z.infer<typeof eventSchema>;

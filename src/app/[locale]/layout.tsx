@@ -86,7 +86,7 @@ const organizationJsonLd = {
   description:
     'Shop rượu vang Úc nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Rượu vang Úc Shiraz, Cabernet Sauvignon, Pháp, Ý, Whisky cao cấp. Giao hàng toàn quốc, tư vấn 24/7.',
   telephone: '+84-338-909-973',
-  email: 'contact@viorawine.vn',
+  email: 'viorawine@gmail.com',
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Đường Tố Hữu',

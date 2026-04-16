@@ -45,14 +45,14 @@ export async function generateMetadata({ params }: Props) {
 
   const { data } = await supabase
     .from('events')
-    .select('name, description, thumbnail_url')
+    .select('name, description, thumbnail_url, seo_title, seo_description')
     .eq('slug', slug)
     .single();
 
   if (!data) return {};
 
-  const title = data.name;
-  const description = data.description ?? title;
+  const title = data.seo_title || data.name;
+  const description = data.seo_description || data.description || title;
 
   return {
     title,
