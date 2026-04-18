@@ -173,14 +173,15 @@ export default async function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-18100193809"
+          src="https://www.googletagmanager.com/gtag/js?id=G-C1XWMDYLVB"
           strategy="afterInteractive"
         />
-        <Script id="google-ads" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
+            gtag('config', 'G-C1XWMDYLVB');
             gtag('config', 'AW-18100193809');
           `}
         </Script>
