@@ -94,7 +94,7 @@ function StatCard({
 	return (
 		<Link
 			href={href}
-			className="group flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md md:gap-4 md:p-5"
+			className="group flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-3   transition-all hover:-translate-y-0.5 hover:shadow-md md:gap-4 md:p-5"
 		>
 			<div className={`shrink-0 rounded-xl p-3 ${iconBg}`}>
 				<Icon size={22} className={iconColor} />
@@ -221,7 +221,7 @@ export default function AdminDashboard() {
 					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">Dashboard</h1>
 					<p className="mt-1 text-sm text-gray-400">{today}</p>
 				</div>
-				<div className="flex items-center gap-2 rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
+				<div className="flex items-center gap-2 rounded-2xl border border-gray-100 bg-white px-4 py-3  ">
 					<TrendingUp size={16} className="text-emerald-500" />
 					<span className="text-sm font-semibold text-gray-700">
 						Tổng giá trị kho:{" "}
@@ -284,7 +284,7 @@ export default function AdminDashboard() {
 				{/* ── Left Column (2/3) ── */}
 				<div className="space-y-6 lg:col-span-2">
 					{/* Category Distribution */}
-					<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+					<div className="rounded-2xl border border-gray-100 bg-white p-6  ">
 						<div className="mb-5 flex items-center justify-between">
 							<div className="flex items-center gap-2">
 								<BarChart3 size={18} className="text-brand-primary" />
@@ -316,7 +316,7 @@ export default function AdminDashboard() {
 					</div>
 
 					{/* Recent Products */}
-					<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+					<div className="rounded-2xl border border-gray-100 bg-white p-6  ">
 						<div className="mb-5 flex items-center justify-between">
 							<div className="flex items-center gap-2">
 								<ShoppingBag size={18} className="text-brand-primary" />
@@ -384,7 +384,7 @@ export default function AdminDashboard() {
 				{/* ── Right Column (1/3) ── */}
 				<div className="space-y-6">
 					{/* Inventory Health */}
-					<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+					<div className="rounded-2xl border border-gray-100 bg-white p-6  ">
 						<div className="mb-5 flex items-center gap-2">
 							<Layers size={18} className="text-brand-primary" />
 							<h2 className="font-bold text-gray-900">Tình trạng kho</h2>
@@ -437,7 +437,7 @@ export default function AdminDashboard() {
 					</div>
 
 					{/* Recent Events */}
-					<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+					<div className="rounded-2xl border border-gray-100 bg-white p-6  ">
 						<div className="mb-5 flex items-center justify-between">
 							<div className="flex items-center gap-2">
 								<CalendarDays size={18} className="text-brand-primary" />
@@ -499,7 +499,7 @@ export default function AdminDashboard() {
 					</div>
 
 					{/* Quick actions */}
-					<div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+					<div className="rounded-2xl border border-gray-100 bg-white p-6  ">
 						<h2 className="mb-4 font-bold text-gray-900">Truy cập nhanh</h2>
 						<div className="space-y-2">
 							{[

@@ -10,11 +10,11 @@ export default function Footer() {
 	const commonT = useTranslations("common");
 
 	const supportItems = [
-		{ name: t("shopping_guide_link"), path: "/shopping-guide" },
-		{ name: t("shipping_policy_link"), path: "/shipping-policy" },
-		{ name: t("inspection_policy_link"), path: "/inspection-policy" },
-		{ name: t("return_policy_link"), path: "/return-policy" },
-		{ name: t("payment_policy_link"), path: "/payment-policy" },
+		{ name: t("shopping_guide_link"), path: "/shopping-guide" as const },
+		{ name: t("shipping_policy_link"), path: "/shipping-policy" as const },
+		{ name: t("inspection_policy_link"), path: "/inspection-policy" as const },
+		{ name: t("return_policy_link"), path: "/return-policy" as const },
+		{ name: t("payment_policy_link"), path: "/payment-policy" as const },
 	];
 
 	const socials = [
@@ -124,13 +124,14 @@ export default function Footer() {
 						</ul>
 
 						<div className="mt-8">
-							<Link
-							target="_blank"
-								href={`https://zalo.me/0338909973`}
+							<a
+								target="_blank"
+								rel="noopener noreferrer"
+								href="https://zalo.me/0338909973"
 								className="inline-block rounded-lg bg-brand-primary px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#A30000]"
 							>
 								{commonT("contact_zalo")}
-							</Link>
+							</a>
 						</div>
 					</div>
 				</div>

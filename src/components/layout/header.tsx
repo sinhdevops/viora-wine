@@ -33,16 +33,16 @@ export default function Header() {
 	}, []);
 
 	const navItems = [
-		{ name: t("home"), path: "/" },
-		{ name: t("products"), path: "/products" },
-		{ name: t("news"), path: "/blog" },
-		{ name: t("promotion"), path: "/promotion" },
-		{ name: t("gifts"), path: "/gifts" },
-		{ name: t("contact"), path: "/contact" },
+		{ name: t("home"), path: "/" as const },
+		{ name: t("products"), path: "/products" as const },
+		{ name: t("news"), path: "/blog" as const },
+		{ name: t("promotion"), path: "/promotion" as const },
+		{ name: t("gifts"), path: "/gifts" as const },
+		{ name: t("contact"), path: "/contact" as const },
 	];
 
 	return (
-		<header className="sticky top-0 z-50 bg-white shadow-sm">
+		<header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-20 items-center justify-between">
 					{/* Logo */}
@@ -103,7 +103,7 @@ export default function Header() {
 										{languages.map((lang) => (
 											<Link
 												key={lang.code}
-												href={pathname}
+												href={pathname as any}
 												locale={lang.code}
 												onClick={() => setIsLangOpen(false)}
 												className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 ${
@@ -122,12 +122,14 @@ export default function Header() {
 						</div>
 
 						{/* Contact Button */}
-						<Link
+						<a
 							href={`https://zalo.me/${phone}`}
+							target="_blank"
+							rel="noopener noreferrer"
 							className="rounded-lg bg-brand-primary px-6 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-red-200"
 						>
 							{t("contact_zalo")}
-						</Link>
+						</a>
 					</div>
 
 					{/* Mobile menu toggle */}
@@ -174,14 +176,15 @@ export default function Header() {
 									</Link>
 								))}
 								<div className="px-3 py-4">
-									<Link
-										target="_blank"
+									<a
 										href={`https://zalo.me/${phone}`}
+										target="_blank"
+										rel="noopener noreferrer"
 										onClick={() => setIsMobileMenuOpen(false)}
 										className="block w-full rounded-lg bg-[#f43f5e] py-3 text-center text-base font-semibold text-white hover:bg-red-700"
 									>
 										{t("contact_zalo")}
-									</Link>
+									</a>
 								</div>
 							</div>
 						</motion.div>

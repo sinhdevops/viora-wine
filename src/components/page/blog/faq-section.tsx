@@ -76,7 +76,7 @@ export default function FaqSection({ title, items }: FaqSectionProps) {
         </div>
 
         {/* Accordion */}
-        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm divide-y-0 px-6">
+        <div className="rounded-2xl border border-gray-200 bg-white   divide-y-0 px-6">
           {items.map((item, i) => (
             <FaqAccordionItem
               key={i}

@@ -8,26 +8,59 @@ export const SITE_URL =
 export const DEFAULT_LOCALE = 'vi';
 
 /**
- * Build the standard `alternates` object for Next.js Metadata API.
- * Generates self-referencing canonical + hreflang (vi, en, x-default).
- *
- * localePrefix is 'as-needed': default locale (vi) has NO prefix in the URL.
- * → vi canonical: https://www.viorawine.com{path}
- * → en canonical: https://www.viorawine.com/en{path}
+ * Maps internal route paths to locale-specific URL segments.
+ * Only Vietnamese needs explicit mapping; English keeps the original path.
  */
+const VI_PATH_MAP: Record<string, string> = {
+  '/products': '/san-pham',
+  '/blog': '/tin-tuc',
+  '/contact': '/lien-he',
+  '/promotion': '/khuyen-mai',
+  '/gifts': '/qua-tang',
+  '/about': '/gioi-thieu',
+  '/privacy-policy': '/chinh-sach-bao-mat',
+  '/terms': '/dieu-khoan',
+  '/shopping-guide': '/huong-dan-mua-hang',
+  '/shipping-policy': '/chinh-sach-van-chuyen',
+  '/inspection-policy': '/chinh-sach-kiem-hang',
+  '/return-policy': '/chinh-sach-doi-tra',
+  '/payment-policy': '/chinh-sach-thanh-toan',
+};
+
+/**
+ * Translate an internal path to its locale-specific URL.
+ * Handles both exact matches and dynamic sub-paths (e.g. /blog/some-slug → /tin-tuc/some-slug).
+ */
+export function getLocalizedPath(path: string, locale: string): string {
+  if (locale !== DEFAULT_LOCALE) return path;
+
+  for (const [internal, localized] of Object.entries(VI_PATH_MAP)) {
+    if (path === internal) return localized;
+    if (path.startsWith(internal + '/')) {
+      return localized + path.slice(internal.length);
+    }
+  }
+  return path;
+}
+
 /**
  * Build the correct page URL respecting localePrefix: 'as-needed'.
- * vi (default) → no prefix: https://www.viorawine.com/products
+ * vi (default) → no prefix, with localized path: https://www.viorawine.com/san-pham
  * en           → /en prefix: https://www.viorawine.com/en/products
  */
 export function buildPageUrl(locale: string, path: string = '') {
+  const localizedPath = getLocalizedPath(path, locale);
   return locale === DEFAULT_LOCALE
-    ? `${SITE_URL}${path || '/'}`
-    : `${SITE_URL}/${locale}${path}`;
+    ? `${SITE_URL}${localizedPath || '/'}`
+    : `${SITE_URL}/${locale}${localizedPath}`;
 }
 
+/**
+ * Build the standard `alternates` object for Next.js Metadata API.
+ * Generates self-referencing canonical + hreflang (vi, en, x-default).
+ */
 export function buildAlternates(locale: string, path: string = '') {
-  const viUrl = `${SITE_URL}${path || '/'}`;
+  const viUrl = `${SITE_URL}${getLocalizedPath(path, 'vi') || '/'}`;
   const enUrl = `${SITE_URL}/en${path}`;
   const canonical = locale === DEFAULT_LOCALE ? viUrl : enUrl;
 

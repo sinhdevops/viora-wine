@@ -88,7 +88,7 @@ export default function EventsPage() {
 			</div>
 
 			{/* Table */}
-			<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+			<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  ">
 				{loading ? (
 					<div className="flex items-center justify-center py-20 text-gray-400">
 						<Loader2 size={24} className="animate-spin" />

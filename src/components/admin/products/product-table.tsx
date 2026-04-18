@@ -35,7 +35,7 @@ export const ProductTable = React.memo(({
 }: ProductTableProps) => {
 	if (loading) {
 		return (
-			<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+			<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  ">
 				<div className="flex items-center justify-center py-20 text-gray-400">
 					<Loader2 size={24} className="animate-spin" />
 				</div>
@@ -45,7 +45,7 @@ export const ProductTable = React.memo(({
 
 	if (products.length === 0) {
 		return (
-			<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+			<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  ">
 				<div className="py-20 text-center text-sm text-gray-400">
 					Chưa có sản phẩm nào. Nhấn <strong>+ Add Product</strong> để tạo.
 				</div>
@@ -54,7 +54,7 @@ export const ProductTable = React.memo(({
 	}
 
 	return (
-		<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+		<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  ">
 			<div className="overflow-x-auto">
 				<table className="w-full min-w-160 text-sm">
 					<thead>

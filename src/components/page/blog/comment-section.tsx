@@ -86,7 +86,7 @@ function initials(name: string) {
 function Avatar({ name }: { name: string }) {
   return (
     <div
-      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white shadow-sm ${avatarColor(name)}`}
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white   ${avatarColor(name)}`}
     >
       {initials(name) || <User size={14} />}
     </div>
@@ -244,7 +244,7 @@ function CommentForm({
       <div className="flex items-center gap-4">
         <button
           type="submit"
-          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-5 py-2.5 text-[13px] font-bold text-white shadow-sm transition-all hover:brightness-110 active:scale-95"
+          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-5 py-2.5 text-[13px] font-bold text-white   transition-all hover:brightness-110 active:scale-95"
         >
           <Send size={13} />
           {t("submit")}

@@ -114,7 +114,7 @@ export default function ContactPageContent() {
                 <label className="block text-sm text-gray-500 mb-2">{t('name_label')}</label>
                 <input
                   {...register('name')}
-                  className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all shadow-sm"
+                  className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all  "
                   placeholder={t('name_placeholder')}
                 />
                 {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
@@ -123,7 +123,7 @@ export default function ContactPageContent() {
                 <label className="block text-sm text-gray-500 mb-2">{t('email_input_label')}</label>
                 <input
                   {...register('email')}
-                  className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all shadow-sm"
+                  className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all  "
                   placeholder={t('email_placeholder')}
                 />
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
@@ -133,7 +133,7 @@ export default function ContactPageContent() {
                 <textarea
                   {...register('message')}
                   rows={5}
-                  className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all resize-none shadow-sm"
+                  className="w-full bg-white border border-brand-primary/10 rounded-lg px-4 py-3 text-gray-900 focus:border-brand-primary outline-none transition-all resize-none  "
                   placeholder={t('message_placeholder')}
                 ></textarea>
                 {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}

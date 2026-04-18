@@ -38,7 +38,7 @@ function FoodCard({ item }: { item: FoodItem }) {
   );
 
   if (item.href) {
-    return <Link href={item.href}>{inner}</Link>;
+    return <Link href={item.href as any}>{inner}</Link>;
   }
   return inner;
 }

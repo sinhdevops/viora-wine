@@ -14,13 +14,13 @@ export async function generateMetadata({
 
   const { data: product } = await supabase
     .from('products')
-    .select('id, name, description, thumbnail_url, category, tags, price')
-    .eq('id', slug)
+    .select('id, slug, name, description, thumbnail_url, category, tags, price, seo_title, seo_description')
+    .eq('slug', slug)
     .single();
 
   if (!product) return {};
 
-  const title = product.name;
+  const title = product.seo_title || product.name;
   const nameLower = product.name?.toLowerCase() ?? '';
   const tagsArr: string[] = Array.isArray(product.tags) ? product.tags : [];
 
@@ -56,9 +56,8 @@ export async function generateMetadata({
   if (isGift) extraKeywords.push('rượu vang Úc làm quà tặng', 'quà tặng rượu vang nhập khẩu');
   if (isUnderOneMillion) extraKeywords.push('rượu vang Úc dưới 1 triệu', 'vang Úc giá rẻ');
 
-  const description = product.description
-    ? `${product.description} — ${t('meta_desc_suffix')}`
-    : t('meta_desc_suffix');
+  const description = product.seo_description
+    || (product.description ? `${product.description} — ${t('meta_desc_suffix')}` : t('meta_desc_suffix'));
 
   return {
     title,

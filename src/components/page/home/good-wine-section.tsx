@@ -28,8 +28,10 @@ export default function GoodWineSection() {
 		setLoading(true);
 		const query = supabase
 			.from("products")
-			.select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, wine_type")
+			.select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, wine_type, rating, sold_count")
 			.eq("category", "wine")
+			.order("rating", { ascending: false })
+			.order("sold_count", { ascending: false })
 			.limit(10);
 
 		if (activeTab !== "all") {
@@ -53,7 +55,7 @@ export default function GoodWineSection() {
 						{t("good_wine_title")}
 					</h2>
 					<Link
-						href="/products?cat=wine"
+						href={"/products?cat=wine" as any}
 						className="flex items-center gap-1 text-sm font-medium text-brand-primary hover:underline"
 					>
 						{t("good_wine_view_all")} <ArrowRight size={15} />

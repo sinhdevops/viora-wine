@@ -21,8 +21,10 @@ export default function BestSellerSlider() {
 	useEffect(() => {
 		supabase
 			.from("products")
-			.select("id, name, description, thumbnail_url, price, discount_percentage, category, stock, is_hot, content")
-			.eq("is_hot", true)
+			.select("id, slug, name, description, thumbnail_url, price, discount_percentage, category, stock, is_hot, content, rating, sold_count")
+			.eq("category", "wine")
+			.gt("sold_count", 0)
+			.order("sold_count", { ascending: false })
 			.limit(10)
 			.then(({ data }) => {
 				if (data && data.length > 0) setProducts(data as DbProduct[]);
@@ -42,7 +44,7 @@ export default function BestSellerSlider() {
 					{/* Prev button */}
 					<button
 						onClick={() => swiperRef.current?.slidePrev()}
-						className="absolute top-1/2 -left-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500 shadow-sm transition-all hover:border-gray-400 hover:text-gray-900 md:-left-5"
+						className="absolute top-1/2 -left-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500   transition-all hover:border-gray-400 hover:text-gray-900 md:-left-5"
 					>
 						<ChevronLeft size={18} />
 					</button>
@@ -71,7 +73,7 @@ export default function BestSellerSlider() {
 					{/* Next button */}
 					<button
 						onClick={() => swiperRef.current?.slideNext()}
-						className="absolute top-1/2 -right-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500 shadow-sm transition-all hover:border-gray-400 hover:text-gray-900 md:-right-5"
+						className="absolute top-1/2 -right-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500   transition-all hover:border-gray-400 hover:text-gray-900 md:-right-5"
 					>
 						<ChevronRight size={18} />
 					</button>

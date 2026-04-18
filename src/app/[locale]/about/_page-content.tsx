@@ -166,7 +166,7 @@ export default function AboutPageContent() {
                 transition={{ delay: idx * 0.1 }}
                 className="flex flex-col items-center"
               >
-                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center text-brand-primary mb-8">
+                <div className="w-16 h-16 rounded-2xl bg-white   flex items-center justify-center text-brand-primary mb-8">
                   <item.icon size={32} />
                 </div>
                 <h3 className="text-xl font-serif text-gray-900 mb-4">{item.title}</h3>
@@ -277,7 +277,7 @@ export default function AboutPageContent() {
                 <button className="bg-brand-primary text-white font-bold py-4 px-10 rounded-xl hover:bg-brand-primary/90 transition-all shadow-lg active:scale-95">
                   {t('book_tasting')}
                 </button>
-                <button className="bg-white text-gray-900 border border-gray-200 font-bold py-4 px-10 rounded-xl hover:bg-gray-50 transition-all shadow-sm active:scale-95">
+                <button className="bg-white text-gray-900 border border-gray-200 font-bold py-4 px-10 rounded-xl hover:bg-gray-50 transition-all   active:scale-95">
                   {t('download_catalog')}
                 </button>
               </div>

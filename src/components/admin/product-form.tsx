@@ -21,6 +21,7 @@ import {
 } from "@/lib/schemas/product-schema";
 import { ImageUploader } from "./image-uploader";
 import { supabase } from "@/lib/supabase-client";
+import { slugify } from "@/utils/slugify";
 
 const QuillEditor = dynamic(() => import("react-quill-new"), {
 	ssr: false,
@@ -58,6 +59,7 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 		resolver: zodResolver(productSchema),
 		defaultValues: initialData ?? {
 			id: "",
+			slug: "",
 			name: "",
 			description: "",
 			thumbnail_url: "",
@@ -75,11 +77,14 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 			is_hot: false,
 			rating: 5.0,
 			sold_count: 0,
+			seo_title: "",
+			seo_description: "",
 		},
 	});
 
 	const thumbnailUrl = watch("thumbnail_url");
 	const category     = watch("category");
+	const name         = watch("name");
 	const isWine       = category === "wine";
 
 	useEffect(() => {
@@ -88,6 +93,13 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 			setValue("id", `vw-${num}`);
 		}
 	}, [isEdit, setValue]);
+
+	// Auto-generate slug from name (only when creating new product)
+	useEffect(() => {
+		if (!isEdit && name) {
+			setValue("slug", slugify(name), { shouldValidate: false });
+		}
+	}, [isEdit, name, setValue]);
 
 	const onSubmit = async (data: ProductFormValues) => {
 
@@ -144,6 +156,21 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 						/>
 						{errors.name && <p className={cls.error}>{errors.name.message}</p>}
 					</div>
+				</div>
+
+				<div>
+					<label className={cls.label}>
+						Slug (URL) <span className="text-red-500">*</span>
+					</label>
+					<input
+						{...register("slug")}
+						className={cls.input}
+						placeholder="chateau-margaux-2015"
+					/>
+					<p className="mt-1 text-[11px] text-gray-400">
+						Tự động tạo từ tên. Chỉ dùng chữ thường, số và dấu gạch ngang.
+					</p>
+					{errors.slug && <p className={cls.error}>{errors.slug.message}</p>}
 				</div>
 
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -325,6 +352,35 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 						)}
 					/>
 					{errors.content && <p className={cls.error}>{errors.content.message}</p>}
+				</div>
+			</div>
+
+			{/* --- SEO --- */}
+			<div className="space-y-4 rounded-xl border border-gray-100 bg-gray-50/30 p-4">
+				<div>
+					<h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">SEO</h3>
+					<p className="mt-1 text-[11px] text-gray-400">Để trống sẽ dùng tên và mô tả sản phẩm</p>
+				</div>
+				<div>
+					<label className={cls.label}>Meta Title</label>
+					<input
+						{...register("seo_title")}
+						className={cls.input}
+						placeholder={name || "Tên sản phẩm (mặc định)"}
+						maxLength={70}
+					/>
+					<p className="mt-1 text-[11px] text-gray-400">Tối đa 70 ký tự. Nên bao gồm từ khóa chính.</p>
+				</div>
+				<div>
+					<label className={cls.label}>Meta Description</label>
+					<textarea
+						{...register("seo_description")}
+						rows={2}
+						className={cls.input}
+						placeholder="Mô tả sản phẩm (mặc định)"
+						maxLength={160}
+					/>
+					<p className="mt-1 text-[11px] text-gray-400">Tối đa 160 ký tự. Hiển thị trên Google Search.</p>
 				</div>
 			</div>
 

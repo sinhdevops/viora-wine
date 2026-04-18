@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -51,6 +51,44 @@ interface EventFormProps {
 
 export function EventForm({ initialData, onSuccess }: EventFormProps) {
 	const isEdit = !!initialData;
+	const quillRef = useRef<any>(null);
+
+	const imageHandler = useCallback(() => {
+		const input = document.createElement("input");
+		input.setAttribute("type", "file");
+		input.setAttribute("accept", "image/png,image/jpeg,image/webp");
+		input.click();
+
+		input.onchange = async () => {
+			const file = input.files?.[0];
+			if (!file) return;
+
+			const formData = new FormData();
+			formData.append("file", file);
+
+			const toastId = toast.loading("Đang tải ảnh lên...");
+			try {
+				const res = await fetch("/api/upload", { method: "POST", body: formData });
+				const data = await res.json();
+
+				if (!res.ok) {
+					toast.error(data.error || "Upload ảnh thất bại", { id: toastId });
+					return;
+				}
+
+				toast.success("Tải ảnh thành công!", { id: toastId });
+
+				const quill = quillRef.current?.getEditor();
+				if (quill) {
+					const range = quill.getSelection(true);
+					quill.insertEmbed(range.index, "image", data.url);
+					quill.setSelection(range.index + 1);
+				}
+			} catch {
+				toast.error("Upload ảnh thất bại", { id: toastId });
+			}
+		};
+	}, []);
 
 	const {
 		register,
@@ -102,6 +140,22 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 	}, [nameValue, isEdit, setValue]);
 
 	const thumbnailUrl = watch("thumbnail_url");
+
+	const quillModules = useMemo(() => ({
+		toolbar: {
+			container: [
+				[{ header: [1, 2, 3, false] }],
+				["bold", "italic", "underline", "strike"],
+				[{ list: "ordered" }, { list: "bullet" }],
+				["blockquote", "code-block"],
+				["link", "image"],
+				["clean"],
+			],
+			handlers: {
+				image: imageHandler,
+			},
+		},
+	}), [imageHandler]);
 
 	const onSubmit = async (data: EventFormValues) => {
 		if (isEdit) {
@@ -221,19 +275,11 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 					control={control}
 					render={({ field }) => (
 						<QuillEditor
+							{...({ ref: quillRef } as any)}
 							theme="snow"
 							value={field.value}
 							onChange={field.onChange}
-							modules={{
-								toolbar: [
-									[{ header: [1, 2, 3, false] }],
-									["bold", "italic", "underline", "strike"],
-									[{ list: "ordered" }, { list: "bullet" }],
-									["blockquote", "code-block"],
-									["link", "image"],
-									["clean"],
-								],
-							}}
+							modules={quillModules}
 						/>
 					)}
 				/>

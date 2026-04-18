@@ -87,7 +87,7 @@ export default function TestimonialsSection() {
 					{reviews.map((review: any) => (
 						<div 
 							key={review.id} 
-							className="flex flex-col rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+							className="flex flex-col rounded-xl border border-gray-100 bg-white p-6   transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
 						>
 							<div className="flex items-center gap-4 mb-4">
 								<div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary font-bold text-lg">

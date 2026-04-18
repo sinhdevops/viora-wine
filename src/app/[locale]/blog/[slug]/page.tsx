@@ -106,7 +106,7 @@ export default async function NewsDetailPage({ params }: Props) {
         .limit(3),
       supabase
         .from('products')
-        .select('id, name, description, thumbnail_url, price, discount_percentage, category, stock, is_hot')
+        .select('id, slug, name, description, thumbnail_url, price, discount_percentage, category, stock, is_hot')
         .eq('category', 'wine')
         .gt('stock', 0)
         .order('created_at', { ascending: false })
@@ -146,6 +146,8 @@ export default async function NewsDetailPage({ params }: Props) {
   };
 
   // ── JSON-LD: Breadcrumb ──
+  const blogListUrl = buildPageUrl(locale, '/blog');
+  const blogPostUrl = buildPageUrl(locale, `/blog/${slug}`);
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -160,13 +162,13 @@ export default async function NewsDetailPage({ params }: Props) {
         '@type': 'ListItem',
         position: 2,
         name: 'Kiến thức',
-        item: `${SITE_URL}/blog`,
+        item: blogListUrl,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: newsItem.title[locale as 'vi' | 'en'],
-        item: `${SITE_URL}/blog/${slug}`,
+        item: blogPostUrl,
       },
     ],
   };

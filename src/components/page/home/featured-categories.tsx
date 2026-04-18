@@ -47,7 +47,7 @@ export default function FeaturedCategories() {
 					{categories.map((cat, index) => (
 						<Link
 							key={cat.name}
-							href={cat.path}
+							href={cat.path as any}
 							className={`group relative overflow-hidden rounded-xl${index === 0 ? " col-span-2 aspect-8/3 sm:col-span-1 sm:aspect-4/3" : " aspect-4/3"}`}
 						>
 							{/* Background Image */}

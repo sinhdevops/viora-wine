@@ -45,6 +45,7 @@ export const PRODUCERS = [
 
 export const productSchema = z.object({
 	id: z.string().min(1, "ID là bắt buộc"),
+	slug: z.string().min(1, "Slug là bắt buộc"),
 	name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
 	description: z.string().min(1, "Mô tả là bắt buộc"),
 	thumbnail_url: z.string().min(1, "Vui lòng upload ảnh sản phẩm"),
@@ -60,6 +61,8 @@ export const productSchema = z.object({
 	country: z.string().optional().nullable(),
 	stock: z.number().int("Phải là số nguyên").min(0, "Kho phải ≥ 0"),
 	is_hot: z.boolean(),
+	seo_title: z.string().optional().nullable(),
+	seo_description: z.string().optional().nullable(),
 	rating: z.number().min(1, "Tối thiểu 1.0").max(5, "Tối đa 5.0").default(5.0).optional(),
 	sold_count: z.number().int("Phải là số nguyên").min(0, "Phải ≥ 0").default(0).optional(),
 });

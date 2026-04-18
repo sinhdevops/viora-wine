@@ -34,7 +34,7 @@ export default function AuthorBlock({
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-      <div className="rounded-2xl border border-gray-100 bg-linear-to-br from-amber-50/60 via-white to-gray-50 p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-linear-to-br from-amber-50/60 via-white to-gray-50 p-6  ">
         {/* Label */}
         <p className="mb-4 text-[10px] font-black uppercase tracking-widest text-gray-400">
           {label}
@@ -51,7 +51,7 @@ export default function AuthorBlock({
                 className="h-18 w-18 rounded-full object-cover shadow"
               />
             ) : (
-              <div className="flex h-18 w-18 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary shadow-sm">
+              <div className="flex h-18 w-18 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary  ">
                 <User size={30} />
               </div>
             )}
@@ -112,7 +112,7 @@ export default function AuthorBlock({
 
               {authorPageHref && (
                 <Link
-                  href={authorPageHref}
+                  href={authorPageHref as any}
                   className="text-[12px] font-semibold text-brand-primary hover:underline"
                 >
                   {viewMoreLabel}

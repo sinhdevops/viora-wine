@@ -379,7 +379,7 @@ export default function NewsDetailPageContent({
             >
               {relatedNews.map((item) => (
                 <SwiperSlide key={item.id}>
-                  <Link href={`/blog/${item.slug}`} className="group block">
+                  <Link href={{ pathname: '/blog/[slug]', params: { slug: item.slug } }} className="group block">
                     <div className="relative mb-4 aspect-3/2 w-full overflow-hidden rounded-xl bg-gray-100">
                       <Image
                         src={item.image}
@@ -387,7 +387,7 @@ export default function NewsDetailPageContent({
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-700 shadow-sm backdrop-blur-sm">
+                      <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gray-700   backdrop-blur-sm">
                         {CATEGORY_LABELS[item.category] ?? item.category}
                       </span>
                     </div>

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { formatCurrency } from "@/utils/format-currency";
 import { useZaloLink } from "@/hooks/use-zalo-link";
-import { ChevronRight, ChevronLeft, Phone, ShieldCheck, Truck, BadgeCheck, Headset } from "lucide-react";
+import { ChevronRight, ChevronLeft, Phone, ShieldCheck, Truck, BadgeCheck, Headset, Droplets, Grape, Wine, Building2, Percent, Globe } from "lucide-react";
 import CardProduct from "@/components/page/card-product";
 import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,6 +15,10 @@ import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import { WINE_IMAGES } from "../../../../../public/statics/images";
 import { useLocale } from "next-intl";
+import { WINE_TYPE_LABELS } from "@/lib/schemas/product-schema";
+import { sanitizeHtmlContent } from "@/utils/content-processor";
+import FaqSection from "@/components/page/blog/faq-section";
+import { DEFAULT_FAQ_ITEMS } from "@/components/page/blog/faq-data";
 
 interface Props {
   product: DbProduct;
@@ -43,6 +47,19 @@ export default function ProductDetailPageContent({ product, related }: Props) {
     t.raw(`category_labels.${product.category}` as Parameters<typeof t.raw>[0]) ??
     product.category;
 
+  const wineTypeLabel = product.wine_type
+    ? (WINE_TYPE_LABELS[product.wine_type as keyof typeof WINE_TYPE_LABELS] ?? product.wine_type)
+    : null;
+
+  const specs = [
+    { icon: Droplets,  label: t("spec_volume"),    value: product.volume       ?? "750 ml" },
+    { icon: Grape,     label: t("spec_grape"),     value: product.grape_variety ?? "Shiraz" },
+    { icon: Wine,      label: t("spec_wine_type"), value: wineTypeLabel         ?? "Rượu vang đỏ" },
+    { icon: Building2, label: t("spec_producer"),  value: product.producer      ?? "Premium Australian Wine PTY LTD" },
+    { icon: Percent,   label: t("spec_alcohol"),   value: product.alcohol       ?? "17%" },
+    { icon: Globe,     label: t("spec_country"),   value: product.country       ?? "Úc" },
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
@@ -63,13 +80,13 @@ export default function ProductDetailPageContent({ product, related }: Props) {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
 
           {/* LEFT: Image */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#F5F5F5] sm:aspect-4/5">
+          <div className="lg:sticky lg:top-24">
+            <div className="relative h-full min-h-[420px] overflow-hidden rounded-2xl bg-[#F5F5F5]">
               <Image
                 src={product.thumbnail_url}
                 alt={product.name}
                 fill
-                className="object-contain p-8 sm:p-12"
+                className="object-contain p-8"
                 priority
               />
               {product.is_hot && (
@@ -78,7 +95,7 @@ export default function ProductDetailPageContent({ product, related }: Props) {
                 </div>
               )}
               {product.discount_percentage > 0 && (
-                <div className="absolute top-4 right-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-primary text-[13px] font-black text-white">
+                <div className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-brand-primary text-[12px] font-black text-white">
                   -{product.discount_percentage}%
                 </div>
               )}
@@ -118,7 +135,7 @@ export default function ProductDetailPageContent({ product, related }: Props) {
             </div>
 
             {/* Stock status */}
-            <div className="mb-8 flex items-center gap-2">
+            <div className="mb-2 flex items-center gap-2">
               <span className={`h-2 w-2 rounded-full ${product.stock > 0 ? "bg-green-500" : "bg-red-400"}`} />
               <span className={`text-[13px] font-medium ${product.stock > 0 ? "text-green-600" : "text-red-500"}`}>
                 {product.stock > 0
@@ -126,6 +143,25 @@ export default function ProductDetailPageContent({ product, related }: Props) {
                   : t("out_of_stock")}
               </span>
             </div>
+
+            {/* Specs grid */}
+            {specs.length > 0 && (
+              <div className="mb-8">
+                <div className="grid grid-cols-3">
+                  {specs.map(({ icon: Icon, label, value }) => (
+                    <div key={label} className="flex items-start gap-2.5 px-4 py-3.5">
+                      <Icon size={16} className="mt-0.5 shrink-0 text-brand-primary" strokeWidth={1.8} />
+                      <div className="min-w-0">
+                        <p className="text-[13px] font-semibold text-gray-600">{label}</p>
+                        <p className="mt-0.5 text-[13px] font-semibold leading-snug text-brand-primary">
+                          {value}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* CTA Buttons */}
             <div className="mb-8 grid grid-cols-2 gap-3">
@@ -163,25 +199,32 @@ export default function ProductDetailPageContent({ product, related }: Props) {
               ))}
             </div>
 
-            {/* Description */}
-            {product.description && (
-              <div className="mt-6 border-t border-gray-100 pt-6">
-                <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-gray-400">
-                  {t("description_label")}
-                </p>
-                <p className="text-[14px] leading-relaxed text-gray-600">
-                  {product.description}
-                </p>
-              </div>
-            )}
           </div>
+        </div>
+
+        {/* Content — full width row */}
+        {product.content && (
+          <div className="mt-8 border-t border-gray-100 pt-6">
+            <p className="mb-3 text-lg font-bold text-gray-700">
+              {t("description_label")}
+            </p>
+            <div
+              className="prose max-w-none wrap-break-word leading-loose text-gray-700"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(product.content) }}
+            />
+          </div>
+        )}
+
+        {/* FAQ */}
+        <div className="mt-14">
+          <FaqSection title="Những câu hỏi thường gặp" items={DEFAULT_FAQ_ITEMS} />
         </div>
 
         {/* Related products */}
         {related.length > 0 && (
           <div className="mt-14 border-t border-gray-100 pt-10">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">{t("related")}</h2>
+              <h2 className="text-2xl font-extrabold text-gray-900">{t("related")}</h2>
               <Link href="/products" className="text-[13px] font-medium text-brand-primary hover:underline">
                 {t("view_all")}
               </Link>
@@ -190,7 +233,7 @@ export default function ProductDetailPageContent({ product, related }: Props) {
               <button
                 onClick={() => swiperRef.current?.slidePrev()}
                 aria-label="Previous"
-                className="absolute top-1/2 -left-4 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition-all hover:border-gray-400 hover:text-gray-900 md:-left-5"
+                className="absolute top-1/2 -left-4 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500   transition-all hover:border-gray-400 hover:text-gray-900 md:-left-5"
               >
                 <ChevronLeft size={16} />
               </button>
@@ -215,7 +258,7 @@ export default function ProductDetailPageContent({ product, related }: Props) {
               <button
                 onClick={() => swiperRef.current?.slideNext()}
                 aria-label="Next"
-                className="absolute top-1/2 -right-4 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition-all hover:border-gray-400 hover:text-gray-900 md:-right-5"
+                className="absolute top-1/2 -right-4 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500   transition-all hover:border-gray-400 hover:text-gray-900 md:-right-5"
               >
                 <ChevronRight size={16} />
               </button>

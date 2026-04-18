@@ -38,7 +38,7 @@ export default async function GiftsPage() {
 
   const { data: products } = await supabase
     .from("products")
-    .select("id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot")
+    .select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot")
     .in("category", ["gift", "combo"])
     .order("is_hot", { ascending: false });
 

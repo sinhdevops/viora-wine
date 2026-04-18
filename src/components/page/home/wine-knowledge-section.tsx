@@ -33,7 +33,7 @@ export default function WineKnowledgeSection({ events }: WineKnowledgeSectionPro
 				{/* Desktop: 3 columns */}
 				<div className="hidden grid-cols-1 gap-6 sm:grid sm:grid-cols-3 md:gap-8">
 					{events.map((event) => (
-						<Link key={event.id} href={`/blog/${event.slug}`} className="group block">
+						<Link key={event.id} href={{ pathname: '/blog/[slug]', params: { slug: event.slug } }} className="group block">
 							<div className="relative mb-4 aspect-3/2 w-full overflow-hidden rounded-xl">
 								{event.thumbnail_url && (
 									<Image
@@ -71,8 +71,8 @@ export default function WineKnowledgeSection({ events }: WineKnowledgeSectionPro
 						{events.map((event) => (
 							<SwiperSlide key={event.id} style={{ height: "auto" }}>
 								<Link
-									href={`/blog/${event.slug}`}
-									className="group flex h-full flex-col overflow-hidden rounded-xl shadow-sm"
+									href={{ pathname: '/blog/[slug]', params: { slug: event.slug } }}
+									className="group flex h-full flex-col overflow-hidden rounded-xl  "
 								>
 									<div className="relative aspect-video w-full overflow-hidden">
 										{event.thumbnail_url && (

@@ -107,7 +107,7 @@ export default function TableOfContents({
 
   // ── Mobile collapsible pill ────────────────────────────────────────────────
   const MobilePanel = (
-    <div className="mb-6 rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+    <div className="mb-6 rounded-xl border border-gray-200 bg-white   overflow-hidden">
       <button
         onClick={() => setIsOpen((p) => !p)}
         className="w-full flex items-center justify-between px-4 py-3 text-[13px] font-bold text-gray-700"
@@ -143,7 +143,7 @@ export default function TableOfContents({
 
   // ── Desktop sticky sidebar ─────────────────────────────────────────────────
   const DesktopPanel = (
-    <div className="sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+    <div className="sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto rounded-xl border border-gray-200 bg-white  ">
       <div className="flex items-center gap-2 border-b border-gray-100 px-5 py-4">
         <List size={14} className="text-brand-primary" />
         <span className="text-[11px] font-black uppercase tracking-widest text-gray-500">

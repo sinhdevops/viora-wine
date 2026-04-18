@@ -25,14 +25,16 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 		<div className="group block h-full">
 			<div className="flex flex-col h-full">
 				{/* Image area */}
-				<Link href={`/products/${product.id}`} className="block">
-					<div className="relative aspect-216/290 rounded-xl bg-[#ECECEC]">
-						<Image
+				<Link href={{ pathname: '/products/[slug]', params: { slug: product.slug } }} className="block">
+					<div className="relative">
+						<div className="relative aspect-216/290 rounded-xl overflow-hidden bg-[#ECECEC]">
+								<Image
 							src={product.thumbnail_url}
 							alt={product.name}
 							fill
 							className="object-contain transition-transform duration-500"
 						/>
+						</div>
 
 						{/* HOT badge */}
 						{isHot && (
@@ -45,7 +47,7 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 
 				{/* Info */}
 				<div className="py-3 flex flex-col flex-1">
-					<Link href={`/products/${product.id}`} className="block">
+					<Link href={{ pathname: '/products/[slug]', params: { slug: product.slug } }} className="block">
 						<div className="flex items-center gap-3 mb-2 justify-between">
 							<div className="flex items-center gap-1">
 								<HiStar className="text-yellow-400" size={14} />

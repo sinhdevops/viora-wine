@@ -4,6 +4,7 @@ import { getMessages, getTranslations } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import MainLayout from '@/components/layout/main-layout';
 import { Montserrat } from 'next/font/google';
+import Script from 'next/script';
 import '../globals.css';
 import { notFound } from 'next/navigation';
 import { SITE_URL } from '@/lib/seo';
@@ -171,6 +172,18 @@ export default async function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18100193809"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-18100193809');
+          `}
+        </Script>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <MainLayout>{children}</MainLayout>
         </NextIntlClientProvider>

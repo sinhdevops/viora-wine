@@ -1,10 +1,11 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { HiChevronDown, HiX, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
-import { HiAdjustmentsHorizontal, HiMagnifyingGlass } from 'react-icons/hi2';
+import { HiChevronDown, HiX, HiChevronLeft, HiChevronRight, HiCheck } from 'react-icons/hi';
+import { HiAdjustmentsHorizontal, HiMagnifyingGlass, HiArrowsUpDown, HiStar, HiSparkles } from 'react-icons/hi2';
+import { HiTrendingUp } from 'react-icons/hi';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Link } from '@/i18n/routing';
 import { supabase } from '@/lib/supabase-client';
@@ -17,6 +18,72 @@ const HOT_FILTER_IDS = ['all', 'hot'] as const;
 
 type HotFilterId = (typeof HOT_FILTER_IDS)[number];
 const PRODUCTS_PER_PAGE = 12; // TODO: đổi lại 12 sau khi test
+
+const SORT_OPTIONS = [
+  { value: 'default',     label: 'Mặc định',           icon: HiArrowsUpDown },
+  { value: 'best_seller', label: 'Bán chạy nhất',       icon: HiTrendingUp },
+  { value: 'top_rated',   label: 'Đánh giá cao nhất',   icon: HiStar },
+  { value: 'newest',      label: 'Mới nhất',             icon: HiSparkles },
+  { value: 'price_asc',   label: 'Giá: Thấp → Cao',     icon: HiArrowsUpDown },
+  { value: 'price_desc',  label: 'Giá: Cao → Thấp',     icon: HiArrowsUpDown },
+] as const;
+
+function SortDropdown({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const active = SORT_OPTIONS.find((o) => o.value === value) ?? SORT_OPTIONS[0];
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative shrink-0 w-full md:w-auto">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full border text-[12px] font-semibold transition-all w-full md:w-auto justify-between md:justify-start
+          ${open ? 'border-brand-primary text-brand-primary bg-brand-primary/5' : 'border-gray-200 text-gray-600 bg-white hover:border-gray-300'}`}
+      >
+        <active.icon size={13} className="shrink-0" />
+        <span>{active.label}</span>
+        <HiChevronDown size={13} className={`shrink-0 transition-transform duration-200 ${open ? 'rotate-180 text-brand-primary' : 'text-gray-400'}`} />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            transition={{ duration: 0.15 }}
+            className="absolute right-0 top-[calc(100%+6px)] z-50 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden py-1.5"
+          >
+            {SORT_OPTIONS.map((opt) => {
+              const Icon = opt.icon;
+              const isActive = opt.value === value;
+              return (
+                <button
+                  key={opt.value}
+                  onClick={() => { onChange(opt.value); setOpen(false); }}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-[13px] transition-colors text-left
+                    ${isActive ? 'text-brand-primary bg-brand-primary/6 font-semibold' : 'text-gray-600 hover:bg-gray-50 font-medium'}`}
+                >
+                  <Icon size={14} className="shrink-0" />
+                  <span className="flex-1">{opt.label}</span>
+                  {isActive && <HiCheck size={14} className="shrink-0 text-brand-primary" />}
+                </button>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 type PriceRangeId = (typeof PRICE_RANGE_IDS)[number];
 
@@ -110,23 +177,32 @@ function FilterSection({
   title,
   isOpen,
   onToggle,
+  hasActive,
   children,
 }: {
   title: string;
   isOpen: boolean;
   onToggle: () => void;
+  hasActive?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className="border-b border-gray-100 last:border-b-0">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-4 text-[11px] uppercase tracking-widest font-bold text-gray-400 hover:text-brand-primary transition-colors"
+        className="w-full flex items-center justify-between py-3.5 group"
       >
-        <span>{title}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] uppercase tracking-widest font-bold text-gray-500 group-hover:text-gray-800 transition-colors">
+            {title}
+          </span>
+          {hasActive && (
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
+          )}
+        </div>
         <HiChevronDown
-          size={15}
-          className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          size={14}
+          className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
       <AnimatePresence initial={false}>
@@ -135,10 +211,10 @@ function FilterSection({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="pb-5 space-y-3">{children}</div>
+            <div className="pb-4">{children}</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -146,45 +222,40 @@ function FilterSection({
   );
 }
 
-// ─── Radio option ─────────────────────────────────────────────────────────────
-function RadioOption({
-  name,
-  checked,
+// ─── Price pill options ───────────────────────────────────────────────────────
+function PriceOptions({
+  options,
+  value,
   onChange,
-  label,
 }: {
-  name: string;
-  checked: boolean;
-  onChange: () => void;
-  label: string;
+  options: { id: string; label: string }[];
+  value: string;
+  onChange: (id: string) => void;
 }) {
   return (
-    <label className="flex items-center gap-3 cursor-pointer group">
-      <div className="relative flex items-center justify-center shrink-0">
-        <input
-          type="radio"
-          name={name}
-          checked={checked}
-          onChange={onChange}
-          className="peer appearance-none w-4 h-4 rounded-full border border-gray-300 checked:border-brand-primary transition-all"
-        />
-        <div className="absolute w-2 h-2 rounded-full bg-brand-primary opacity-0 peer-checked:opacity-100 transition-opacity" />
-      </div>
-      <span
-        className={`text-[13px] transition-colors ${
-          checked
-            ? 'text-brand-primary font-medium'
-            : 'text-gray-600 group-hover:text-brand-primary'
-        }`}
-      >
-        {label}
-      </span>
-    </label>
+    <div className="flex flex-col gap-2">
+      {options.map((opt) => {
+        const isActive = opt.id === value;
+        return (
+          <button
+            key={opt.id}
+            onClick={() => onChange(opt.id)}
+            className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-all duration-200 cursor-pointer ${
+              isActive
+                ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/30'
+                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-gray-800'
+            }`}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
-// ─── Checkbox option ──────────────────────────────────────────────────────────
-function CheckboxOption({
+// ─── Toggle option ────────────────────────────────────────────────────────────
+function ToggleOption({
   checked,
   onChange,
   label,
@@ -194,32 +265,25 @@ function CheckboxOption({
   label: string;
 }) {
   return (
-    <label className="flex items-center gap-3 cursor-pointer group">
-      <div className="relative flex items-center justify-center shrink-0">
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={onChange}
-          className="peer appearance-none w-4 h-4 rounded border border-gray-300 checked:border-brand-primary checked:bg-brand-primary transition-all"
-        />
-        <svg
-          className="absolute w-2.5 h-2.5 text-white opacity-0 peer-checked:opacity-100 pointer-events-none"
-          viewBox="0 0 10 10"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <polyline points="1.5,5 4,7.5 8.5,2.5" />
-        </svg>
-      </div>
-      <span
-        className={`text-[13px] transition-colors ${
-          checked ? 'text-brand-primary font-medium' : 'text-gray-600 group-hover:text-brand-primary'
-        }`}
-      >
+    <div
+      onClick={onChange}
+      className="flex items-center justify-between py-1 cursor-pointer group"
+    >
+      <span className={`text-[13px] font-semibold transition-colors ${checked ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-900'}`}>
         {label}
       </span>
-    </label>
+      <div
+        className={`relative w-10 h-5 rounded-full transition-colors duration-200 shrink-0 ${
+          checked ? 'bg-brand-primary' : 'bg-gray-200 group-hover:bg-gray-300'
+        }`}
+      >
+        <span
+          className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+            checked ? 'translate-x-5' : 'translate-x-0.5'
+          }`}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -245,8 +309,8 @@ export default function ProductsPageContent() {
   useEffect(() => {
     supabase
       .from('products')
-      .select('id, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, rating, sold_count')
-      .order('created_at', { ascending: false })
+      .select('id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, rating, sold_count, created_at')
+      .order('sold_count', { ascending: false })
       .then(({ data }) => {
         if (data) setProducts(data as DbProduct[]);
         setLoading(false);
@@ -282,6 +346,20 @@ export default function ProductsPageContent() {
       result.sort((a, b) => a.price - b.price);
     } else if (sortOrder === 'price_desc') {
       result.sort((a, b) => b.price - a.price);
+    } else if (sortOrder === 'best_seller') {
+      result.sort((a, b) => (b.sold_count ?? 0) - (a.sold_count ?? 0));
+    } else if (sortOrder === 'top_rated') {
+      result.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0) || (b.sold_count ?? 0) - (a.sold_count ?? 0));
+    } else if (sortOrder === 'newest') {
+      result.sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime());
+    } else {
+      // default: sold_count DESC → nếu bằng nhau thì hot đứng trước
+      result.sort((a, b) => {
+        const soldDiff = (b.sold_count ?? 0) - (a.sold_count ?? 0);
+        if (soldDiff !== 0) return soldDiff;
+        if (b.is_hot !== a.is_hot) return b.is_hot ? 1 : -1;
+        return 0;
+      });
     }
 
     return result;
@@ -312,26 +390,24 @@ export default function ProductsPageContent() {
         title={t('price_range')}
         isOpen={priceOpen}
         onToggle={() => setPriceOpen((v) => !v)}
+        hasActive={priceFilter !== 'all'}
       >
-        {PRICE_RANGE_IDS.map((id) => (
-          <RadioOption
-            key={id}
-            name="price"
-            checked={priceFilter === id}
-            onChange={() => {
-              updateFilter('price', id);
-              if (isMobile) setIsFilterOpen(false);
-            }}
-            label={t(`price_range_tabs.${id}`)}
-          />
-        ))}
+        <PriceOptions
+          options={PRICE_RANGE_IDS.map((id) => ({ id, label: t(`price_range_tabs.${id}`) }))}
+          value={priceFilter}
+          onChange={(id) => {
+            updateFilter('price', id);
+            if (isMobile) setIsFilterOpen(false);
+          }}
+        />
       </FilterSection>
       <FilterSection
         title={t('hot_filter')}
         isOpen={hotOpen}
         onToggle={() => setHotOpen((v) => !v)}
+        hasActive={hotFilter === 'hot'}
       >
-        <CheckboxOption
+        <ToggleOption
           checked={hotFilter === 'hot'}
           onChange={() => {
             updateFilter('hot', hotFilter === 'hot' ? 'all' : 'hot');
@@ -379,38 +455,43 @@ export default function ProductsPageContent() {
       </section>
 
       {/* CATEGORY TABS + SEARCH */}
-      <div className="bg-white border-b border-gray-100 sticky top-18 z-30 shadow-sm">
+      <div className="bg-white border-b border-gray-100 sticky top-19 z-30 shadow-sm">
         <div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 lg:gap-8">
-            <div className="no-scrollbar flex gap-6 overflow-x-auto flex-1">
-              {CATEGORY_TAB_IDS.map((id) => (
-                <button
-                  key={id}
-                  onClick={() => updateFilter('cat', id)}
-                  className={`shrink-0 py-3.5 text-[12px] font-semibold tracking-wider transition-colors border-b-2 ${
-                    categoryFilter === id
-                      ? 'border-brand-primary text-brand-primary'
-                      : 'border-transparent text-gray-500 hover:text-gray-800'
-                  }`}
-                >
-                  {t(`tabs.${id}`)}
-                </button>
-              ))}
+          <div className="flex items-center gap-3 py-2.5">
+
+            {/* Pill tabs */}
+            <div className="no-scrollbar flex gap-1.5 overflow-x-auto flex-1">
+              {CATEGORY_TAB_IDS.map((id) => {
+                const isActive = categoryFilter === id;
+                return (
+                  <button
+                    key={id}
+                    onClick={() => updateFilter('cat', id)}
+                    className={`relative shrink-0 px-4 py-1.5 rounded-full text-[12px] font-bold tracking-wide transition-all duration-200 ${
+                      isActive
+                        ? 'bg-brand-primary text-white'
+                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'
+                    }`}
+                  >
+                    {t(`tabs.${id}`)}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Desktop search */}
-            <div className="hidden lg:flex items-center gap-2 border border-gray-200 rounded-full px-4 py-2 w-52 shrink-0 focus-within:border-brand-primary transition-colors">
-              <HiMagnifyingGlass className="text-gray-400 shrink-0" size={15} />
+            <div className="hidden lg:flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-full px-3.5 py-2 w-44 shrink-0 focus-within:border-brand-primary focus-within:bg-white focus-within:w-56 transition-all duration-300">
+              <HiMagnifyingGlass className="text-gray-400 shrink-0" size={14} />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('search_placeholder')}
-                className="bg-transparent outline-none text-[13px] text-gray-700 w-full placeholder:text-gray-400"
+                className="bg-transparent outline-none text-[12px] text-gray-700 w-full placeholder:text-gray-400"
               />
               {searchInput && (
                 <button onClick={() => setSearchInput('')} className="text-gray-400 hover:text-gray-600 transition-colors">
-                  <HiX size={14} />
+                  <HiX size={13} />
                 </button>
               )}
             </div>
@@ -418,12 +499,16 @@ export default function ProductsPageContent() {
             {/* Mobile filter trigger */}
             <button
               onClick={() => setIsFilterOpen(true)}
-              className="lg:hidden flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-gray-500 shrink-0 py-3.5 hover:text-brand-primary transition-colors"
+              className={`lg:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all shrink-0 ${
+                priceFilter !== 'all' || hotFilter !== 'all'
+                  ? 'bg-brand-primary text-white'
+                  : 'text-gray-500 bg-gray-100 hover:bg-gray-200'
+              }`}
             >
-              <HiAdjustmentsHorizontal size={17} />
+              <HiAdjustmentsHorizontal size={15} />
               {t('filter')}
               {(priceFilter !== 'all' || hotFilter !== 'all') && (
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white" />
               )}
             </button>
           </div>
@@ -453,16 +538,20 @@ export default function ProductsPageContent() {
         <div className="flex gap-10 lg:gap-14">
 
           {/* Desktop Sidebar */}
-          <aside className="hidden lg:block w-48 shrink-0 sticky top-40 self-start">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] uppercase tracking-widest font-black text-gray-900">
-                {t('filters')}
-              </span>
+          <aside className="hidden lg:block w-52 shrink-0 sticky top-40 self-start">
+            <div className="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <HiAdjustmentsHorizontal size={15} className="text-gray-400" />
+                <span className="text-[12px] uppercase tracking-widest font-black text-gray-800">
+                  {t('filters')}
+                </span>
+              </div>
               {(priceFilter !== 'all' || hotFilter !== 'all') && (
                 <button
                   onClick={() => { updateFilter('price', 'all'); updateFilter('hot', 'all'); }}
-                  className="text-[10px] text-brand-primary hover:underline uppercase tracking-wider font-bold"
+                  className="flex items-center gap-1 text-[11px] text-brand-primary hover:underline font-bold"
                 >
+                  <HiX size={11} />
                   {t('clear')}
                 </button>
               )}
@@ -497,19 +586,7 @@ export default function ProductsPageContent() {
                 )}
               </div>
 
-              <div className="relative shrink-0 w-full md:w-[180px]">
-                <select
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value)}
-                  className="w-full appearance-none border border-gray-200 rounded-full px-4 py-2 pl-4 pr-10 text-[13px] text-gray-700 bg-white outline-none focus:border-brand-primary hover:border-gray-300 transition-colors cursor-pointer"
-                >
-                  <option value="default">Sắp xếp: Mặc định</option>
-                  <option value="price_asc">Giá: Thấp đến Cao</option>
-                  <option value="price_desc">Giá: Cao đến Thấp</option>
-                  <option value="newest">Mới nhất</option>
-                </select>
-                <HiChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
+              <SortDropdown value={sortOrder} onChange={setSortOrder} />
             </div>
 
             {/* Loading skeleton */}

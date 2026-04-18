@@ -32,9 +32,9 @@ function ProductCard({
       : null;
 
   return (
-    <div className="group flex flex-col rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md overflow-hidden">
+    <div className="group flex flex-col rounded-2xl border border-gray-100 bg-white   transition-shadow hover:shadow-md overflow-hidden">
       {/* Image */}
-      <Link href={`/products/${product.id}`} className="block">
+      <Link href={{ pathname: '/products/[slug]', params: { slug: product.slug } }} className="block">
         <div className="relative aspect-[3/2] w-full bg-[#ECECEC]">
           <Image
             src={product.thumbnail_url}
@@ -60,7 +60,7 @@ function ProductCard({
         </div>
 
         {/* Name */}
-        <Link href={`/products/${product.id}`}>
+        <Link href={{ pathname: '/products/[slug]', params: { slug: product.slug } }}>
           <p className="line-clamp-2 min-h-[2.5rem] text-[13px] font-semibold leading-snug text-gray-800 hover:text-brand-primary transition-colors">
             {product.name}
           </p>
@@ -98,7 +98,7 @@ function ProductCard({
           href="https://zalo.me/0338909973"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0068FF] py-2.5 text-[13px] font-bold text-white shadow-sm transition-all hover:bg-[#0055CC] hover:shadow-md active:scale-95"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0068FF] py-2.5 text-[13px] font-bold text-white   transition-all hover:bg-[#0055CC] hover:shadow-md active:scale-95"
         >
           <SiZalo size={16} />
           {ctaLabel}

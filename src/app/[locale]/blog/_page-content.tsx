@@ -96,7 +96,7 @@ export default function EventsPageContent({ news }: Props) {
             {displayed.map((item) => (
               <Link
                 key={item.id}
-                href={`/blog/${item.slug}`}
+                href={{ pathname: '/blog/[slug]', params: { slug: item.slug } }}
                 className="group block"
               >
                 {/* Image */}
@@ -107,7 +107,7 @@ export default function EventsPageContent({ news }: Props) {
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-gray-700 shadow-sm backdrop-blur-sm">
+                  <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-gray-700   backdrop-blur-sm">
                     {CATEGORY_LABELS[item.category] ?? item.category}
                   </span>
                 </div>
