@@ -5,6 +5,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+declare function gtag(...args: unknown[]): void;
+
+function trackContactConversion() {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', { send_to: 'AW-18100193809/tU1uCO_GvJ4cEJGU7LZD' });
+  }
+}
+
 interface FloatingButtonItemProps {
   href: string;
   icon: React.ReactNode;
@@ -37,7 +45,7 @@ function FloatingButtonItem({ href, icon, label, bgClass, rippleColor, delay = 0
         )}
       </AnimatePresence>
 
-      <a href={href} target="_blank" rel="noopener noreferrer" className="relative">
+      <a href={href} target="_blank" rel="noopener noreferrer" className="relative" onClick={trackContactConversion}>
         {/* Ripple rings — CSS animation, không dùng framer */}
         <span
           className="absolute inset-0 rounded-full animate-ping opacity-40"

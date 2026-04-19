@@ -48,7 +48,7 @@ export default function AboutPageContent() {
       <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?q=80&w=1920&auto=format&fit=crop"
-          alt="Vineyard"
+          alt={t('hero_image_alt')}
           fill
           className="object-cover"
           priority
@@ -119,7 +119,7 @@ export default function AboutPageContent() {
               <div className="relative aspect-4/5 rounded-3xl overflow-hidden shadow-2xl">
                 <Image
                   src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1200&auto=format&fit=crop"
-                  alt="Wine pouring"
+                  alt={t('story_image_alt')}
                   fill
                   className="object-cover"
                 />
@@ -291,7 +291,7 @@ export default function AboutPageContent() {
             >
               <Image
                 src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&auto=format&fit=crop"
-                alt="Map/Lifestyle"
+                alt={t('visit_image_alt')}
                 fill
                 className="object-cover"
               />

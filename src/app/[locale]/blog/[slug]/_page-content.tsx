@@ -20,7 +20,7 @@ import "swiper/css/pagination";
 
 import { NewsItem } from "@/@types/news";
 import type { DbProduct } from "@/@types/product";
-import { processContent, splitAtSecondH2, calculateReadingTime, sanitizeHtmlContent } from "@/utils/content-processor";
+import { processContent, splitAtSecondH2, calculateReadingTime, sanitizeHtmlContent, ensureImgAlt } from "@/utils/content-processor";
 import { injectInternalLinks } from "@/utils/internal-links";
 
 import TableOfContents from "@/components/page/blog/table-of-contents";
@@ -131,7 +131,8 @@ export default function NewsDetailPageContent({
 
   // ── Process HTML content: inject heading IDs + extract TOC + internal links ──
   const rawHtml = sanitizeHtmlContent(DOMPurify.sanitize(newsItem.content[locale]));
-  const withLinks = injectInternalLinks(rawHtml);
+  const withAlt = ensureImgAlt(rawHtml, newsItem.title[locale]);
+  const withLinks = injectInternalLinks(withAlt);
   const { processedHtml, headings } = processContent(withLinks);
   const [firstSection, restSection] = splitAtSecondH2(processedHtml);
 

@@ -39,7 +39,7 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 						{/* HOT badge */}
 						{isHot && (
 							<div className="absolute -top-5 -left-3">
-								<Image src={WINE_IMAGES.hot} alt="hot product" />
+								<Image src={WINE_IMAGES.hot} alt="" aria-hidden="true" />
 							</div>
 						)}
 					</div>

@@ -9,6 +9,13 @@ import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
 
 const phone = '0338909973';
+
+declare function gtag(...args: unknown[]): void;
+function trackContactConversion() {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', { send_to: 'AW-18100193809/tU1uCO_GvJ4cEJGU7LZD' });
+  }
+}
 const languages = [
 	{ code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
 	{ code: "en", name: "English", flag: "🇺🇸" },
@@ -126,6 +133,7 @@ export default function Header() {
 							href={`https://zalo.me/${phone}`}
 							target="_blank"
 							rel="noopener noreferrer"
+							onClick={trackContactConversion}
 							className="rounded-lg bg-brand-primary px-6 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:bg-red-700 hover:shadow-red-200"
 						>
 							{t("contact_zalo")}
@@ -180,7 +188,7 @@ export default function Header() {
 										href={`https://zalo.me/${phone}`}
 										target="_blank"
 										rel="noopener noreferrer"
-										onClick={() => setIsMobileMenuOpen(false)}
+										onClick={() => { setIsMobileMenuOpen(false); trackContactConversion(); }}
 										className="block w-full rounded-lg bg-[#f43f5e] py-3 text-center text-base font-semibold text-white hover:bg-red-700"
 									>
 										{t("contact_zalo")}

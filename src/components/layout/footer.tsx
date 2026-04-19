@@ -4,6 +4,7 @@ import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
+import FooterZaloButton from "./footer-zalo-button";
 
 export default function Footer() {
 	const t = useTranslations("footer");
@@ -124,14 +125,7 @@ export default function Footer() {
 						</ul>
 
 						<div className="mt-8">
-							<a
-								target="_blank"
-								rel="noopener noreferrer"
-								href="https://zalo.me/0338909973"
-								className="inline-block rounded-lg bg-brand-primary px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#A30000]"
-							>
-								{commonT("contact_zalo")}
-							</a>
+							<FooterZaloButton label={commonT("contact_zalo")} />
 						</div>
 					</div>
 				</div>

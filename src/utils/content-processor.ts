@@ -104,6 +104,20 @@ export function calculateReadingTime(html: string, wordsPerMinute = 200): string
 }
 
 /**
+ * Ensures every <img> in an HTML string has a non-empty alt attribute.
+ * Injects fallbackAlt on any <img> that is missing alt or has alt="".
+ */
+export function ensureImgAlt(html: string, fallbackAlt: string): string {
+  const escaped = fallbackAlt.replace(/"/g, '&quot;');
+  return html.replace(/<img([^>]*)>/gi, (_, attrs: string) => {
+    if (/\balt\s*=\s*"[^"]+"/.test(attrs)) return `<img${attrs}>`;
+    // Remove empty alt="" if present, then inject fallback
+    const cleanAttrs = attrs.replace(/\s*\balt\s*=\s*"[^"]*"/gi, '');
+    return `<img${cleanAttrs} alt="${escaped}">`;
+  });
+}
+
+/**
  * Splits processedHtml at the position of the second <h2> tag.
  * Returns [firstSection, remainder].
  * If there is no second <h2>, returns [html, ''].

@@ -16,7 +16,7 @@ import "swiper/css";
 import { WINE_IMAGES } from "../../../../../public/statics/images";
 import { useLocale } from "next-intl";
 import { WINE_TYPE_LABELS } from "@/lib/schemas/product-schema";
-import { sanitizeHtmlContent } from "@/utils/content-processor";
+import { sanitizeHtmlContent, ensureImgAlt } from "@/utils/content-processor";
 import FaqSection from "@/components/page/blog/faq-section";
 import { DEFAULT_FAQ_ITEMS } from "@/components/page/blog/faq-data";
 
@@ -91,7 +91,7 @@ export default function ProductDetailPageContent({ product, related }: Props) {
               />
               {product.is_hot && (
                 <div className="absolute top-0 -left-2.5">
-                  <Image src={WINE_IMAGES.hot} alt="Hot product" />
+                  <Image src={WINE_IMAGES.hot} alt="" aria-hidden="true" />
                 </div>
               )}
               {product.discount_percentage > 0 && (
@@ -210,7 +210,7 @@ export default function ProductDetailPageContent({ product, related }: Props) {
             </p>
             <div
               className="prose max-w-none wrap-break-word leading-loose text-gray-700"
-              dangerouslySetInnerHTML={{ __html: sanitizeHtmlContent(product.content) }}
+              dangerouslySetInnerHTML={{ __html: ensureImgAlt(sanitizeHtmlContent(product.content), product.name) }}
             />
           </div>
         )}
