@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { NewsItem } from "@/@types/news";
@@ -18,6 +18,8 @@ export default function EventsPageContent({ news }: Props) {
   const locale = useLocale() as "vi" | "en";
   const t = useTranslations("news");
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [activeTab, setActiveTab] = useState("all");
   const page = Number(searchParams.get('page')) || 1;
 
@@ -46,9 +48,19 @@ export default function EventsPageContent({ news }: Props) {
     [filtered, page]
   );
 
+  const getPageUrl = (p: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (p === 1) params.delete('page');
+    else params.set('page', p.toString());
+    const qs = params.toString();
+    return `${pathname}${qs ? `?${qs}` : ''}`;
+  };
+
   function handleTabChange(id: string) {
     setActiveTab(id);
-    setPage(1);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('page');
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   }
 
   return (
@@ -157,7 +169,7 @@ export default function EventsPageContent({ news }: Props) {
               </div>
             ) : (
               <Link
-                href={{ query: { ...Object.fromEntries(searchParams.entries()), page: page - 1 } }}
+                href={getPageUrl(page - 1) as any}
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-brand-primary hover:text-brand-primary"
               >
                 <ChevronLeft size={16} />
@@ -167,7 +179,7 @@ export default function EventsPageContent({ news }: Props) {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <Link
                 key={p}
-                href={{ query: { ...Object.fromEntries(searchParams.entries()), page: p } }}
+                href={getPageUrl(p) as any}
                 className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-semibold transition ${
                   p === page
                     ? "bg-brand-primary text-white"
@@ -184,7 +196,7 @@ export default function EventsPageContent({ news }: Props) {
               </div>
             ) : (
               <Link
-                href={{ query: { ...Object.fromEntries(searchParams.entries()), page: page + 1 } }}
+                href={getPageUrl(page + 1) as any}
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-brand-primary hover:text-brand-primary"
               >
                 <ChevronRight size={16} />
