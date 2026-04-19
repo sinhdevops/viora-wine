@@ -14,6 +14,10 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/*',
         ],
       },
+      {
+        userAgent: ['GPTBot', 'ChatGPT-User', 'OAI-SearchBot', 'Google-Extended', 'CCBot'],
+        allow: '/',
+      },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
   };

@@ -190,6 +190,7 @@
     "contact_phone_label": "Hotline",
     "contact_email_label": "Email",
     "support_label": "Customer Support",
+    "categories_label": "Product Categories",
     "shopping_guide_link": "Shopping Guide",
     "shipping_policy_link": "Shipping Policy",
     "inspection_policy_link": "Inspection Policy",
@@ -417,7 +418,7 @@
     "referral_label": "Refer a Friend",
     "referral_title": "Earn a 500,000 VND voucher for every successful referral",
     "referral_desc": "Share your link — when your friend places their first order, you receive the reward immediately.",
-    "referral_cta": "Learn More"
+    "referral_cta": "Contact for Offer"
   },
   "not_found": {
     "title": "Page Not Found",

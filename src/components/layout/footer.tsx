@@ -9,6 +9,7 @@ import FooterZaloButton from "./footer-zalo-button";
 export default function Footer() {
 	const t = useTranslations("footer");
 	const commonT = useTranslations("common");
+	const homeT = useTranslations("home");
 
 	const supportItems = [
 		{ name: t("shopping_guide_link"), path: "/shopping-guide" as const },
@@ -64,6 +65,31 @@ export default function Footer() {
 					</div>
 
 					
+
+					{/* Col 2 — Categories */}
+					<div>
+						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+							{t("categories_label")}
+						</h4>
+						<ul className="space-y-3">
+							{[
+								{ name: homeT("cat_wine"), path: "/products?cat=wine" },
+								{ name: homeT("cat_whisky"), path: "/products?cat=whisky" },
+								{ name: homeT("cat_spirits"), path: "/products?cat=spirits" },
+								{ name: homeT("cat_champagne"), path: "/products?cat=champagne" },
+								{ name: homeT("cat_gift"), path: "/products?cat=gift" },
+							].map((item) => (
+								<li key={item.path}>
+									<Link
+										href={item.path as any}
+										className="text-sm text-white/60 transition-colors hover:text-white"
+									>
+										{item.name}
+									</Link>
+								</li>
+							))}
+						</ul>
+					</div>
 
 					{/* Col 3 — Support */}
 					<div>

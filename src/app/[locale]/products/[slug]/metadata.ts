@@ -14,7 +14,7 @@ export async function generateMetadata({
 
   const { data: product } = await supabase
     .from('products')
-    .select('id, slug, name, description, thumbnail_url, category, tags, price, seo_title, seo_description')
+    .select('id, slug, name, description, thumbnail_url, category, price, seo_title, seo_description')
     .eq('slug', slug)
     .single();
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
 
   const title = product.seo_title || product.name;
   const nameLower = product.name?.toLowerCase() ?? '';
-  const tagsArr: string[] = Array.isArray(product.tags) ? product.tags : [];
+  const tagsArr: string[] = [];
 
   const isAustralian =
     nameLower.includes('úc') ||

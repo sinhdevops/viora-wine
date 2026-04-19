@@ -3,7 +3,7 @@
  * across all metadata, schema markup, and sitemaps.
  */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || 'https://www.viorawine.com';
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://viorawine.com';
 
 export const DEFAULT_LOCALE = 'vi';
 
@@ -45,11 +45,12 @@ export function getLocalizedPath(path: string, locale: string): string {
 
 /**
  * Build the correct page URL respecting localePrefix: 'as-needed'.
- * vi (default) → no prefix, with localized path: https://www.viorawine.com/san-pham
- * en           → /en prefix: https://www.viorawine.com/en/products
+ * vi (default) → no prefix, with localized path: https://viorawine.com/san-pham
+ * en           → /en prefix: https://viorawine.com/en/products
  */
 export function buildPageUrl(locale: string, path: string = '') {
-  const localizedPath = getLocalizedPath(path, locale);
+  const cleanPath = path === '/' ? '' : path;
+  const localizedPath = getLocalizedPath(cleanPath, locale);
   return locale === DEFAULT_LOCALE
     ? `${SITE_URL}${localizedPath || '/'}`
     : `${SITE_URL}/${locale}${localizedPath}`;
@@ -60,8 +61,9 @@ export function buildPageUrl(locale: string, path: string = '') {
  * Generates self-referencing canonical + hreflang (vi, en, x-default).
  */
 export function buildAlternates(locale: string, path: string = '') {
-  const viUrl = `${SITE_URL}${getLocalizedPath(path, 'vi') || '/'}`;
-  const enUrl = `${SITE_URL}/en${path}`;
+  const cleanPath = path === '/' ? '' : path;
+  const viUrl = `${SITE_URL}${getLocalizedPath(cleanPath, 'vi') || '/'}`;
+  const enUrl = `${SITE_URL}/en${cleanPath}`;
   const canonical = locale === DEFAULT_LOCALE ? viUrl : enUrl;
 
   return {

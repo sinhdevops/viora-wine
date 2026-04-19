@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { NewsItem } from "@/@types/news";
@@ -16,8 +17,9 @@ const PAGE_SIZE = 6;
 export default function EventsPageContent({ news }: Props) {
   const locale = useLocale() as "vi" | "en";
   const t = useTranslations("news");
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState("all");
-  const [page, setPage] = useState(1);
+  const page = Number(searchParams.get('page')) || 1;
 
   const TABS = [
     { id: "all", label: t("tab_all") },
@@ -149,18 +151,23 @@ export default function EventsPageContent({ news }: Props) {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="mt-10 flex items-center justify-center gap-2">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-brand-primary hover:text-brand-primary disabled:opacity-30"
-            >
-              <ChevronLeft size={16} />
-            </button>
+            {page === 1 ? (
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 opacity-30 cursor-not-allowed">
+                <ChevronLeft size={16} />
+              </div>
+            ) : (
+              <Link
+                href={{ query: { ...Object.fromEntries(searchParams.entries()), page: page - 1 } }}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-brand-primary hover:text-brand-primary"
+              >
+                <ChevronLeft size={16} />
+              </Link>
+            )}
 
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-              <button
+              <Link
                 key={p}
-                onClick={() => setPage(p)}
+                href={{ query: { ...Object.fromEntries(searchParams.entries()), page: p } }}
                 className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-semibold transition ${
                   p === page
                     ? "bg-brand-primary text-white"
@@ -168,16 +175,21 @@ export default function EventsPageContent({ news }: Props) {
                 }`}
               >
                 {p}
-              </button>
+              </Link>
             ))}
 
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-brand-primary hover:text-brand-primary disabled:opacity-30"
-            >
-              <ChevronRight size={16} />
-            </button>
+            {page === totalPages ? (
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 opacity-30 cursor-not-allowed">
+                <ChevronRight size={16} />
+              </div>
+            ) : (
+              <Link
+                href={{ query: { ...Object.fromEntries(searchParams.entries()), page: page + 1 } }}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-brand-primary hover:text-brand-primary"
+              >
+                <ChevronRight size={16} />
+              </Link>
+            )}
           </div>
         )}
       </div>

@@ -37,6 +37,9 @@ export async function generateMetadata({
     },
     description: homeT('meta_desc'),
     keywords: [
+      'rượu vang',
+      'rượu vang đỏ',
+      'ly rượu vang',
       'Viora Wine',
       'Viora Wine Đà Nẵng',
       'rượu vang Úc Hà Nội',

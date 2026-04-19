@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { HiChevronDown, HiX, HiChevronLeft, HiChevronRight, HiCheck } from 'react-icons/hi';
 import { HiAdjustmentsHorizontal, HiMagnifyingGlass, HiArrowsUpDown, HiStar, HiSparkles } from 'react-icons/hi2';
 import { HiTrendingUp } from 'react-icons/hi';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Link } from '@/i18n/routing';
 import { supabase } from '@/lib/supabase-client';
 import CardProduct from '@/components/page/card-product';
@@ -103,15 +103,24 @@ function getPageNumbers(current: number, total: number): (number | '...')[] {
 function Pagination({
   currentPage,
   totalPages,
-  onPageChange,
 }: {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
 }) {
   const t = useTranslations('products_page');
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
   if (totalPages <= 1) return null;
   const pages = getPageNumbers(currentPage, totalPages);
+
+  const getPageUrl = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (page === 1) params.delete('page');
+    else params.set('page', page.toString());
+    const qs = params.toString();
+    return `${pathname}${qs ? `?${qs}` : ''}`;
+  };
 
   return (
     <motion.div
@@ -121,17 +130,20 @@ function Pagination({
       className="flex items-center justify-center gap-1.5 pt-8 pb-6"
     >
       {/* Prev */}
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-200
-          disabled:opacity-30 disabled:cursor-not-allowed
-          enabled:hover:bg-brand-primary enabled:hover:text-white enabled:hover:shadow-md enabled:hover:shadow-brand-primary/30
-          text-gray-500 border border-gray-200 enabled:hover:border-brand-primary"
-      >
-        <HiChevronLeft size={13} />
-        <span className="hidden sm:inline">{t('pagination.prev')}</span>
-      </button>
+      {currentPage === 1 ? (
+        <div className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] opacity-30 cursor-not-allowed text-gray-500 border border-gray-200">
+          <HiChevronLeft size={13} />
+          <span className="hidden sm:inline">{t('pagination.prev')}</span>
+        </div>
+      ) : (
+        <Link
+          href={getPageUrl(currentPage - 1) as any}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-200 text-gray-500 border border-gray-200 hover:bg-brand-primary hover:text-white hover:border-brand-primary hover:shadow-md hover:shadow-brand-primary/30"
+        >
+          <HiChevronLeft size={13} />
+          <span className="hidden sm:inline">{t('pagination.prev')}</span>
+        </Link>
+      )}
 
       {/* Page numbers */}
       <div className="flex items-center gap-1">
@@ -141,33 +153,36 @@ function Pagination({
               ···
             </span>
           ) : (
-            <button
+            <Link
               key={page}
-              onClick={() => onPageChange(page)}
-              className={`w-9 h-9 rounded-full text-[11px] font-black transition-all duration-200 ${
+              href={getPageUrl(page) as any}
+              className={`w-9 h-9 rounded-full text-[11px] font-black flex items-center justify-center transition-all duration-200 ${
                 page === currentPage
                   ? 'bg-brand-primary text-white shadow-md shadow-brand-primary/40 scale-105'
                   : 'text-gray-500 hover:text-brand-primary hover:bg-brand-primary/8 border border-transparent hover:border-brand-primary/20'
               }`}
             >
               {page}
-            </button>
+            </Link>
           )
         )}
       </div>
 
       {/* Next */}
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-200
-          disabled:opacity-30 disabled:cursor-not-allowed
-          enabled:hover:bg-brand-primary enabled:hover:text-white enabled:hover:shadow-md enabled:hover:shadow-brand-primary/30
-          text-gray-500 border border-gray-200 enabled:hover:border-brand-primary"
-      >
-        <span className="hidden sm:inline">{t('pagination.next')}</span>
-        <HiChevronRight size={13} />
-      </button>
+      {currentPage === totalPages ? (
+        <div className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] opacity-30 cursor-not-allowed text-gray-500 border border-gray-200">
+          <span className="hidden sm:inline">{t('pagination.next')}</span>
+          <HiChevronRight size={13} />
+        </div>
+      ) : (
+        <Link
+          href={getPageUrl(currentPage + 1) as any}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-200 text-gray-500 border border-gray-200 hover:bg-brand-primary hover:text-white hover:border-brand-primary hover:shadow-md hover:shadow-brand-primary/30"
+        >
+          <span className="hidden sm:inline">{t('pagination.next')}</span>
+          <HiChevronRight size={13} />
+        </Link>
+      )}
     </motion.div>
   );
 }
@@ -303,7 +318,7 @@ export default function ProductsPageContent() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(true);
   const [hotOpen, setHotOpen] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPage = Number(searchParams.get('page')) || 1;
   const [sortOrder, setSortOrder] = useState('default');
 
   useEffect(() => {
@@ -321,6 +336,7 @@ export default function ProductsPageContent() {
     const params = new URLSearchParams(searchParams.toString());
     if (value === 'all') params.delete(key);
     else params.set(key, value);
+    params.delete('page');
     router.push(`/products?${params.toString()}`, { scroll: false });
   };
 
@@ -369,7 +385,9 @@ export default function ProductsPageContent() {
 
   // Reset to page 1 when filters or sorting change
   useEffect(() => {
-    setCurrentPage(1);
+    if (currentPage !== 1 && !searchParams.get('page')) {
+      // already page 1 implicitly
+    }
   }, [categoryFilter, priceFilter, hotFilter, searchInput, sortOrder]);
 
   const paginatedProducts = useMemo(() => {
@@ -378,7 +396,6 @@ export default function ProductsPageContent() {
   }, [filteredProducts, currentPage]);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -623,7 +640,6 @@ export default function ProductsPageContent() {
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
-                  onPageChange={handlePageChange}
                 />
               </>
             )}

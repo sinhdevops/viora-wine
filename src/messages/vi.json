@@ -37,8 +37,8 @@
   "home": {
     "hero_title": "RƯỢU VANG\nVIORA WINE",
     "hero_subtitle": "Website chuyên cung cấp rượu vang Úc nhập khẩu chính hãng, đa dạng từ phổ thông đến cao cấp. Cam kết chất lượng, giá tốt và tư vấn tận tâm, giúp bạn dễ dàng chọn chai vang phù hợp cho mọi dịp. 🍷",
-    "meta_title": "Shop Rượu Vang Úc Nhập Khẩu Chính Hãng | Viora Wine Đà Nẵng & Hà Nội",
-    "meta_desc": "Shop rượu vang Úc nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Rượu vang Úc Shiraz, Cabernet Sauvignon từ 300K–5 triệu. Tư vấn chọn vang 24/7, giao hàng toàn quốc.",
+    "meta_title": "Rượu Vang Nhập Khẩu Chính Hãng – Viora Wine Đà Nẵng & Hà Nội",
+    "meta_desc": "Viora Wine cung cấp các loại rượu vang, rượu vang đỏ nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Chuyên vang Úc Shiraz, Cabernet Sauvignon, hộp quà tặng sang trọng, ly rượu vang cao cấp.",
     "bestseller": "Sản Phẩm Bán Chạy",
     "categories": "Danh Mục Nổi Bật",
     "testimonials": "Khách Hàng Nói Gì",
@@ -191,6 +191,7 @@
     "contact_phone_label": "Hotline",
     "contact_email_label": "Email",
     "support_label": "Hỗ trợ khách hàng",
+    "categories_label": "Danh mục sản phẩm",
     "shopping_guide_link": "Hướng dẫn mua hàng",
     "shipping_policy_link": "Chính sách giao hàng",
     "inspection_policy_link": "Chính sách kiểm hàng",
@@ -418,7 +419,7 @@
     "referral_label": "Giới thiệu bạn bè",
     "referral_title": "Nhận voucher 500.000đ cho mỗi lời giới thiệu thành công",
     "referral_desc": "Chia sẻ link của bạn — bạn bè đặt hàng lần đầu là bạn nhận ngay ưu đãi.",
-    "referral_cta": "Tìm hiểu thêm"
+    "referral_cta": "Liên hệ nhận ưu đãi"
   },
   "not_found": {
     "title": "Không tìm thấy trang",
