@@ -3,7 +3,7 @@
  * across all metadata, schema markup, and sitemaps.
  */
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || 'https://viorawine.com';
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://www.viorawine.com';
 
 export const DEFAULT_LOCALE = 'vi';
 

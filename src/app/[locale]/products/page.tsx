@@ -53,6 +53,17 @@ export async function generateMetadata({
   };
 }
 
-export default function Page() {
-  return <ProductsPageContent />;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'products_page' });
+  return (
+    <>
+      <h1 className="sr-only">{t("shop")}</h1>
+      <ProductsPageContent />
+    </>
+  );
 }

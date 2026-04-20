@@ -177,10 +177,10 @@ export default function NewsDetailPageContent({
             {categoryLabel}
           </span>
 
-          {/* H1 – SEO-primary heading */}
-          <h1 className="mb-5 text-2xl font-black leading-tight tracking-tight text-gray-900 md:text-[36px] lg:text-[42px]">
+          {/* Title styled as H1 but actual H1 is in server component for SEO */}
+          <div className="mb-5 text-2xl font-black leading-tight tracking-tight text-gray-900 md:text-[36px] lg:text-[42px]">
             {newsItem.title[locale]}
-          </h1>
+          </div>
 
           {/* Meta row: date · read-time · author · share */}
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-100 pb-6">

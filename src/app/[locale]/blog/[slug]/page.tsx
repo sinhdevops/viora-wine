@@ -201,6 +201,7 @@ export default async function NewsDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <h1 className="sr-only">{newsItem.title[locale as 'vi' | 'en']}</h1>
       <NewsDetailPageContent
         newsItem={newsItem}
         relatedNews={relatedNews}

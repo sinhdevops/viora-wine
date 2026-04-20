@@ -3,6 +3,7 @@ import Features from "@/components/page/home/features";
 import FeaturedCategories from "@/components/page/home/featured-categories";
 import BelowFoldSections from "@/components/page/home/below-fold-sections";
 import { createClient } from "@/utils/supabase/server";
+import { getTranslations } from "next-intl/server";
 
 export type EventItem = {
 	id: string;
@@ -14,7 +15,8 @@ export type EventItem = {
 	category: string;
 };
 
-export default async function HomePageContent() {
+export default async function HomePageContent({ locale }: { locale: string }) {
+	const t = await getTranslations({ locale, namespace: "home" });
 	const supabase = await createClient();
 
 	const [{ data: banners }, { data: suKienEvents }, { data: kienThucEvents }] = await Promise.all([
@@ -39,6 +41,7 @@ export default async function HomePageContent() {
 
 	return (
 		<div className="flex flex-col gap-0 pb-24">
+			<h1 className="sr-only">{t("meta_title")}</h1>
 			<HeroBanner banners={banners ?? []} />
 			<Features />
 			<div className="mb-25">

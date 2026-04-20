@@ -63,7 +63,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function EventsPage() {
+export default async function EventsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'news' });
   const supabase = await createClient();
 
   const { data: rows } = await supabase
@@ -74,5 +80,10 @@ export default async function EventsPage() {
 
   const events = (rows ?? []).map((r) => mapToNewsItem(r as EventRow));
 
-  return <EventsPageContent news={events} />;
+  return (
+    <>
+      <h1 className="sr-only">{t("title")}</h1>
+      <EventsPageContent news={events} />
+    </>
+  );
 }

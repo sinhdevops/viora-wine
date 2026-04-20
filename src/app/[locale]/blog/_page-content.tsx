@@ -79,9 +79,10 @@ export default function EventsPageContent({ news }: Props) {
       <div className="mx-auto max-w-360 px-4 py-10 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-xl font-black uppercase tracking-tight md:text-[28px]">
+          {/* Title styled as H1 but actual H1 is in server component for SEO */}
+          <div className="text-xl font-black uppercase tracking-tight md:text-[28px]">
             {t("title")}
-          </h1>
+          </div>
           <p className="mt-1.5 text-sm text-gray-500">
             {t("subtitle")}
           </p>

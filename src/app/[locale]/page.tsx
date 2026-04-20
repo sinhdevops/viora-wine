@@ -39,6 +39,11 @@ export async function generateMetadata({
   };
 }
 
-export default function Page() {
-  return <HomePageContent />;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return <HomePageContent locale={locale} />;
 }

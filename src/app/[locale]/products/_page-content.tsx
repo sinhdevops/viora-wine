@@ -461,9 +461,9 @@ export default function ProductsPageContent() {
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight uppercase mb-6 leading-none">
+          <div className="text-5xl md:text-7xl font-black text-white tracking-tight uppercase mb-6 leading-none">
             {t('shop')}
-          </h1>
+          </div>
 
           <p className="text-gray-500 text-sm md:text-base font-light max-w-lg leading-relaxed border-l-2 border-brand-primary/30 pl-5 py-1 italic">
             {t('shop_desc')}
