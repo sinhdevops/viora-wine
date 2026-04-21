@@ -6,7 +6,6 @@ import { Link } from "@/i18n/routing";
 import { formatCurrency } from "@/utils/format-currency";
 import type { DbProduct } from "@/@types/product";
 import { WINE_IMAGES } from "../../../public/statics/images";
-import { HiStar } from "react-icons/hi";
 
 interface CardProductProps {
 	product: DbProduct;
@@ -48,16 +47,6 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 				{/* Info */}
 				<div className="py-3 flex flex-col flex-1">
 					<Link href={{ pathname: '/products/[slug]', params: { slug: product.slug } }} className="block">
-						<div className="flex items-center gap-3 mb-2 justify-between">
-							<div className="flex items-center gap-1">
-								<HiStar className="text-yellow-400" size={14} />
-								<span className="text-[12px] font-bold text-gray-700">{product.rating || 5.0}</span>
-							</div>
-							<div className="w-1 h-1 rounded-full bg-gray-300" />
-							<span className="text-[12px] text-gray-400 font-medium">
-								{t("sold")} {product.sold_count || 0}+
-							</span>
-						</div>
 						<p className="mb-1.5 line-clamp-2 min-h-11 wrap-break-word text-[14px] font-medium md:text-[15px]">
 							{product.name}
 						</p>
@@ -82,7 +71,7 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 					</Link>
 					<div className="mt-auto pt-2">
 						<a
-							href="https://zalo.me/0338909973"
+							href="https://zalo.me/0349748451"
 							target="_blank"
 							rel="noopener noreferrer"
 							onClick={(e) => {

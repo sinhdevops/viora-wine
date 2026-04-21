@@ -85,7 +85,7 @@ function FloatingButtonItem({ href, icon, label, bgClass, rippleColor, delay = 0
 
 export default function FloatingZalo() {
   const t = useTranslations('common');
-  const phone = '0338909973';
+  const phone = '0349748451';
   const messengerLink = 'https://m.me/viorawine';
 
   return (

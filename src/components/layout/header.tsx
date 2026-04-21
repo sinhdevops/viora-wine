@@ -2,13 +2,14 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Globe, Menu } from "lucide-react";
 import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
 
-const phone = '0338909973';
+const phone = '0349748451';
 
 declare function gtag(...args: unknown[]): void;
 function trackContactConversion() {
@@ -107,22 +108,46 @@ export default function Header() {
 										transition={{ duration: 0.15 }}
 										className="absolute right-0 mt-2 w-40 overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-lg"
 									>
-										{languages.map((lang) => (
-											<Link
-												key={lang.code}
-												href={pathname as any}
-												locale={lang.code}
-												onClick={() => setIsLangOpen(false)}
-												className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 ${
-													locale === lang.code
-														? "font-bold text-red-600"
-														: "text-gray-600"
-												}`}
-											>
-												<span>{lang.flag}</span>
-												{lang.name}
-											</Link>
-										))}
+										{languages.map((lang) => {
+											// Standard way to switch language using native browser URL
+											const handleLangSwitch = (e: React.MouseEvent<HTMLAnchorElement>) => {
+												e.preventDefault();
+												setIsLangOpen(false);
+												
+												// Get raw path, safely handling current locale in the path
+												const currentPath = window.location.pathname;
+												const segments = currentPath.split("/");
+												
+												// If first segment is a known locale, replace it
+												if (languages.some((l) => l.code === segments[1])) {
+													segments[1] = lang.code;
+												} else {
+													// Insert locale as first segment
+													segments.splice(1, 0, lang.code);
+												}
+												
+												// Default locale (vi) might not need prefix depending on next-intl config,
+												// but next-intl will automatically normalize it.
+												const newPath = segments.join("/") + window.location.search;
+												window.location.href = newPath;
+											};
+
+											return (
+												<a
+													key={lang.code}
+													href="#"
+													onClick={handleLangSwitch}
+													className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 ${
+														locale === lang.code
+															? "font-bold text-red-600"
+															: "text-gray-600"
+													}`}
+												>
+													<span>{lang.flag}</span>
+													{lang.name}
+												</a>
+											);
+										})}
 									</motion.div>
 								)}
 							</AnimatePresence>

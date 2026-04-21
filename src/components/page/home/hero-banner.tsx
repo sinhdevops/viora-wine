@@ -25,8 +25,8 @@ export default function HeroBanner({ banners }: HeroBannerProps) {
 		<section className="group relative overflow-hidden">
 			<Swiper
 				modules={[Navigation, Pagination, Autoplay]}
-				speed={800}
-				autoplay={{ delay: 5000, disableOnInteraction: false }}
+				speed={1000}
+				autoplay={{ delay: 10000, disableOnInteraction: false }}
 				pagination={{
 					clickable: true,
 					el: ".custom-pagination",

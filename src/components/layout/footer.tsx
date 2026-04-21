@@ -1,7 +1,8 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { FaFacebookF, FaYoutube } from "react-icons/fa";
+import { SiZalo } from "react-icons/si";
+import { MapPin, Phone, Mail, Clock, Car, Baby } from "lucide-react";
 import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
 import FooterZaloButton from "./footer-zalo-button";
@@ -20,9 +21,9 @@ export default function Footer() {
 	];
 
 	const socials = [
-		{ icon: FaFacebookF, href: "#", label: "Facebook" },
-		{ icon: FaInstagram, href: "#", label: "Instagram" },
-		{ icon: FaYoutube, href: "#", label: "YouTube" },
+		{ icon: FaFacebookF, href: "https://www.facebook.com/viorawine", label: "Facebook" },
+		{ icon: SiZalo, href: "https://zalo.me/0373216268", label: "Zalo" },
+		{ icon: FaYoutube, href: "https://www.youtube.com/@viorawine", label: "YouTube" },
 	];
 
 	const contacts = [
@@ -56,11 +57,49 @@ export default function Footer() {
 									key={label}
 									href={href}
 									aria-label={label}
+									target="_blank"
+									rel="noopener noreferrer"
 									className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/40 transition-all hover:border-brand-primary hover:bg-brand-primary hover:text-white"
 								>
 									<Icon size={14} />
 								</a>
 							))}
+						</div>
+						
+						{/* Legal / warning block (moved here) */}
+						<div className="mt-6 space-y-3">
+							<div className="flex items-center gap-3">
+								<div
+									aria-label="18+"
+									className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-red-500 text-[11px] font-extrabold tracking-tight text-red-500"
+								>
+									18+
+								</div>
+								<div
+									aria-label={t("warnings_no_driving")}
+									className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-red-500"
+								>
+									<Car className="h-4 w-4 text-red-500" />
+									<span className="pointer-events-none absolute inset-0 rotate-45">
+										<span className="absolute left-1/2 top-1/2 h-[2px] w-[22px] -translate-x-1/2 -translate-y-1/2 bg-red-500" />
+									</span>
+								</div>
+								<div
+									aria-label={t("warnings_no_pregnancy")}
+									className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-red-500"
+								>
+									<Baby className="h-4 w-4 text-red-500" />
+									<span className="pointer-events-none absolute inset-0 rotate-45">
+										<span className="absolute left-1/2 top-1/2 h-[2px] w-[22px] -translate-x-1/2 -translate-y-1/2 bg-red-500" />
+									</span>
+								</div>
+							</div>
+
+							<div className="space-y-2 text-sm leading-relaxed ">
+								<p className="text-white/60 transition-colors hover:text-white">{t("legal_company_name")}</p>
+								<p className="text-white/60 transition-colors hover:text-white">{t("legal_business_license")}</p>
+								<p className="text-white/60 transition-colors hover:text-white">{t("legal_alcohol_license")}</p>
+							</div>
 						</div>
 					</div>
 
@@ -113,7 +152,7 @@ export default function Footer() {
 				{/* Col 4 — Contact */}
 					<div>
 						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
-							{commonT("contact")}
+							{t("owner_info_label")}
 						</h4>
 						<ul className="space-y-5">
 							{contacts.map(({ icon: Icon, label, value }) => (
@@ -130,11 +169,8 @@ export default function Footer() {
 								</li>
 							))}
 						</ul>
-					</div>
-
-					{/* Col 4 — Hours */}
-					<div>
-						<h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
+						<div className="mt-4">
+						<h4 className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/40">
 							{t("hours_label")}
 						</h4>
 						<ul className="space-y-3">
@@ -150,10 +186,11 @@ export default function Footer() {
 							))}
 						</ul>
 
-						<div className="mt-8">
+						<div className="mt-4">
 							<FooterZaloButton label={commonT("contact_zalo")} />
 						</div>
 					</div>
+				</div>
 				</div>
 			</div>
 

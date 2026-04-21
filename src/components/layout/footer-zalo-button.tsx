@@ -17,7 +17,7 @@ export default function FooterZaloButton({ label }: FooterZaloButtonProps) {
     <a
       target="_blank"
       rel="noopener noreferrer"
-      href="https://zalo.me/0338909973"
+      href="https://zalo.me/0349748451"
       onClick={handleClick}
       className="inline-block rounded-lg bg-brand-primary px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#A30000]"
     >
