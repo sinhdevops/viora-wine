@@ -9,7 +9,7 @@ import { ChevronDown, Globe, Menu } from "lucide-react";
 import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
 
-const phone = '0349748451';
+const phone = '0338909973';
 
 declare function gtag(...args: unknown[]): void;
 function trackContactConversion() {

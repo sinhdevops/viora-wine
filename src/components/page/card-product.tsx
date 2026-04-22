@@ -71,7 +71,7 @@ export default function CardProduct({ product, isHot = false }: CardProductProps
 					</Link>
 					<div className="mt-auto pt-2">
 						<a
-							href="https://zalo.me/0349748451"
+							href="https://zalo.me/0338909973"
 							target="_blank"
 							rel="noopener noreferrer"
 							onClick={(e) => {
