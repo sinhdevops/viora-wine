@@ -28,7 +28,7 @@ export default function GoodWineSection() {
 		setLoading(true);
 		const query = supabase
 			.from("products")
-			.select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, wine_type, rating, sold_count")
+			.select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, tag, wine_type, rating, sold_count")
 			.eq("category", "wine")
 			.order("rating", { ascending: false })
 			.order("sold_count", { ascending: false })
@@ -89,7 +89,7 @@ export default function GoodWineSection() {
 				) : displayed.length > 0 ? (
 					<div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:gap-x-5 lg:grid-cols-5">
 						{displayed.map((product) => (
-							<CardProduct key={product.id} product={product} isHot={product.is_hot} />
+							<CardProduct key={product.id} product={product} />
 						))}
 					</div>
 				) : (

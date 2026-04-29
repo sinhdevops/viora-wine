@@ -1,6 +1,16 @@
 import { z } from "zod";
 
 export const CATEGORIES = ["wine", "whisky", "spirits", "combo", "gift"] as const;
+
+export const TAGS = ["best_seller", "easy_drink", "sweet", "everyday", "gift"] as const;
+export type TagValue = (typeof TAGS)[number];
+export const TAG_LABELS: Record<TagValue, string> = {
+	best_seller: "Best seller",
+	easy_drink:  "Dễ uống",
+	sweet:       "Ngọt nhẹ",
+	everyday:    "Thường ngày",
+	gift:        "Quà tặng",
+};
 export const CATEGORY_LABELS: Record<(typeof CATEGORIES)[number], string> = {
 	wine: "Rượu vang",
 	whisky: "Whisky",
@@ -60,7 +70,7 @@ export const productSchema = z.object({
 	alcohol: z.string().optional().nullable(),
 	country: z.string().optional().nullable(),
 	stock: z.number().int("Phải là số nguyên").min(0, "Kho phải ≥ 0"),
-	is_hot: z.boolean(),
+	tag: z.enum(TAGS).optional().nullable(),
 	seo_title: z.string().optional().nullable(),
 	seo_description: z.string().optional().nullable(),
 	rating: z.number().min(1, "Tối thiểu 1.0").max(5, "Tối đa 5.0").default(5.0).optional(),

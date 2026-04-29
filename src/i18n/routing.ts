@@ -2,71 +2,26 @@ import { defineRouting } from 'next-intl/routing';
 import { createNavigation } from 'next-intl/navigation';
 
 export const routing = defineRouting({
-  locales: ['vi', 'en'],
+  locales: ['vi'],
   defaultLocale: 'vi',
   localePrefix: 'as-needed',
   pathnames: {
     '/': '/',
-    '/about': {
-      vi: '/gioi-thieu',
-      en: '/about',
-    },
-    '/products': {
-      vi: '/san-pham',
-      en: '/products',
-    },
-    '/products/[slug]': {
-      vi: '/san-pham/[slug]',
-      en: '/products/[slug]',
-    },
-    '/blog': {
-      vi: '/tin-tuc',
-      en: '/blog',
-    },
-    '/blog/[slug]': {
-      vi: '/tin-tuc/[slug]',
-      en: '/blog/[slug]',
-    },
-    '/contact': {
-      vi: '/lien-he',
-      en: '/contact',
-    },
-    '/promotion': {
-      vi: '/khuyen-mai',
-      en: '/promotion',
-    },
-    '/gifts': {
-      vi: '/qua-tang',
-      en: '/gifts',
-    },
-    '/privacy-policy': {
-      vi: '/chinh-sach-bao-mat',
-      en: '/privacy-policy',
-    },
-    '/terms': {
-      vi: '/dieu-khoan',
-      en: '/terms',
-    },
-    '/shopping-guide': {
-      vi: '/huong-dan-mua-hang',
-      en: '/shopping-guide',
-    },
-    '/shipping-policy': {
-      vi: '/chinh-sach-van-chuyen',
-      en: '/shipping-policy',
-    },
-    '/inspection-policy': {
-      vi: '/chinh-sach-kiem-hang',
-      en: '/inspection-policy',
-    },
-    '/return-policy': {
-      vi: '/chinh-sach-doi-tra',
-      en: '/return-policy',
-    },
-    '/payment-policy': {
-      vi: '/chinh-sach-thanh-toan',
-      en: '/payment-policy',
-    },
+    '/about': '/gioi-thieu',
+    '/products': '/san-pham',
+    '/products/[slug]': '/san-pham/[slug]',
+    '/blog': '/tin-tuc',
+    '/blog/[slug]': '/tin-tuc/[slug]',
+    '/contact': '/lien-he',
+    '/promotion': '/khuyen-mai',
+    '/gifts': '/qua-tang',
+    '/privacy-policy': '/chinh-sach-bao-mat',
+    '/terms': '/dieu-khoan',
+    '/shopping-guide': '/huong-dan-mua-hang',
+    '/shipping-policy': '/chinh-sach-van-chuyen',
+    '/inspection-policy': '/chinh-sach-kiem-hang',
+    '/return-policy': '/chinh-sach-doi-tra',
+    '/payment-policy': '/chinh-sach-thanh-toan',
   },
 });
 

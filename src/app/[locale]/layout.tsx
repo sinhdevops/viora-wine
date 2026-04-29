@@ -151,7 +151,7 @@ export default async function RootLayout({
 	const { locale } = await params;
 	const messages = await getMessages();
 
-	if (!routing.locales.includes(locale as "vi" | "en")) {
+	if (!routing.locales.includes(locale as "vi")) {
 		notFound();
 	}
 

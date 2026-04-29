@@ -5,7 +5,7 @@ import type { EventItem } from "@/app/[locale]/_page-content";
 
 const BestSellerSlider = dynamic(() => import("@/components/page/home/best-seller-slider"), { ssr: false });
 const SavingComboSection = dynamic(() => import("@/components/page/home/saving-combo-section"), { ssr: false });
-const WinePromoBanner = dynamic(() => import("@/components/page/home/wine-promo-banner"), { ssr: false });
+const PromoCards = dynamic(() => import("@/components/page/home/promo-cards"), { ssr: false });
 const GoodWineSection = dynamic(() => import("@/components/page/home/good-wine-section"), { ssr: false });
 const ExploreSection = dynamic(() => import("@/components/page/home/explore-section"), { ssr: false });
 const WineKnowledgeSection = dynamic(() => import("@/components/page/home/wine-knowledge-section"), { ssr: false });
@@ -18,10 +18,10 @@ interface BelowFoldSectionsProps {
 
 export default function BelowFoldSections({ suKienEvents, kienThucEvents }: BelowFoldSectionsProps) {
 	return (
-		<div className="flex flex-col gap-25">
+		<div className="flex flex-col gap-10 lg:gap-20">
 			<BestSellerSlider />
 			<SavingComboSection />
-			<WinePromoBanner />
+			<PromoCards />
 			<GoodWineSection />
 			<ExploreSection events={suKienEvents} />
 			<WineKnowledgeSection events={kienThucEvents} />

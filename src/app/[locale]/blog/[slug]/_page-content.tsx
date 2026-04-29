@@ -109,7 +109,7 @@ export default function NewsDetailPageContent({
   relatedNews,
   suggestedProducts,
 }: NewsDetailPageContentProps) {
-  const locale = useLocale() as "vi" | "en";
+  const locale = useLocale() as "vi";
   const t = useTranslations("news_detail");
   const tNews = useTranslations("news");
 

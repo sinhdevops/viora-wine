@@ -15,7 +15,7 @@ interface Props {
 const PAGE_SIZE = 6;
 
 export default function EventsPageContent({ news }: Props) {
-  const locale = useLocale() as "vi" | "en";
+  const locale = useLocale() as "vi";
   const t = useTranslations("news");
   const searchParams = useSearchParams();
   const router = useRouter();

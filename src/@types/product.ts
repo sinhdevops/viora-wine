@@ -9,7 +9,7 @@ export interface DbProduct {
   discount_percentage: number;
   category: 'wine' | 'whisky' | 'spirits' | 'combo' | 'gift';
   stock: number;
-  is_hot: boolean;
+  tag?: "best_seller" | "easy_drink" | "sweet" | "everyday" | "gift" | null;
   rating?: number;
   sold_count?: number;
   created_at?: string;
@@ -23,4 +23,5 @@ export interface DbProduct {
   producer?: string | null;
   alcohol?: string | null;
   country?: string | null;
+  food_pairing?: string | null;
 }

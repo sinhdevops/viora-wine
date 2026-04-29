@@ -28,7 +28,7 @@ type Product = {
 	discount_percentage: number;
 	category: string;
 	stock: number;
-	is_hot: boolean;
+	tag?: string | null;
 	created_at: string;
 };
 
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
 	useEffect(() => {
 		const supabase = createClient();
 		Promise.all([
-			supabase.from("products").select("id,name,thumbnail_url,price,discount_percentage,category,stock,is_hot,created_at").order("created_at", { ascending: false }),
+			supabase.from("products").select("id,name,thumbnail_url,price,discount_percentage,category,stock,tag,created_at").order("created_at", { ascending: false }),
 			supabase.from("events").select("id,name,thumbnail_url,category,date,created_at").order("created_at", { ascending: false }),
 			supabase.from("hero_banners").select("id,is_active"),
 		]).then(([p, e, b]) => {
@@ -176,7 +176,7 @@ export default function AdminDashboard() {
 
 	// ── Computed stats ──
 	const activeBanners = banners.filter((b) => b.is_active).length;
-	const hotProducts = products.filter((p) => p.is_hot).length;
+	const hotProducts = products.filter((p) => !!p.tag).length;
 	const outOfStock = products.filter((p) => p.stock === 0).length;
 	const totalStockValue = products.reduce((sum, p) => {
 		const finalPrice = p.price * (1 - p.discount_percentage / 100);
@@ -348,9 +348,9 @@ export default function AdminDashboard() {
 											<div className="min-w-0 flex-1">
 												<div className="flex items-center gap-2">
 													<p className="truncate text-sm font-semibold text-gray-900">{p.name}</p>
-													{p.is_hot && (
-														<span className="shrink-0 rounded-full bg-orange-50 px-1.5 py-0.5 text-[10px] font-bold text-orange-500">
-															HOT
+													{p.tag && (
+														<span className="shrink-0 rounded-full bg-red-50 px-1.5 py-0.5 text-[10px] font-bold text-brand-primary uppercase">
+															{p.tag.replace("_", " ")}
 														</span>
 													)}
 												</div>

@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
   const { data: product } = await supabase
     .from("products")
-    .select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, rating, sold_count, volume, grape_variety, wine_type, producer, alcohol, country")
+    .select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, tag, rating, sold_count, volume, grape_variety, wine_type, producer, alcohol, country")
     .eq("slug", slug)
     .single();
 
@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
 
   const { data: relatedRaw } = await supabase
     .from("products")
-    .select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, is_hot, rating, sold_count, country, wine_type")
+    .select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, tag, rating, sold_count, country, wine_type")
     .eq("category", product.category)
     .neq("id", product.id)
     .limit(30);
@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
       _score:
         (p.country && p.country === product.country ? 3 : 0) +
         (p.wine_type && p.wine_type === product.wine_type ? 2 : 0) +
-        (p.is_hot ? 1 : 0) +
+        (p.tag ? 1 : 0) +
         (p.sold_count ?? 0) / 1000,
     }))
     .sort((a, b) => b._score - a._score)

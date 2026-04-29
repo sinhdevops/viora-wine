@@ -1,6 +1,5 @@
-import HeroBanner from "@/components/page/home/hero-banner";
-import Features from "@/components/page/home/features";
-import FeaturedCategories from "@/components/page/home/featured-categories";
+import HeroBannerNew from "@/components/page/home/hero-banner-new";
+import CategoryQuickNav from "@/components/page/home/category-quick-nav";
 import BelowFoldSections from "@/components/page/home/below-fold-sections";
 import { createClient } from "@/utils/supabase/server";
 import { getTranslations } from "next-intl/server";
@@ -19,12 +18,7 @@ export default async function HomePageContent({ locale }: { locale: string }) {
 	const t = await getTranslations({ locale, namespace: "home" });
 	const supabase = await createClient();
 
-	const [{ data: banners }, { data: suKienEvents }, { data: kienThucEvents }] = await Promise.all([
-		supabase
-			.from("hero_banners")
-			.select("id, image_url")
-			.eq("is_active", true)
-			.order("created_at", { ascending: true }),
+	const [{ data: suKienEvents }, { data: kienThucEvents }] = await Promise.all([
 		supabase
 			.from("events")
 			.select("id, slug, name, description, thumbnail_url, date, category")
@@ -42,12 +36,19 @@ export default async function HomePageContent({ locale }: { locale: string }) {
 	return (
 		<div className="flex flex-col gap-0 pb-24">
 			<h1 className="sr-only">{t("meta_title")}</h1>
-			<HeroBanner banners={banners ?? []} />
-			<Features />
-			<div className="mb-25">
-				<FeaturedCategories />
+			{/* Banner + quicknav overlap */}
+			<div className="relative">
+				<HeroBannerNew />
+				<div className="absolute right-0 bottom-[-170px] left-0 z-10 mx-auto max-w-360 px-4 sm:px-6 lg:bottom-[-120px] lg:px-8">
+					<CategoryQuickNav />
+				</div>
 			</div>
-			<BelowFoldSections suKienEvents={(suKienEvents ?? []) as EventItem[]} kienThucEvents={(kienThucEvents ?? []) as EventItem[]} />
+			{/* Padding to compensate for the overlapping quicknav */}
+			<div className="pt-40" />
+			<BelowFoldSections
+				suKienEvents={(suKienEvents ?? []) as EventItem[]}
+				kienThucEvents={(kienThucEvents ?? []) as EventItem[]}
+			/>
 		</div>
 	);
 }

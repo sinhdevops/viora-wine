@@ -106,7 +106,7 @@ export default async function NewsDetailPage({ params }: Props) {
         .limit(3),
       supabase
         .from('products')
-        .select('id, slug, name, description, thumbnail_url, price, discount_percentage, category, stock, is_hot')
+        .select('id, slug, name, description, thumbnail_url, price, discount_percentage, category, stock, tag')
         .eq('category', 'wine')
         .gt('stock', 0)
         .order('created_at', { ascending: false })
@@ -123,7 +123,7 @@ export default async function NewsDetailPage({ params }: Props) {
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
-    headline: newsItem.title[locale as 'vi' | 'en'],
+    headline: newsItem.title['vi'],
     image: [newsItem.image],
     datePublished: newsItem.date,
     dateModified: newsItem.date,
@@ -167,7 +167,7 @@ export default async function NewsDetailPage({ params }: Props) {
       {
         '@type': 'ListItem',
         position: 3,
-        name: newsItem.title[locale as 'vi' | 'en'],
+        name: newsItem.title['vi'],
         item: blogPostUrl,
       },
     ],
@@ -201,7 +201,7 @@ export default async function NewsDetailPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <h1 className="sr-only">{newsItem.title[locale as 'vi' | 'en']}</h1>
+      <h1 className="sr-only">{newsItem.title['vi']}</h1>
       <NewsDetailPageContent
         newsItem={newsItem}
         relatedNews={relatedNews}

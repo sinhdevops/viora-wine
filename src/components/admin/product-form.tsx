@@ -16,6 +16,8 @@ import {
 	GRAPE_VARIETIES,
 	COUNTRIES,
 	PRODUCERS,
+	TAGS,
+	TAG_LABELS,
 	productSchema,
 	type ProductFormValues,
 } from "@/lib/schemas/product-schema";
@@ -74,7 +76,7 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 			country: "",
 			producer: "",
 			stock: 0,
-			is_hot: false,
+			tag: null,
 			rating: 5.0,
 			sold_count: 0,
 			seo_title: "",
@@ -244,16 +246,14 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 						/>
 						{errors.sold_count && <p className={cls.error}>{errors.sold_count.message}</p>}
 					</div>
-					<div className="flex items-center gap-3 pt-6">
-						<input
-							type="checkbox"
-							id="is_hot"
-							{...register("is_hot")}
-							className="h-4 w-4 rounded border-gray-300 accent-brand-primary"
-						/>
-						<label htmlFor="is_hot" className="text-sm font-medium text-gray-700">
-							Sản phẩm nổi bật (Hot)
-						</label>
+					<div>
+						<label className={cls.label}>Badge / Tag</label>
+						<select {...register("tag")} className={cls.input + " w-44"}>
+							<option value="">-- Không có --</option>
+							{TAGS.map((t) => (
+								<option key={t} value={t}>{TAG_LABELS[t]}</option>
+							))}
+						</select>
 					</div>
 				</div>
 			</div>

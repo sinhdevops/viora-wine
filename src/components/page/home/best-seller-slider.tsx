@@ -21,7 +21,9 @@ export default function BestSellerSlider() {
 	useEffect(() => {
 		supabase
 			.from("products")
-			.select("id, slug, name, description, thumbnail_url, price, discount_percentage, category, stock, is_hot, content, rating, sold_count")
+			.select(
+				"id, slug, name, description, thumbnail_url, price, discount_percentage, category, stock, tag, content, rating, sold_count",
+			)
 			.eq("category", "wine")
 			.gt("sold_count", 0)
 			.order("sold_count", { ascending: false })
@@ -35,7 +37,7 @@ export default function BestSellerSlider() {
 		<section className="bg-white">
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Title */}
-				<h2 className="mb-7.5 text-center text-xl font-semibold uppercase tracking-[0.15em] md:text-[28px]">
+				<h2 className="mb-3 text-xl font-semibold tracking-[0.15em] uppercase md:text-[28px]">
 					{t("bestseller_title")}
 				</h2>
 
@@ -44,7 +46,7 @@ export default function BestSellerSlider() {
 					{/* Prev button */}
 					<button
 						onClick={() => swiperRef.current?.slidePrev()}
-						className="absolute top-1/2 -left-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500   transition-all hover:border-gray-400 hover:text-gray-900 md:-left-5"
+						className="absolute top-1/2 -left-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500 transition-all hover:border-gray-400 hover:text-gray-900 md:-left-5"
 					>
 						<ChevronLeft size={18} />
 					</button>
@@ -65,7 +67,7 @@ export default function BestSellerSlider() {
 					>
 						{products.map((product) => (
 							<SwiperSlide key={product.id}>
-								<CardProduct product={product} isHot />
+								<CardProduct product={product} />
 							</SwiperSlide>
 						))}
 					</Swiper>
@@ -73,7 +75,7 @@ export default function BestSellerSlider() {
 					{/* Next button */}
 					<button
 						onClick={() => swiperRef.current?.slideNext()}
-						className="absolute top-1/2 -right-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500   transition-all hover:border-gray-400 hover:text-gray-900 md:-right-5"
+						className="absolute top-1/2 -right-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500 transition-all hover:border-gray-400 hover:text-gray-900 md:-right-5"
 					>
 						<ChevronRight size={18} />
 					</button>

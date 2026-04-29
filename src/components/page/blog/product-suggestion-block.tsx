@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { formatCurrency } from "@/utils/format-currency";
 import { SiZalo } from "react-icons/si";
 import { HiStar } from "react-icons/hi";
@@ -21,7 +21,6 @@ function ProductCard({
   product: DbProduct;
   ctaLabel: string;
 }) {
-  const locale = useLocale();
   const t = useTranslations("common");
 
   const originalPrice =
@@ -83,11 +82,11 @@ function ProductCard({
             <>
               {originalPrice && (
                 <span className="text-[12px] text-gray-400 line-through">
-                  {formatCurrency(originalPrice, locale)}
+                  {formatCurrency(originalPrice)}
                 </span>
               )}
               <span className="text-[14px] font-bold text-brand-primary">
-                {formatCurrency(product.price, locale)}
+                {formatCurrency(product.price)}
               </span>
             </>
           )}

@@ -83,16 +83,13 @@ export const ProductTableRow = React.memo(({
 				</div>
 			</td>
 
-			{/* Hot */}
+			{/* Tag */}
 			<td className="px-5 py-4">
-				{product.is_hot && (
-					<div className="flex items-center gap-1.5">
-						<span className="h-2 w-2 rounded-full bg-orange-400" />
-						<span className="text-xs font-bold uppercase tracking-wider text-orange-500">
-							Hot
-						</span>
-					</div>
-				)}
+				{product.tag ? (
+					<span className="rounded-full bg-red-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-brand-primary">
+						{product.tag.replace("_", " ")}
+					</span>
+				) : null}
 			</td>
 
 			{/* Actions */}

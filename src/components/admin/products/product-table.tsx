@@ -63,7 +63,7 @@ export const ProductTable = React.memo(({
 							<th className="px-5 py-4">Category</th>
 							<th className="px-5 py-4">Price</th>
 							<th className="px-5 py-4">Stock</th>
-							<th className="px-5 py-4">Hot</th>
+							<th className="px-5 py-4">Tag</th>
 							<th className="px-5 py-4 text-right">Actions</th>
 						</tr>
 					</thead>

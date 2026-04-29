@@ -1,271 +1,214 @@
 "use client";
 
+import type React from "react";
 import type { DbProduct } from "@/@types/product";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { formatCurrency } from "@/utils/format-currency";
-import { useZaloLink } from "@/hooks/use-zalo-link";
-import { ChevronRight, ChevronLeft, Phone, ShieldCheck, Truck, BadgeCheck, Headset, Droplets, Grape, Wine, Building2, Percent, Globe } from "lucide-react";
-import CardProduct from "@/components/page/card-product";
-import { useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import type { Swiper as SwiperType } from "swiper";
-import "swiper/css";
-import { WINE_IMAGES } from "../../../../../public/statics/images";
-import { useLocale } from "next-intl";
+import {
+	PhoneCall,
+	Star,
+	AlertCircle,
+	MessageCircle,
+	MapPin,
+	Leaf,
+	Wine,
+	FlaskConical,
+	Building2,
+	Percent,
+	Globe,
+	Utensils,
+} from "lucide-react";
 import { WINE_TYPE_LABELS } from "@/lib/schemas/product-schema";
-import { sanitizeHtmlContent, ensureImgAlt } from "@/utils/content-processor";
-import FaqSection from "@/components/page/blog/faq-section";
-import { DEFAULT_FAQ_ITEMS } from "@/components/page/blog/faq-data";
+import Button from "@/components/ui/button";
+import ProductImageGallery from "@/components/page/product/product-image-gallery";
+import ProductStockUrgency from "@/components/page/product/product-stock-urgency";
+import ProductTrustBadges from "@/components/page/product/product-trust-badges";
+import ProductSpecsCard from "@/components/page/product/product-specs-card";
+import ProductAccordion from "@/components/page/product/product-accordion";
+import ProductRelatedSlider from "@/components/page/product/product-related-slider";
 
 interface Props {
-  product: DbProduct;
-  related: DbProduct[];
+	product: DbProduct;
+	related: DbProduct[];
 }
 
 export default function ProductDetailPageContent({ product, related }: Props) {
-  const locale = useLocale();
-  const t = useTranslations("product");
-  const { getZaloLink } = useZaloLink();
-  const swiperRef = useRef<SwiperType | null>(null);
+	const t = useTranslations("product");
 
-  const originalPrice =
-    product.discount_percentage > 0
-      ? Math.round(product.price / (1 - product.discount_percentage / 100) / 100) * 100
-      : null;
+	const originalPrice =
+		product.discount_percentage > 0
+			? Math.round(product.price / (1 - product.discount_percentage / 100) / 100) * 100
+			: null;
 
-  const commitments = [
-    { icon: ShieldCheck, text: t("commitment_authentic") },
-    { icon: Truck, text: t("commitment_delivery") },
-    { icon: BadgeCheck, text: t("commitment_payment") },
-    { icon: Headset, text: t("commitment_support") },
-  ];
+	const wineTypeLabel = product.wine_type
+		? (WINE_TYPE_LABELS[product.wine_type as keyof typeof WINE_TYPE_LABELS] ?? product.wine_type)
+		: null;
 
-  const categoryLabel =
-    t.raw(`category_labels.${product.category}` as Parameters<typeof t.raw>[0]) ??
-    product.category;
+	const images = [product.thumbnail_url, product.thumbnail_url, product.thumbnail_url];
+	const stockPercent = Math.min(95, Math.max(15, (product.stock / 20) * 100));
+	const showUrgency = product.stock > 0 && product.stock < 25;
 
-  const wineTypeLabel = product.wine_type
-    ? (WINE_TYPE_LABELS[product.wine_type as keyof typeof WINE_TYPE_LABELS] ?? product.wine_type)
-    : null;
+	const specs: { label: string; value: string; icon: React.ElementType }[] = [
+		{ label: "Xuất xứ", value: product.country ?? "—", icon: MapPin },
+		{ label: t("spec_grape"), value: product.grape_variety ?? "—", icon: Leaf },
+		{ label: t("spec_wine_type"), value: wineTypeLabel ?? "—", icon: Wine },
+		{ label: t("spec_volume"), value: product.volume ?? "—", icon: FlaskConical },
+		{ label: t("spec_producer"), value: product.producer ?? "—", icon: Building2 },
+		{ label: t("spec_alcohol"), value: product.alcohol ?? "—", icon: Percent },
+		{ label: t("spec_country"), value: product.country ?? "—", icon: Globe },
+		{ label: "Kết hợp món ăn", value: product.food_pairing ?? "—", icon: Utensils },
+	];
 
-  const specs = [
-    { icon: Droplets,  label: t("spec_volume"),    value: product.volume       ?? "750 ml" },
-    { icon: Grape,     label: t("spec_grape"),     value: product.grape_variety ?? "Shiraz" },
-    { icon: Wine,      label: t("spec_wine_type"), value: wineTypeLabel         ?? "Rượu vang đỏ" },
-    { icon: Building2, label: t("spec_producer"),  value: product.producer      ?? "Premium Australian Wine PTY LTD" },
-    { icon: Percent,   label: t("spec_alcohol"),   value: product.alcohol       ?? "17%" },
-    { icon: Globe,     label: t("spec_country"),   value: product.country       ?? "Úc" },
-  ];
+	const accordionSections = [
+		{
+			id: "usage",
+			title: "Hướng dẫn sử dụng",
+			content: `<p>Nên thưởng thức ở nhiệt độ 16–18°C. Mở nắp trước 30 phút để rượu tiếp xúc không khí. Rót vào ly vang rộng miệng để phát huy hương thơm tốt nhất.</p>`,
+		},
+		{ id: "reviews", title: "Đánh giá & nhận xét", content: null },
+		{
+			id: "policy",
+			title: "Chính sách giao hàng và đổi trả",
+			content: `<p>Miễn phí vận chuyển cho đơn hàng từ 1 thùng hoặc từ 1 triệu trở lên nội thành tại các chi nhánh trên toàn quốc. Giao hàng liên tỉnh vui lòng liên hệ.</p><p style="margin-top:8px">Chúng tôi đổi trả trong vòng 7 ngày miễn phí đến khi nào quý vị ưng ý.</p>`,
+		},
+	];
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Breadcrumb */}
-      <div className="border-b border-gray-100 bg-white">
-        <div className="mx-auto max-w-360 px-4 py-3 sm:px-6 lg:px-8">
-          <nav className="flex items-center gap-1.5 text-[12px] text-gray-400" aria-label="breadcrumb">
-            <Link href="/" className="hover:text-gray-700">{t("breadcrumb_home")}</Link>
-            <ChevronRight size={12} />
-            <Link href="/products" className="hover:text-gray-700">{t("breadcrumb_products")}</Link>
-            <ChevronRight size={12} />
-            <span className="line-clamp-1 text-gray-700">{product.name}</span>
-          </nav>
-        </div>
-      </div>
+	return (
+		<div className="min-h-screen bg-white pb-24 lg:pb-0">
+			{/* Breadcrumb */}
+			<div className="border-b border-gray-100 bg-gray-50">
+				<div className="mx-auto max-w-360 px-4 py-3 sm:px-6 lg:px-8">
+					<nav className="flex items-center gap-1.5 text-[12px] text-gray-400" aria-label="breadcrumb">
+						<Link href="/" className="transition-colors hover:text-gray-600">
+							{t("breadcrumb_home")}
+						</Link>
+						<span>/</span>
+						<Link href="/products" className="transition-colors hover:text-gray-600">
+							{t("breadcrumb_products")}
+						</Link>
+						<span>/</span>
+						<span className="line-clamp-1 text-gray-600">{product.name}</span>
+					</nav>
+				</div>
+			</div>
 
-      {/* Main content */}
-      <div className="mx-auto max-w-360 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
+			{/* Main product section */}
+			<div className="mx-auto max-w-360 px-4 pt-4 pb-6 sm:px-6 lg:px-8 lg:py-12">
+				<div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-14">
+					<ProductImageGallery images={images} productName={product.name} />
 
-          {/* LEFT: Image */}
-          <div className="lg:sticky lg:top-24">
-            <div className="relative h-full min-h-[420px] overflow-hidden rounded-2xl bg-[#F5F5F5]">
-              <Image
-                src={product.thumbnail_url}
-                alt={product.name}
-                fill
-                className="object-contain p-8"
-                priority
-              />
-              {product.is_hot && (
-                <div className="absolute top-0 -left-2.5">
-                  <Image src={WINE_IMAGES.hot} alt="" aria-hidden="true" />
-                </div>
-              )}
-              {product.discount_percentage > 0 && (
-                <div className="absolute top-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-brand-primary text-[12px] font-black text-white">
-                  -{product.discount_percentage}%
-                </div>
-              )}
-            </div>
-          </div>
+					{/* RIGHT — product info */}
+					<div className="flex flex-col gap-0">
+						{product.tag && (
+							<div className="border-brand-primary mb-3 inline-flex h-7.5 w-fit items-center rounded-md border px-2.5">
+								<span className="text-brand-primary font-semibold capitalize">{product.tag.replace("_", " ")}</span>
+							</div>
+						)}
 
-          {/* RIGHT: Info */}
-          <div className="flex flex-col">
-            {/* Category */}
-            <span className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-brand-primary">
-              {String(categoryLabel)}
-            </span>
+						<h1 className="mb-3 text-[20px] leading-snug font-semibold text-gray-900 lg:text-[28px]">
+							{product.name}
+						</h1>
 
-            {/* Name */}
-            <h1 className="mb-5 text-2xl font-bold leading-snug text-gray-900 sm:text-3xl lg:text-[32px]">
-              {product.name}
-            </h1>
+						{/* Rating + sold */}
+						<div className="mb-3 flex flex-wrap items-center gap-2.5">
+							<div className="flex items-center gap-1">
+								{Array.from({ length: 5 }).map((_, i) => (
+									<Star
+										key={i}
+										size={14}
+										className={
+											i < Math.round(product.rating ?? 4.8)
+												? "fill-yellow-400 text-yellow-400"
+												: "fill-gray-200 text-gray-200"
+										}
+									/>
+								))}
+								<span className="ml-1 text-[12px] font-semibold text-gray-600 lg:text-[13px]">
+									{(product.rating ?? 4.8).toFixed(1)}/5
+								</span>
+							</div>
+							<span className="h-3.5 w-px bg-gray-200" />
+							<span className="text-[12px] text-gray-400 lg:text-[13px]">
+								Đã bán {(product.sold_count ?? 0).toLocaleString("vi-VN")} chai
+							</span>
+						</div>
 
-            {/* Price */}
-            <div className="mb-6 flex items-baseline gap-3">
-              {product.price === 0 ? (
-                <span className="text-3xl font-black text-brand-primary">
-                  Liên hệ
-                </span>
-              ) : (
-                <>
-                  <span className="text-3xl font-black text-brand-primary">
-                    {formatCurrency(product.price, locale)}
-                  </span>
-                  {originalPrice && (
-                    <span className="text-lg text-gray-400 line-through">
-                      {formatCurrency(originalPrice, locale)}
-                    </span>
-                  )}
-                </>
-              )}
-            </div>
+						{/* Price */}
+						<div className="mb-4 flex flex-wrap items-baseline gap-2.5 border-b border-gray-100 pb-4">
+							{product.price === 0 ? (
+								<span className="text-brand-primary text-[28px] font-black lg:text-[32px]">
+									Liên hệ
+								</span>
+							) : (
+								<>
+									<span className="text-brand-primary text-[28px] font-black lg:text-[32px]">
+										{formatCurrency(product.price)}
+									</span>
+									{originalPrice && (
+										<>
+											<span className="text-[14px] text-gray-300 line-through lg:text-[16px]">
+												{formatCurrency(originalPrice)}
+											</span>
+											<span className="h-4 w-px self-center bg-gray-300" />
+										</>
+									)}
+									<span className="text-[12px] text-gray-400 lg:text-[13px]">
+										Freeship toàn quốc hôm nay
+									</span>
+								</>
+							)}
+						</div>
 
-            {/* Stock status */}
-            <div className="mb-2 flex items-center gap-2">
-              <span className={`h-2 w-2 rounded-full ${product.stock > 0 ? "bg-green-500" : "bg-red-400"}`} />
-              <span className={`text-[13px] font-medium ${product.stock > 0 ? "text-green-600" : "text-red-500"}`}>
-                {product.stock > 0
-                  ? `${t("in_stock")} (${product.stock})`
-                  : t("out_of_stock")}
-              </span>
-            </div>
+						{showUrgency && <ProductStockUrgency stock={product.stock} stockPercent={stockPercent} />}
 
-            {/* Specs grid */}
-            {specs.length > 0 && (
-              <div className="mb-8">
-                <div className="grid grid-cols-3">
-                  {specs.map(({ icon: Icon, label, value }) => (
-                    <div key={label} className="flex items-start gap-2.5 px-4 py-3.5">
-                      <Icon size={16} className="mt-0.5 shrink-0 text-brand-primary" strokeWidth={1.8} />
-                      <div className="min-w-0">
-                        <p className="text-[13px] font-semibold text-gray-600">{label}</p>
-                        <p className="mt-0.5 text-[13px] font-semibold leading-snug text-brand-primary">
-                          {value}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+						{/* CTA buttons — desktop only; mobile uses sticky bottom bar */}
+						<div className="mb-5 grid grid-cols-2 gap-3">
+							<Button size="lg" leftIcon={MessageCircle}>
+								Tư vấn đặt hàng
+							</Button>
+							<Button size="lg" variant="outline-primary" leftIcon={PhoneCall}>
+								Gọi điện đặt hàng
+							</Button>
+						</div>
 
-            {/* CTA Buttons */}
-            <div className="mb-8 grid grid-cols-2 gap-3">
-              <a
-                href={getZaloLink(product.name)}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => {
-                  // Fire-and-forget: increment sold_count, does not block Zalo opening
-                  fetch(`/api/products/${product.id}/increment-sold`, { method: 'POST' });
-                }}
-                className="flex items-center justify-center gap-2 rounded-xl bg-brand-primary py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#A30000] active:scale-95"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1 23l6.71-1.97C9.02 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" />
-                </svg>
-                {t("chat_zalo")}
-              </a>
-              <a
-                href="tel:0901234567"
-                className="flex items-center justify-center gap-2 rounded-xl border-2 border-gray-200 py-3.5 text-sm font-bold text-gray-700 transition-colors hover:border-gray-300 hover:bg-gray-50 active:scale-95"
-              >
-                <Phone size={18} />
-                {t("call")}
-              </a>
-            </div>
+						<ProductTrustBadges />
 
-            {/* Commitments */}
-            <div className="grid grid-cols-2 gap-3 rounded-2xl bg-gray-50 p-5">
-              {commitments.map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-2.5">
-                  <Icon size={16} className="shrink-0 text-brand-primary" strokeWidth={2} />
-                  <span className="text-[12px] font-medium text-gray-600">{text}</span>
-                </div>
-              ))}
-            </div>
+						{/* Age / safety warning */}
+						<div className="bg-brand-primary/16 flex items-start gap-2.5 rounded-xl px-4 py-3">
+							<AlertCircle
+								size={18}
+								className="text-brand-primary mt-0.5 shrink-0 lg:size-[22px]"
+								strokeWidth={2}
+							/>
+							<p className="text-brand-primary text-[12px] leading-relaxed lg:text-[13px]">
+								Sản phẩm không dành cho người dưới 18 tuổi và phụ nữ đang mang thai. Khi uống rượu bia
+								không lái xe!
+							</p>
+						</div>
+					</div>
+				</div>
 
-          </div>
-        </div>
+				{/* Below fold — Specs + Accordion */}
+				<div className="mt-8 grid grid-cols-1 gap-6 lg:mt-14 lg:grid-cols-[260px_1fr] lg:gap-8">
+					<ProductSpecsCard specs={specs} />
+					<ProductAccordion productContent={product.content} sections={accordionSections} />
+				</div>
 
-        {/* Content — full width row */}
-        {product.content && (
-          <div className="mt-8 border-t border-gray-100 pt-6">
-            <p className="mb-3 text-lg font-bold text-gray-700">
-              {t("description_label")}
-            </p>
-            <div
-              className="prose max-w-none wrap-break-word leading-loose text-gray-700"
-              dangerouslySetInnerHTML={{ __html: ensureImgAlt(sanitizeHtmlContent(product.content), product.name) }}
-            />
-          </div>
-        )}
+				<ProductRelatedSlider related={related} />
+			</div>
 
-        {/* FAQ */}
-        <div className="mt-14">
-          <FaqSection title="Những câu hỏi thường gặp" items={DEFAULT_FAQ_ITEMS} />
-        </div>
-
-        {/* Related products */}
-        {related.length > 0 && (
-          <div className="mt-14 border-t border-gray-100 pt-10">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-extrabold text-gray-900">{t("related")}</h2>
-              <Link href="/products" className="text-[13px] font-medium text-brand-primary hover:underline">
-                {t("view_all")}
-              </Link>
-            </div>
-            <div className="relative">
-              <button
-                onClick={() => swiperRef.current?.slidePrev()}
-                aria-label="Previous"
-                className="absolute top-1/2 -left-4 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500   transition-all hover:border-gray-400 hover:text-gray-900 md:-left-5"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <Swiper
-                modules={[Navigation]}
-                onSwiper={(s) => (swiperRef.current = s)}
-                spaceBetween={14}
-                slidesPerView={2}
-                breakpoints={{
-                  640: { slidesPerView: 3, spaceBetween: 16 },
-                  1024: { slidesPerView: 4, spaceBetween: 20 },
-                  1280: { slidesPerView: 5, spaceBetween: 20 },
-                }}
-                className="px-1! py-4!"
-              >
-                {related.map((p) => (
-                  <SwiperSlide key={p.id}>
-                    <CardProduct product={p} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-              <button
-                onClick={() => swiperRef.current?.slideNext()}
-                aria-label="Next"
-                className="absolute top-1/2 -right-4 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500   transition-all hover:border-gray-400 hover:text-gray-900 md:-right-5"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+			{/* Sticky mobile CTA bar */}
+			<div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white px-4 py-3 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] lg:hidden">
+				<div className="grid grid-cols-2 gap-3">
+					<Button leftIcon={MessageCircle} className="h-12 text-[13px]">
+						Tư vấn đặt hàng
+					</Button>
+					<Button variant="outline-primary" leftIcon={PhoneCall} className="h-12 text-[13px]">
+						Gọi điện đặt hàng
+					</Button>
+				</div>
+			</div>
+		</div>
+	);
 }
