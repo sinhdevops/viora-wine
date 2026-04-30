@@ -57,7 +57,7 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 		{ label: t("spec_producer"), value: product.producer ?? "—", icon: Building2 },
 		{ label: t("spec_alcohol"), value: product.alcohol ?? "—", icon: Percent },
 		{ label: t("spec_country"), value: product.country ?? "—", icon: Globe },
-		{ label: "Kết hợp món ăn", value: product.food_pairing ?? "—", icon: Utensils },
+		// { label: "Kết hợp món ăn", value: product.food_pairing ?? "—", icon: Utensils },
 	];
 
 	const accordionSections = [
@@ -102,7 +102,9 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 					<div className="flex flex-col gap-0">
 						{product.tag && (
 							<div className="border-brand-primary mb-3 inline-flex h-7.5 w-fit items-center rounded-md border px-2.5">
-								<span className="text-brand-primary font-semibold capitalize">{product.tag.replace("_", " ")}</span>
+								<span className="text-brand-primary font-semibold capitalize">
+									{product.tag.replace("_", " ")}
+								</span>
 							</div>
 						)}
 
