@@ -395,20 +395,28 @@ export default function ProductsPageContent() {
 		router.push(`/products?${params.toString()}`, { scroll: false });
 	};
 
+	const resetPage = () => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.delete("page");
+		router.push(`?${params.toString()}`, { scroll: false });
+	};
+
 	const toggleCountry = (c: string) => {
 		if (c === "__all__") {
 			setSelectedCountries([]);
-			return;
+		} else {
+			setSelectedCountries((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 		}
-		setSelectedCountries((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
+		resetPage();
 	};
 
 	const toggleWineType = (type: string) => {
 		if (type === "__all__") {
 			setSelectedWineTypes([]);
-			return;
+		} else {
+			setSelectedWineTypes((prev) => (prev.includes(type) ? prev.filter((x) => x !== type) : [...prev, type]));
 		}
-		setSelectedWineTypes((prev) => (prev.includes(type) ? prev.filter((x) => x !== type) : [...prev, type]));
+		resetPage();
 	};
 
 	const clearAll = () => {
@@ -589,7 +597,12 @@ export default function ProductsPageContent() {
 								return (
 									<button
 										key={tab.id}
-										onClick={() => setQuickFilter(tab.id)}
+										onClick={() => {
+											setQuickFilter(tab.id);
+											const params = new URLSearchParams(searchParams.toString());
+											params.delete("page");
+											router.push(`?${params.toString()}`, { scroll: false });
+										}}
 										className={`rounded-xl border px-4 py-[9px] leading-[22px] transition-all ${
 											isActive
 												? "border-brand-primary text-brand-primary font-semibold"
