@@ -80,7 +80,7 @@ function ReviewCard({ review }: { review: Review }) {
 					</div>
 				</div>
 				{review.productImage && (
-					<div className="relative h-14 w-10 shrink-0 rounded-md overflow-hidden">
+					<div className="relative h-14 w-10 shrink-0 overflow-hidden rounded-md">
 						<Image src={review.productImage} alt="product" fill className="object-contain" />
 					</div>
 				)}
@@ -95,7 +95,7 @@ export default function TestimonialsSection() {
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-6 flex items-start justify-between gap-4">
-					<h2 className="text-base font-bold tracking-wide text-gray-900 uppercase md:text-lg">
+					<h2 className="text-base font-semibold tracking-wide uppercase md:text-[28px]">
 						Khách hàng nói gì về chúng tôi
 					</h2>
 					<a
@@ -125,7 +125,7 @@ export default function TestimonialsSection() {
 						</SwiperSlide>
 					))}
 				</Swiper>
-				<div className="testimonials-pagination mt-4 flex justify-center gap-1.5 [&_.swiper-pagination-bullet-active]:bg-brand-primary [&_.swiper-pagination-bullet]:bg-gray-300" />
+				<div className="testimonials-pagination [&_.swiper-pagination-bullet-active]:bg-brand-primary mt-4 flex justify-center gap-1.5 [&_.swiper-pagination-bullet]:bg-gray-300" />
 			</div>
 
 			{/* Desktop: grid */}

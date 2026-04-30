@@ -20,8 +20,8 @@ export default function WinePromoBanner() {
 
 			{/* Content */}
 			<div className="relative z-10 mx-auto flex min-h-48 max-w-360 items-center px-8 py-10 sm:min-h-65 sm:px-12 lg:min-h-90 lg:px-16 lg:py-16">
-				<div className="w-full text-center sm:text-left sm:max-w-1/2">
-					<h2 className="mb-3 text-xl font-black leading-tight tracking-tight uppercase md:mb-4 md:text-[28px]">
+				<div className="w-full text-center sm:max-w-1/2 sm:text-left">
+					<h2 className="mb-3 text-xl leading-tight font-semibold tracking-tight uppercase md:mb-4 md:text-[28px]">
 						{t("promo_title")}
 					</h2>
 					<p className="mb-6 text-[13px] leading-relaxed text-gray-700 md:mb-8 md:text-sm lg:text-[16px]">
@@ -29,7 +29,7 @@ export default function WinePromoBanner() {
 					</p>
 					<Link
 						href="/products"
-						className="inline-block rounded-lg bg-brand-primary px-6 py-3 text-xs font-bold tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#A30000] md:px-8 md:py-3.5 md:text-sm"
+						className="bg-brand-primary inline-block rounded-lg px-6 py-3 text-xs font-bold tracking-[0.12em] text-white uppercase transition-colors hover:bg-[#A30000] md:px-8 md:py-3.5 md:text-sm"
 					>
 						{t("all_product")}
 					</Link>

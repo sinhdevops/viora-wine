@@ -13,7 +13,7 @@ interface Props {
 export default function ProductSpecsCard({ specs }: Props) {
 	return (
 		<div className="h-fit rounded-2xl bg-[#EFEFEF] p-6">
-			<h3 className="mb-5 text-[20px] font-black text-gray-900">Thông tin sản phẩm</h3>
+			<h3 className="mb-5 text-[20px] font-semibold text-gray-900">Thông tin sản phẩm</h3>
 			<div className="space-y-5">
 				{specs.map(({ label, value, icon: Icon }) => (
 					<div key={label} className="flex items-start gap-3">

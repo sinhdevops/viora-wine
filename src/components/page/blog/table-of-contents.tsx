@@ -123,7 +123,7 @@ export default function TableOfContents({ headings, tocTitle, mode }: TableOfCon
 		<div className="sticky top-35 max-h-[calc(100vh-148px)] overflow-y-auto rounded-xl border border-gray-200 bg-white">
 			<div className="flex items-center gap-2 border-b border-gray-100 px-5 py-4">
 				<List size={14} className="text-brand-primary" />
-				<span className="text-[11px] font-black tracking-widest text-gray-500 uppercase">{tocTitle}</span>
+				<span className="text-[11px] font-semibold tracking-widest text-gray-500 uppercase">{tocTitle}</span>
 			</div>
 			<nav className="px-3 py-3">
 				<TocList headings={headings} activeId={activeId} onClickItem={handleClick} />

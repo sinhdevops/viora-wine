@@ -102,7 +102,7 @@ function FilterSidebar({
 		<div>
 			{/* Header */}
 			<div className="mb-5 flex items-center justify-between">
-				<span className="text-[13px] font-black tracking-[0.15em] text-gray-900 uppercase">Bộ lọc</span>
+				<span className="text-[13px] font-semibold tracking-[0.15em] text-gray-900 uppercase">Bộ lọc</span>
 				{hasActive && (
 					<button
 						onClick={onClearAll}
@@ -287,14 +287,14 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
 			className="flex items-center justify-center gap-1.5 pt-8 pb-6"
 		>
 			{currentPage === 1 ? (
-				<div className="flex cursor-not-allowed items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-black tracking-[0.15em] text-gray-500 uppercase opacity-30">
+				<div className="flex cursor-not-allowed items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-semibold tracking-[0.15em] text-gray-500 uppercase opacity-30">
 					<HiChevronLeft size={13} />
 					<span className="hidden sm:inline">{t("pagination.prev")}</span>
 				</div>
 			) : (
 				<Link
 					href={getPageUrl(currentPage - 1) as any}
-					className="hover:bg-brand-primary hover:border-brand-primary hover:shadow-brand-primary/30 flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-black tracking-[0.15em] text-gray-500 uppercase transition-all duration-200 hover:text-white hover:shadow-md"
+					className="hover:bg-brand-primary hover:border-brand-primary hover:shadow-brand-primary/30 flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-semibold tracking-[0.15em] text-gray-500 uppercase transition-all duration-200 hover:text-white hover:shadow-md"
 				>
 					<HiChevronLeft size={13} />
 					<span className="hidden sm:inline">{t("pagination.prev")}</span>
@@ -314,7 +314,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
 						<Link
 							key={page}
 							href={getPageUrl(page) as any}
-							className={`flex h-9 w-9 items-center justify-center rounded-full text-[11px] font-black transition-all duration-200 ${
+							className={`flex h-9 w-9 items-center justify-center rounded-full text-[11px] font-semibold transition-all duration-200 ${
 								page === currentPage
 									? "bg-brand-primary shadow-brand-primary/40 scale-105 text-white shadow-md"
 									: "hover:text-brand-primary hover:bg-brand-primary/8 hover:border-brand-primary/20 border border-transparent text-gray-500"
@@ -327,14 +327,14 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
 			</div>
 
 			{currentPage === totalPages ? (
-				<div className="flex cursor-not-allowed items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-black tracking-[0.15em] text-gray-500 uppercase opacity-30">
+				<div className="flex cursor-not-allowed items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-semibold tracking-[0.15em] text-gray-500 uppercase opacity-30">
 					<span className="hidden sm:inline">{t("pagination.next")}</span>
 					<HiChevronRight size={13} />
 				</div>
 			) : (
 				<Link
 					href={getPageUrl(currentPage + 1) as any}
-					className="hover:bg-brand-primary hover:border-brand-primary hover:shadow-brand-primary/30 flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-black tracking-[0.15em] text-gray-500 uppercase transition-all duration-200 hover:text-white hover:shadow-md"
+					className="hover:bg-brand-primary hover:border-brand-primary hover:shadow-brand-primary/30 flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-semibold tracking-[0.15em] text-gray-500 uppercase transition-all duration-200 hover:text-white hover:shadow-md"
 				>
 					<span className="hidden sm:inline">{t("pagination.next")}</span>
 					<HiChevronRight size={13} />
@@ -558,7 +558,7 @@ export default function ProductsPageContent() {
 									<HiAdjustmentsHorizontal size={13} />
 									Lọc
 									{hasSidebarFilters && (
-										<span className="bg-brand-primary flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-black text-white">
+										<span className="bg-brand-primary flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-semibold text-white">
 											{selectedCountries.length +
 												selectedWineTypes.length +
 												(priceRange[0] > 0 || priceRange[1] < MAX_PRICE ? 1 : 0)}
@@ -663,7 +663,7 @@ export default function ProductsPageContent() {
 										<HiX size={11} />
 									</div>
 								</div>
-								<h3 className="mb-3 text-xl font-black tracking-tight text-gray-900 uppercase">
+								<h3 className="mb-3 text-xl font-semibold tracking-tight text-gray-900 uppercase">
 									{t("no_products_title")}
 								</h3>
 								<p className="mb-8 max-w-xs text-sm leading-relaxed text-gray-400">
@@ -671,7 +671,7 @@ export default function ProductsPageContent() {
 								</p>
 								<button
 									onClick={clearAll}
-									className="bg-brand-primary shadow-brand-primary/30 hover:shadow-brand-primary/50 rounded-full px-8 py-3 text-[11px] font-black tracking-[0.2em] text-white uppercase shadow-lg transition-all active:scale-95"
+									className="bg-brand-primary shadow-brand-primary/30 hover:shadow-brand-primary/50 rounded-full px-8 py-3 text-[11px] font-semibold tracking-[0.2em] text-white uppercase shadow-lg transition-all active:scale-95"
 								>
 									{t("clear_all_filters")}
 								</button>
@@ -700,7 +700,7 @@ export default function ProductsPageContent() {
 							className="fixed inset-y-0 right-0 z-60 flex w-[85%] max-w-sm flex-col bg-white shadow-2xl lg:hidden"
 						>
 							<div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
-								<span className="text-[11px] font-black tracking-widest text-gray-900 uppercase">
+								<span className="text-[11px] font-semibold tracking-widest text-gray-900 uppercase">
 									{t("filters")}
 								</span>
 								<button
@@ -734,13 +734,13 @@ export default function ProductsPageContent() {
 										clearAll();
 										setIsFilterOpen(false);
 									}}
-									className="flex-1 rounded-xl border border-gray-200 py-3.5 text-[11px] font-black tracking-widest text-gray-500 uppercase transition-colors hover:bg-gray-100"
+									className="flex-1 rounded-xl border border-gray-200 py-3.5 text-[11px] font-semibold tracking-widest text-gray-500 uppercase transition-colors hover:bg-gray-100"
 								>
 									{t("clear_filters")}
 								</button>
 								<button
 									onClick={() => setIsFilterOpen(false)}
-									className="bg-brand-primary shadow-brand-primary/20 flex-1 rounded-xl py-3.5 text-[11px] font-black tracking-widest text-white uppercase shadow-lg"
+									className="bg-brand-primary shadow-brand-primary/20 flex-1 rounded-xl py-3.5 text-[11px] font-semibold tracking-widest text-white uppercase shadow-lg"
 								>
 									{t("apply")}
 								</button>

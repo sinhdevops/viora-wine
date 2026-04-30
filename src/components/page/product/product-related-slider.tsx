@@ -25,7 +25,7 @@ export default function ProductRelatedSlider({ related }: Props) {
 	return (
 		<div className="mt-14 border-t border-gray-100 pt-10">
 			<div className="mb-6 flex items-center justify-between">
-				<h2 className="text-2xl font-black text-gray-900">{t("related")}</h2>
+				<h2 className="text-2xl font-semibold text-gray-900">{t("related")}</h2>
 				<Link href="/products" className="text-brand-primary text-[13px] font-medium hover:underline">
 					{t("view_all")}
 				</Link>

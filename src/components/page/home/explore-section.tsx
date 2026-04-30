@@ -26,12 +26,10 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8 text-center">
-					<h2 className="mb-2 text-xl font-black uppercase tracking-[0.15em] md:text-[28px]">
+					<h2 className="mb-2 text-xl font-semibold tracking-[0.15em] uppercase md:text-[28px]">
 						{t("explore_title")}
 					</h2>
-					<p className="text-sm text-gray-500 md:text-base">
-						{t("explore_subtitle")}
-					</p>
+					<p className="text-sm text-gray-500 md:text-base">{t("explore_subtitle")}</p>
 				</div>
 
 				{/* Bento grid — desktop */}
@@ -41,7 +39,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 				>
 					{/* Left: tall card spanning 2 rows */}
 					<Link
-						href={{ pathname: '/blog/[slug]', params: { slug: featured.slug } }}
+						href={{ pathname: "/blog/[slug]", params: { slug: featured.slug } }}
 						className="group relative row-span-2 overflow-hidden rounded-xl"
 					>
 						{featured.thumbnail_url && (
@@ -53,7 +51,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 							/>
 						)}
 						<div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-						<p className="absolute right-4 bottom-5 left-4 text-[15px] font-semibold leading-snug text-white">
+						<p className="absolute right-4 bottom-5 left-4 text-[15px] leading-snug font-semibold text-white">
 							{featured.name}
 						</p>
 					</Link>
@@ -62,7 +60,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 					{rest.map((event) => (
 						<Link
 							key={event.id}
-							href={{ pathname: '/blog/[slug]', params: { slug: event.slug } }}
+							href={{ pathname: "/blog/[slug]", params: { slug: event.slug } }}
 							className="group relative overflow-hidden rounded-xl"
 						>
 							{event.thumbnail_url && (
@@ -74,7 +72,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 								/>
 							)}
 							<div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/15 to-transparent" />
-							<p className="absolute right-3 bottom-4 left-3 text-[13px] font-semibold leading-snug text-white">
+							<p className="absolute right-3 bottom-4 left-3 text-[13px] leading-snug font-semibold text-white">
 								{event.name}
 							</p>
 						</Link>
@@ -85,7 +83,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 				<div className="md:hidden">
 					{/* Featured item — full width image overlay */}
 					<Link
-						href={{ pathname: '/blog/[slug]', params: { slug: featured.slug } }}
+						href={{ pathname: "/blog/[slug]", params: { slug: featured.slug } }}
 						className="group relative mb-4 block overflow-hidden rounded-xl"
 						style={{ height: 260 }}
 					>
@@ -98,7 +96,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 							/>
 						)}
 						<div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-						<p className="absolute right-4 bottom-4 left-4 text-[14px] font-semibold leading-snug text-white">
+						<p className="absolute right-4 bottom-4 left-4 text-[14px] leading-snug font-semibold text-white">
 							{featured.name}
 						</p>
 					</Link>
@@ -116,8 +114,8 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 								{rest.map((event) => (
 									<SwiperSlide key={event.id} style={{ height: "auto" }}>
 										<Link
-											href={{ pathname: '/blog/[slug]', params: { slug: event.slug } }}
-											className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-100  "
+											href={{ pathname: "/blog/[slug]", params: { slug: event.slug } }}
+											className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-100"
 										>
 											<div className="relative aspect-video w-full overflow-hidden">
 												{event.thumbnail_url && (
@@ -130,7 +128,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 												)}
 											</div>
 											<div className="p-3">
-												<p className="mb-1 line-clamp-2 min-h-[2.4em] text-[13px] font-semibold leading-snug text-gray-900">
+												<p className="mb-1 line-clamp-2 min-h-[2.4em] text-[13px] leading-snug font-semibold text-gray-900">
 													{event.name}
 												</p>
 												{event.description && (
@@ -138,7 +136,7 @@ export default function ExploreSection({ events }: ExploreSectionProps) {
 														{event.description}
 													</p>
 												)}
-												<span className="text-[12px] font-semibold text-brand-primary group-hover:underline">
+												<span className="text-brand-primary text-[12px] font-semibold group-hover:underline">
 													{t("explore_read_more")}
 												</span>
 											</div>

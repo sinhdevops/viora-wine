@@ -46,7 +46,7 @@ export default function PromoCards() {
 
 							{/* Content */}
 							<div className="flex flex-1 flex-col justify-center gap-2 px-6 py-6">
-								<p className="text-xl leading-tight font-black text-white uppercase">{title}</p>
+								<p className="text-xl leading-tight font-semibold text-white uppercase">{title}</p>
 								<p className="text-[13px] text-white/80">{desc}</p>
 								<Button href="/products" variant="ghost" size="md" className="mt-2 w-fit">
 									Mua ngay

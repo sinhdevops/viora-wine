@@ -139,12 +139,12 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 						{/* Price */}
 						<div className="mb-4 flex flex-wrap items-baseline gap-2.5 border-b border-gray-100 pb-4">
 							{product.price === 0 ? (
-								<span className="text-brand-primary text-[28px] font-black lg:text-[32px]">
+								<span className="text-brand-primary text-[28px] font-semibold lg:text-[32px]">
 									Liên hệ
 								</span>
 							) : (
 								<>
-									<span className="text-brand-primary text-[28px] font-black lg:text-[32px]">
+									<span className="text-brand-primary text-[28px] font-semibold lg:text-[32px]">
 										{formatCurrency(product.price)}
 									</span>
 									{originalPrice && (

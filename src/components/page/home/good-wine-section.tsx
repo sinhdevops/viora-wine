@@ -28,7 +28,9 @@ export default function GoodWineSection() {
 		setLoading(true);
 		const query = supabase
 			.from("products")
-			.select("id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, tag, wine_type, rating, sold_count")
+			.select(
+				"id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, tag, wine_type, rating, sold_count",
+			)
 			.eq("category", "wine")
 			.order("rating", { ascending: false })
 			.order("sold_count", { ascending: false })
@@ -51,12 +53,12 @@ export default function GoodWineSection() {
 			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-5 flex items-center justify-between">
-					<h2 className="text-xl font-black uppercase tracking-tight md:text-[26px]">
+					<h2 className="text-xl font-semibold tracking-tight uppercase md:text-[26px]">
 						{t("good_wine_title")}
 					</h2>
 					<Link
 						href={"/products?cat=wine" as any}
-						className="flex items-center gap-1 text-sm font-medium text-brand-primary hover:underline"
+						className="text-brand-primary flex items-center gap-1 text-sm font-medium hover:underline"
 					>
 						{t("good_wine_view_all")} <ArrowRight size={15} />
 					</Link>
@@ -70,7 +72,7 @@ export default function GoodWineSection() {
 							onClick={() => setActiveTab(tab.id)}
 							className={`shrink-0 pb-3 text-[13px] font-semibold tracking-wider transition-colors ${
 								activeTab === tab.id
-									? "border-b-2 border-brand-primary text-brand-primary"
+									? "border-brand-primary text-brand-primary border-b-2"
 									: "text-gray-500 hover:text-gray-800"
 							}`}
 						>
@@ -94,7 +96,7 @@ export default function GoodWineSection() {
 					</div>
 				) : (
 					<div className="flex flex-col items-center justify-center py-16 text-center">
-						<p className="text-gray-400 text-sm">{t("good_wine_empty")}</p>
+						<p className="text-sm text-gray-400">{t("good_wine_empty")}</p>
 					</div>
 				)}
 			</div>
