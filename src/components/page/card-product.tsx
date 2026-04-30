@@ -40,12 +40,14 @@ export default function CardProduct({ product }: CardProductProps) {
 				<Link href={{ pathname: "/products/[slug]", params: { slug: product.slug } }} className="block">
 					<div className="relative">
 						<div className="relative aspect-220/290 overflow-hidden rounded-xl bg-[#ECECEC]">
-							<Image
-								src={product.thumbnail_url}
-								alt={product.name}
-								fill
-								className="object-contain transition-transform duration-500"
-							/>
+							{product.thumbnail_url && (
+								<Image
+									src={product.thumbnail_url}
+									alt={product.name}
+									fill
+									className="object-contain transition-transform duration-500"
+								/>
+							)}
 						</div>
 
 						{/* Badge */}

@@ -45,7 +45,10 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 		? (WINE_TYPE_LABELS[product.wine_type as keyof typeof WINE_TYPE_LABELS] ?? product.wine_type)
 		: null;
 
-	const images = [product.thumbnail_url, product.thumbnail_url, product.thumbnail_url];
+	const images = [
+		product.thumbnail_url,
+		...(product.images ?? []),
+	].filter(Boolean) as string[];
 	const stockPercent = Math.min(95, Math.max(15, (product.stock / 20) * 100));
 	const showUrgency = product.stock > 0 && product.stock < 25;
 

@@ -22,6 +22,7 @@ import {
 	type ProductFormValues,
 } from "@/lib/schemas/product-schema";
 import { ImageUploader } from "./image-uploader";
+import { MultiImageUploader } from "./multi-image-uploader";
 import { supabase } from "@/lib/supabase-client";
 import { slugify } from "@/utils/slugify";
 
@@ -81,10 +82,12 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 			sold_count: 0,
 			seo_title: "",
 			seo_description: "",
+			images: [],
 		},
 	});
 
 	const thumbnailUrl = watch("thumbnail_url");
+	const galleryImages = watch("images") ?? [];
 	const category     = watch("category");
 	const name         = watch("name");
 	const isWine       = category === "wine";
@@ -326,6 +329,17 @@ export function ProductForm({ initialData, onSuccess }: ProductFormProps) {
 						value={thumbnailUrl}
 						onChange={(url) => setValue("thumbnail_url", url, { shouldValidate: true })}
 						error={errors.thumbnail_url?.message}
+					/>
+				</div>
+
+				<div>
+					<label className={cls.label}>Ảnh gallery (thêm góc chụp)</label>
+					<p className="mb-2 text-[11px] text-gray-400">
+						Ảnh bổ sung hiển thị trong gallery trang chi tiết sản phẩm. Thumbnail ở trên luôn là ảnh đầu tiên.
+					</p>
+					<MultiImageUploader
+						value={galleryImages as string[]}
+						onChange={(urls) => setValue("images", urls, { shouldValidate: true })}
 					/>
 				</div>
 

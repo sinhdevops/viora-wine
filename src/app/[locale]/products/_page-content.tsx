@@ -25,7 +25,7 @@ const QUICK_FILTER_TABS = [
 	{ id: "gift", label: "Quà tặng" },
 ] as const;
 const PRODUCTS_PER_PAGE = 12;
-const MAX_PRICE = 50_000_000;
+const MAX_PRICE = 5_000_000;
 
 const COUNTRY_OPTIONS = ["Pháp", "Ý", "Úc", "Chile"];
 
@@ -136,7 +136,7 @@ function FilterSidebar({
 					</span>
 					<span className="text-[10px] text-gray-300">—</span>
 					<span className="rounded bg-gray-50 px-2 py-0.5 text-[11px] font-semibold text-gray-600">
-						{priceRange[1] >= MAX_PRICE ? "Trên 50 triệu" : formatPrice(priceRange[1])}
+						{priceRange[1] >= MAX_PRICE ? "Trên 5 triệu" : formatPrice(priceRange[1])}
 					</span>
 				</div>
 			</div>

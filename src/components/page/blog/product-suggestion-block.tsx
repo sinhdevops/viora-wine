@@ -36,13 +36,15 @@ function ProductCard({ product, ctaLabel }: { product: DbProduct; ctaLabel: stri
 			{/* Image */}
 			<Link href={{ pathname: "/products/[slug]", params: { slug: product.slug } }} className="block">
 				<div className="relative aspect-[3/2] w-full bg-[#ECECEC]">
-					<Image
-						src={product.thumbnail_url}
-						alt={product.name}
-						fill
-						className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-						sizes="(max-width: 768px) 100vw, 33vw"
-					/>
+					{product.thumbnail_url && (
+						<Image
+							src={product.thumbnail_url}
+							alt={product.name}
+							fill
+							className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+							sizes="(max-width: 768px) 100vw, 33vw"
+						/>
+					)}
 					{product.discount_percentage > 0 && (
 						<span className="bg-brand-primary absolute top-2 left-2 rounded-full px-2 py-0.5 text-[10px] font-bold text-white">
 							-{product.discount_percentage}%

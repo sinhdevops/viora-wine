@@ -20,7 +20,6 @@ function trackContactConversion() {
 	}
 }
 
-
 export default function Header() {
 	const t = useTranslations("common");
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,7 +37,7 @@ export default function Header() {
 		<header className="sticky top-0 z-50">
 			{/* Top bar */}
 			<div className="bg-black text-white">
-				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 					{/* Mobile */}
 					<div className="flex h-10 items-center justify-between gap-3 md:hidden">
 						<a
@@ -110,7 +109,7 @@ export default function Header() {
 
 			{/* Main header */}
 			<div className="border-b border-gray-100 bg-white shadow-sm">
-				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 					<div className="flex h-[76px] items-center justify-between gap-8">
 						{/* Logo */}
 						<Link href="/" className="shrink-0">
@@ -138,8 +137,6 @@ export default function Header() {
 						{/* Right: Search + Language */}
 						<div className="hidden items-center gap-3 md:flex">
 							<SearchBar className="w-64" />
-
-
 						</div>
 
 						{/* Mobile menu toggle */}

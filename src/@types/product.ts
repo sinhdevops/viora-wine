@@ -24,4 +24,5 @@ export interface DbProduct {
   alcohol?: string | null;
   country?: string | null;
   food_pairing?: string | null;
+  images?: string[] | null;
 }

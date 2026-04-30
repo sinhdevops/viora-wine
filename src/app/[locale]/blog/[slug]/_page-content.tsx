@@ -325,7 +325,7 @@ export default function NewsDetailPageContent({
 				<section className="border-t border-gray-100 bg-gray-50 py-12 md:py-16">
 					<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
 						<div className="mb-8 flex items-center justify-between">
-							<h2 className="text-xl font-semibold tracking-tight text-gray-900 uppercase md:text-[24px]">
+							<h2 className="text-xl font-semibold tracking-tight text-gray-900 uppercase md:text-[28px]">
 								{t("related_title")}
 							</h2>
 							<Link

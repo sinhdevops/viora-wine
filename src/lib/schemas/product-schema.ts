@@ -75,6 +75,7 @@ export const productSchema = z.object({
 	seo_description: z.string().optional().nullable(),
 	rating: z.number().min(1, "Tối thiểu 1.0").max(5, "Tối đa 5.0").default(5.0).optional(),
 	sold_count: z.number().int("Phải là số nguyên").min(0, "Phải ≥ 0").default(0).optional(),
+	images: z.array(z.string().url("URL ảnh không hợp lệ")).optional().nullable(),
 });
 
 export type ProductFormValues = z.infer<typeof productSchema>;
