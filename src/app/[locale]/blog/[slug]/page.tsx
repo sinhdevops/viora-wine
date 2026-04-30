@@ -106,10 +106,10 @@ export default async function NewsDetailPage({ params }: Props) {
         .limit(3),
       supabase
         .from('products')
-        .select('id, slug, name, description, thumbnail_url, price, discount_percentage, category, stock, tag')
-        .eq('category', 'wine')
+        .select('id, slug, name, description, thumbnail_url, price, discount_percentage, category, stock, tag, sold_count, rating')
+        .eq('tag', 'best_seller')
         .gt('stock', 0)
-        .order('created_at', { ascending: false })
+        .order('sold_count', { ascending: false })
         .limit(3),
     ]);
 

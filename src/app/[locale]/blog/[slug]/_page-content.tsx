@@ -312,7 +312,7 @@ export default function NewsDetailPageContent({
             {/* ── RIGHT COLUMN: sticky sidebar (30%, desktop only, TOC ≥ 3) ── */}
             {hasToc && (
               <aside className="hidden lg:block">
-                <div className="sticky top-24 space-y-6">
+                <div className="sticky top-35 space-y-6">
                   <TableOfContents
                     headings={headings}
                     tocTitle={t("toc_title")}

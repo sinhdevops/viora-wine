@@ -44,7 +44,7 @@ export default async function HomePageContent({ locale }: { locale: string }) {
 				</div>
 			</div>
 			{/* Padding to compensate for the overlapping quicknav */}
-			<div className="pt-40" />
+			<div className="pt-50 lg:pt-40" />
 			<BelowFoldSections
 				suKienEvents={(suKienEvents ?? []) as EventItem[]}
 				kienThucEvents={(kienThucEvents ?? []) as EventItem[]}

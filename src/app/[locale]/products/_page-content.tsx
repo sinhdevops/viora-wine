@@ -16,7 +16,14 @@ import { WINE_IMAGES } from "../../../../public/statics/images";
 import type { DbProduct } from "@/@types/product";
 import TestimonialsSection from "@/components/page/home/testimonials-section";
 
-const CATEGORY_TAB_IDS = ["all", "wine", "whisky", "spirits", "combo", "gift"] as const;
+const QUICK_FILTER_TABS = [
+	{ id: "all", label: "Tất cả" },
+	{ id: "best_seller", label: "Bán chạy nhất" },
+	{ id: "everyday", label: "Thường ngày" },
+	{ id: "easy_drink", label: "Dễ uống" },
+	{ id: "sweet", label: "Ngọt nhẹ" },
+	{ id: "gift", label: "Quà tặng" },
+] as const;
 const PRODUCTS_PER_PAGE = 12;
 const MAX_PRICE = 50_000_000;
 
@@ -198,7 +205,7 @@ function SortDropdown({ value, onChange }: { value: string; onChange: (v: string
 				}`}
 			>
 				<active.icon size={13} className="shrink-0" />
-				<span>{active.label}</span>
+				<span>Sắp xếp : {active.label}</span>
 				<HiChevronDown
 					size={13}
 					className={`shrink-0 transition-transform duration-200 ${open ? "text-brand-primary rotate-180" : "text-gray-400"}`}
@@ -357,6 +364,7 @@ export default function ProductsPageContent() {
 	const [priceRange, setPriceRange] = useState<[number, number]>([0, MAX_PRICE]);
 	const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
 	const [selectedWineTypes, setSelectedWineTypes] = useState<string[]>(wtParam ? [wtParam] : []);
+	const [quickFilter, setQuickFilter] = useState<string>("all");
 
 	useEffect(() => {
 		setSearchInput(qParam);
@@ -425,7 +433,8 @@ export default function ProductsPageContent() {
 					if (!opt) return false;
 					return opt.field === "wine_type" ? p.wine_type === id : p.category === id;
 				});
-			return matchCat && matchSearch && matchPrice && matchCountry && matchWineType;
+			const matchQuickFilter = quickFilter === "all" || p.tag === quickFilter;
+			return matchCat && matchSearch && matchPrice && matchCountry && matchWineType && matchQuickFilter;
 		});
 
 		if (sortOrder === "price_asc") {
@@ -448,7 +457,16 @@ export default function ProductsPageContent() {
 		}
 
 		return result;
-	}, [products, categoryFilter, priceRange, selectedCountries, selectedWineTypes, searchInput, sortOrder]);
+	}, [
+		products,
+		categoryFilter,
+		priceRange,
+		selectedCountries,
+		selectedWineTypes,
+		searchInput,
+		sortOrder,
+		quickFilter,
+	]);
 
 	const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
 
@@ -544,16 +562,9 @@ export default function ProductsPageContent() {
 						</div>
 
 						{/* Desktop toolbar: count + clear + sort */}
-						<div className="mb-8 hidden items-center justify-between gap-4 lg:flex">
+						<div className="mb-4 hidden items-center justify-between gap-4 lg:flex">
 							<div className="flex items-center gap-4">
-								<p className="text-[11px] font-bold tracking-widest text-gray-400 uppercase">
-									{loading ? t("loading") : `${filteredProducts.length} ${t("count")}`}
-									{!loading && totalPages > 1 && (
-										<span className="ml-2 font-normal tracking-normal text-gray-300 normal-case">
-											— {t("pagination.page_of", { current: currentPage, total: totalPages })}
-										</span>
-									)}
-								</p>
+								<p className="text-[28px] font-semibold uppercase">TẤT CẢ SẢN PHẨM</p>
 								{hasActiveFilters && (
 									<button
 										onClick={clearAll}
@@ -565,6 +576,30 @@ export default function ProductsPageContent() {
 								)}
 							</div>
 							<SortDropdown value={sortOrder} onChange={setSortOrder} />
+						</div>
+
+						<div className="relative mb-6 aspect-956/105">
+							<Image src={WINE_IMAGES.promotion} alt="promotion banner" fill />
+						</div>
+
+						{/* Quick filter tabs */}
+						<div className="mb-5 flex flex-wrap gap-2">
+							{QUICK_FILTER_TABS.map((tab) => {
+								const isActive = quickFilter === tab.id;
+								return (
+									<button
+										key={tab.id}
+										onClick={() => setQuickFilter(tab.id)}
+										className={`rounded-xl border px-4 py-[9px] leading-[22px] transition-all ${
+											isActive
+												? "border-brand-primary text-brand-primary font-semibold"
+												: "border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-800"
+										}`}
+									>
+										{tab.label}
+									</button>
+								);
+							})}
 						</div>
 
 						{/* Loading skeleton */}

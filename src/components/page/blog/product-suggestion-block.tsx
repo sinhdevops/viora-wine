@@ -14,6 +14,14 @@ interface ProductSuggestionBlockProps {
   ctaLabel: string;
 }
 
+const TAG_LABELS: Record<string, { label: string; className: string }> = {
+  best_seller: { label: "Bán chạy", className: "bg-orange-500 text-white" },
+  easy_drink:  { label: "Dễ uống",  className: "bg-green-500 text-white" },
+  sweet:       { label: "Ngọt nhẹ", className: "bg-pink-500 text-white" },
+  everyday:    { label: "Thường ngày", className: "bg-blue-500 text-white" },
+  gift:        { label: "Quà tặng", className: "bg-purple-500 text-white" },
+};
+
 function ProductCard({
   product,
   ctaLabel,
@@ -22,6 +30,7 @@ function ProductCard({
   ctaLabel: string;
 }) {
   const t = useTranslations("common");
+  const tagMeta = product.tag ? TAG_LABELS[product.tag] : null;
 
   const originalPrice =
     product.discount_percentage > 0
@@ -45,6 +54,11 @@ function ProductCard({
           {product.discount_percentage > 0 && (
             <span className="absolute top-2 left-2 rounded-full bg-brand-primary px-2 py-0.5 text-[10px] font-bold text-white">
               -{product.discount_percentage}%
+            </span>
+          )}
+          {tagMeta && (
+            <span className={`absolute top-2 right-2 rounded-full px-2 py-0.5 text-[10px] font-bold ${tagMeta.className}`}>
+              {tagMeta.label}
             </span>
           )}
         </div>

@@ -27,33 +27,35 @@ const PROMOS = [
 
 export default function PromoCards() {
 	return (
-		<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
-			<div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-				{PROMOS.map(({ bg, iconBg, icon: Icon, title, desc }) => (
-					<div
-						key={title}
-						className="flex min-h-[148px] overflow-hidden rounded-2xl"
-						style={{ background: bg }}
-					>
-						{/* Icon strip */}
+		<section className="w-full">
+			<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
+				<div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+					{PROMOS.map(({ bg, iconBg, icon: Icon, title, desc }) => (
 						<div
-							className="flex w-[100px] shrink-0 items-center justify-center"
-							style={{ background: iconBg }}
+							key={title}
+							className="flex min-h-[148px] overflow-hidden rounded-2xl"
+							style={{ background: bg }}
 						>
-							<Icon size={52} className="text-white/90" strokeWidth={1.2} />
-						</div>
+							{/* Icon strip */}
+							<div
+								className="flex w-[100px] shrink-0 items-center justify-center"
+								style={{ background: iconBg }}
+							>
+								<Icon size={52} className="text-white/90" strokeWidth={1.2} />
+							</div>
 
-						{/* Content */}
-						<div className="flex flex-1 flex-col justify-center gap-2 px-6 py-6">
-							<p className="text-xl leading-tight font-black text-white uppercase">{title}</p>
-							<p className="text-[13px] text-white/80">{desc}</p>
-							<Button href="/products" variant="ghost" size="md" className="mt-2 w-fit">
-								Mua ngay
-							</Button>
+							{/* Content */}
+							<div className="flex flex-1 flex-col justify-center gap-2 px-6 py-6">
+								<p className="text-xl leading-tight font-black text-white uppercase">{title}</p>
+								<p className="text-[13px] text-white/80">{desc}</p>
+								<Button href="/products" variant="ghost" size="md" className="mt-2 w-fit">
+									Mua ngay
+								</Button>
+							</div>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
-		</div>
+		</section>
 	);
 }

@@ -11,8 +11,12 @@
 }
 
 @keyframes marquee {
-	from { transform: translateX(0); }
-	to   { transform: translateX(-50%); }
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
 }
 
 :root {
@@ -39,7 +43,6 @@ h4,
 h5,
 h6 {
 	font-family: var(--font-montserrat);
-	font-weight: 400;
 	/* Playfair looks better at 400 even if body is 300 */
 	letter-spacing: -0.02em;
 }
