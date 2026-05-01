@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Image, LayoutDashboard, Package } from "lucide-react";
+import { CalendarDays, Image as ImageIcon, LayoutDashboard, Package } from "lucide-react";
+import { WINE_IMAGES } from "../../../public/statics/images";
+import Image from "next/image";
 
 const navItems = [
 	{ href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-	{ href: "/admin/hero-banner", label: "Banner", icon: Image, exact: false },
+	{ href: "/admin/hero-banner", label: "Banner", icon: ImageIcon, exact: false },
 	{ href: "/admin/products", label: "Sản phẩm", icon: Package, exact: false },
 	{ href: "/admin/events", label: "Sự kiện", icon: CalendarDays, exact: false },
 ];
@@ -17,11 +19,11 @@ export function AdminSidebar() {
 	return (
 		<>
 			{/* ── Desktop Sidebar ── */}
-			<aside className="hidden md:flex h-screen w-56 shrink-0 flex-col border-r border-gray-200 bg-white sticky top-0">
+			<aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-gray-200 bg-white md:flex">
 				<div className="flex h-16 items-center border-b border-gray-200 px-5">
-					<span className="font-serif text-lg font-bold tracking-tight text-brand-primary">
-					VIORA WINE ADMIN
-					</span>
+					<Link href="/" className="shrink-0">
+						<Image src={WINE_IMAGES.logo} alt="Viora Wine" />
+					</Link>
 				</div>
 				<nav className="flex flex-col gap-1 p-3">
 					{navItems.map(({ href, label, icon: Icon, exact }) => {
@@ -42,7 +44,7 @@ export function AdminSidebar() {
 						);
 					})}
 				</nav>
-				<div className="mt-auto p-3 border-t border-gray-100">
+				<div className="mt-auto border-t border-gray-100 p-3">
 					<button
 						onClick={async () => {
 							const { createClient } = await import("@/utils/supabase/client");
@@ -73,14 +75,12 @@ export function AdminSidebar() {
 			</aside>
 
 			{/* ── Mobile Top Header ── */}
-			<header className="md:hidden fixed top-0 inset-x-0 z-50 flex h-14 items-center border-b border-gray-200 bg-white px-4">
-				<span className="font-serif text-base font-bold tracking-tight text-brand-primary">
-					VIORA ADMIN
-				</span>
+			<header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center border-b border-gray-200 bg-white px-4 md:hidden">
+				<span className="text-brand-primary font-serif text-base font-bold tracking-tight">VIORA ADMIN</span>
 			</header>
 
 			{/* ── Mobile Bottom Navigation ── */}
-			<nav className="md:hidden fixed bottom-0 inset-x-0 z-50 flex h-16 border-t border-gray-200 bg-white safe-area-pb">
+			<nav className="safe-area-pb fixed inset-x-0 bottom-0 z-50 flex h-16 border-t border-gray-200 bg-white md:hidden">
 				{navItems.map(({ href, label, icon: Icon, exact }) => {
 					const isActive = exact ? pathname === href : pathname.startsWith(href);
 					return (

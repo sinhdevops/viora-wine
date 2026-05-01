@@ -218,7 +218,7 @@ export default function AdminDashboard() {
 						<Wine size={20} className="text-brand-primary" />
 						<span className="text-xs font-bold uppercase tracking-widest text-brand-primary">Viora Wine</span>
 					</div>
-					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">Dashboard</h1>
+					<h1 className="text-3xl font-extrabold tracking-tight text-gray-900">Tổng quan</h1>
 					<p className="mt-1 text-sm text-gray-400">{today}</p>
 				</div>
 				<div className="flex items-center gap-2 rounded-2xl border border-gray-100 bg-white px-4 py-3  ">

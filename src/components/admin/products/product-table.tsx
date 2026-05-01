@@ -47,7 +47,7 @@ export const ProductTable = React.memo(({
 		return (
 			<div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  ">
 				<div className="py-20 text-center text-sm text-gray-400">
-					Chưa có sản phẩm nào. Nhấn <strong>+ Add Product</strong> để tạo.
+					Chưa có sản phẩm nào. Nhấn <strong>+ Thêm sản phẩm</strong> để tạo.
 				</div>
 			</div>
 		);
@@ -59,12 +59,12 @@ export const ProductTable = React.memo(({
 				<table className="w-full min-w-160 text-sm">
 					<thead>
 						<tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-widest text-gray-400">
-							<th className="px-5 py-4">Product</th>
-							<th className="px-5 py-4">Category</th>
-							<th className="px-5 py-4">Price</th>
-							<th className="px-5 py-4">Stock</th>
-							<th className="px-5 py-4">Tag</th>
-							<th className="px-5 py-4 text-right">Actions</th>
+							<th className="px-5 py-4">Sản phẩm</th>
+							<th className="px-5 py-4">Danh mục</th>
+							<th className="px-5 py-4">Giá</th>
+							<th className="px-5 py-4">Kho</th>
+							<th className="px-5 py-4">Nhãn</th>
+							<th className="px-5 py-4 text-right">Thao tác</th>
 						</tr>
 					</thead>
 					<tbody className="divide-y divide-gray-50">

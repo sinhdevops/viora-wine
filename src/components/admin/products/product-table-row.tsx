@@ -62,7 +62,7 @@ export const ProductTableRow = React.memo(({
 				</p>
 				{product.discount_percentage > 0 && (
 					<p className="text-xs font-medium text-brand-primary">
-						-{product.discount_percentage}% OFF
+						-{product.discount_percentage}% giảm giá
 					</p>
 				)}
 			</td>
@@ -77,8 +77,8 @@ export const ProductTableRow = React.memo(({
 					/>
 					<span className="text-gray-600">
 						{product.stock > 0
-							? `${product.stock} in stock`
-							: "Out of stock"}
+							? `${product.stock} còn hàng`
+							: "Hết hàng"}
 					</span>
 				</div>
 			</td>

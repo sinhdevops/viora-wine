@@ -74,7 +74,7 @@ export default function EventsPage() {
 						Sự kiện & Kiến thức
 					</h1>
 					<p className="mt-1 text-xs font-semibold uppercase tracking-widest text-gray-400">
-						Event &amp; Knowledge Management
+						Quản lý sự kiện &amp; bài viết kiến thức
 					</p>
 				</div>
 
