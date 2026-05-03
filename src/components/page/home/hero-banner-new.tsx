@@ -12,10 +12,11 @@ export default function HeroBannerNew() {
 			{/* Background image */}
 			<Image
 				src={WINE_IMAGES.banner}
-				alt="Viora Wine Banner"
+				alt="Rượu Vang Nhập Khẩu Chính Hãng – Viora Wine"
 				fill
 				priority
-				sizes="100vw"
+				quality={75}
+				sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1920px"
 				className="object-cover lg:object-center"
 			/>
 

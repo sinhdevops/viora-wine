@@ -51,7 +51,8 @@ export default function HeroBanner({ banners }: HeroBannerProps) {
 								className="lg:object-cover"
 								fill
 								priority
-								sizes="100vw"
+								quality={75}
+								sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1920px"
 							/>
 							{/* Mobile: bottom gradient for readability */}
 							<div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent sm:hidden" />
