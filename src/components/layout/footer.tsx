@@ -16,6 +16,7 @@ export default function Footer() {
 	const toggle = (id: string) => setOpenSection((prev) => (prev === id ? null : id));
 
 	const categories = [
+		{ name: "Rượu Vang Shiraz", path: "/shiraz" },
 		{ name: "Vang đỏ", path: "/products?cat=red" },
 		{ name: "Vang trắng", path: "/products?cat=white" },
 		{ name: "Vang hồng", path: "/products?cat=rose" },

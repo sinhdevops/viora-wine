@@ -15,6 +15,11 @@ const VI_PATH_MAP: Record<string, string> = {
   '/inspection-policy': '/chinh-sach-kiem-hang',
   '/return-policy': '/chinh-sach-doi-tra',
   '/payment-policy': '/chinh-sach-thanh-toan',
+  '/shiraz': '/ruou-vang-shiraz',
+  '/shiraz-da-nang': '/ruou-vang-shiraz-da-nang',
+  '/shiraz-ha-noi': '/ruou-vang-shiraz-ha-noi',
+  '/da-nang': '/ruou-vang-da-nang',
+  '/ha-noi': '/ruou-vang-ha-noi',
 };
 
 export function getLocalizedPath(path: string): string {

@@ -590,6 +590,29 @@ export default function ProductsPageContent() {
 							<Image src={WINE_IMAGES.promotion} alt="promotion banner" fill />
 						</div>
 
+						{/* Shiraz collection spotlight */}
+						<div className="mb-4 flex flex-wrap items-center gap-2">
+							<span className="text-xs font-medium text-gray-400">Trang chuyên đề:</span>
+							<Link
+								href={"/shiraz" as any}
+								className="flex items-center gap-1.5 rounded-full border border-[#B22222]/30 bg-red-50 px-3.5 py-1.5 text-xs font-semibold text-[#B22222] transition-colors hover:bg-[#B22222] hover:text-white"
+							>
+								🍷 Rượu Vang Shiraz Úc →
+							</Link>
+							<Link
+								href={"/shiraz-da-nang" as any}
+								className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-[#B22222]/30 hover:text-[#B22222]"
+							>
+								Shiraz Đà Nẵng
+							</Link>
+							<Link
+								href={"/shiraz-ha-noi" as any}
+								className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-[#B22222]/30 hover:text-[#B22222]"
+							>
+								Shiraz Hà Nội
+							</Link>
+						</div>
+
 						{/* Quick filter tabs */}
 						<div className="mb-5 flex flex-wrap gap-2">
 							{QUICK_FILTER_TABS.map((tab) => {
