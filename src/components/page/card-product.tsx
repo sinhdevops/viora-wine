@@ -45,6 +45,7 @@ export default function CardProduct({ product }: CardProductProps) {
 									src={product.thumbnail_url}
 									alt={product.name}
 									fill
+									sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
 									className="object-contain transition-transform duration-500"
 								/>
 							)}

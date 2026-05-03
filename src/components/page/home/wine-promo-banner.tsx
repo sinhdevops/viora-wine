@@ -12,6 +12,7 @@ export default function WinePromoBanner() {
 				src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1600"
 				alt="Wine background"
 				fill
+				sizes="100vw"
 				className="object-cover object-center"
 			/>
 

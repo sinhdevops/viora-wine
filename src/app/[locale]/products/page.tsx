@@ -4,16 +4,21 @@ import { buildAlternates, buildPageUrl, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string>>;
 }) {
   const { locale } = await params;
+  const sp = await searchParams;
+  const hasFilters = Object.keys(sp).length > 0;
   const t = await getTranslations({ locale, namespace: 'products_page' });
   const common = await getTranslations({ locale, namespace: 'common' });
 
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
+    ...(hasFilters && { robots: { index: false, follow: true } }),
     keywords: [
       'rượu vang Úc Hà Nội',
       'rượu vang Úc Đà Nẵng',

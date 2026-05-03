@@ -2,6 +2,10 @@ import { getTranslations } from 'next-intl/server';
 import HomePageContent from './_page-content';
 import { buildAlternates, buildPageUrl, SITE_URL } from '@/lib/seo';
 
+// Revalidate every 5 minutes so Supabase event/banner data stays fresh
+// without hitting Supabase on every request (cuts TTFB significantly)
+export const revalidate = 300;
+
 export async function generateMetadata({
   params,
 }: {

@@ -15,6 +15,7 @@ export default function HeroBannerNew() {
 				alt="Viora Wine Banner"
 				fill
 				priority
+				sizes="100vw"
 				className="object-cover lg:object-center"
 			/>
 
