@@ -17,6 +17,9 @@ import combo from "./combo.svg";
 import whisky from "./whisky.svg";
 import bannerProduct from "./banner-products.webp";
 import promotion from "./promotion.webp";
+import heroMobile from "./hero-mobile.webp";
+import promotionGifts from "./promotion-gifts.webp";
+import bannerProductMobile from "./banner-product-mobile.webp";
 
 export const WINE_IMAGES = {
 	categoryWine1,
@@ -38,4 +41,7 @@ export const WINE_IMAGES = {
 	whisky,
 	bannerProduct,
 	promotion,
+	heroMobile,
+	promotionGifts,
+	bannerProductMobile,
 };

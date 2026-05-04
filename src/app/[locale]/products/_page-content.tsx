@@ -9,6 +9,10 @@ import { HiTrendingUp } from "react-icons/hi";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
 import * as Slider from "@radix-ui/react-slider";
 import { supabase } from "@/lib/supabase-client";
 import CardProduct from "@/components/page/card-product";
@@ -201,11 +205,11 @@ function SortDropdown({ value, onChange }: { value: string; onChange: (v: string
 				className={`flex items-center justify-between gap-2 rounded-full border px-4 py-2 text-[12px] font-semibold transition-all ${
 					open
 						? "border-brand-primary text-brand-primary bg-brand-primary/5"
-						: "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+						: "border-transparent bg-[#EFEFEF] text-gray-600 hover:border-gray-300"
 				}`}
 			>
 				<active.icon size={13} className="shrink-0" />
-				<span>Sắp xếp : {active.label}</span>
+				<span>{active.label}</span>
 				<HiChevronDown
 					size={13}
 					className={`shrink-0 transition-transform duration-200 ${open ? "text-brand-primary rotate-180" : "text-gray-400"}`}
@@ -496,31 +500,116 @@ export default function ProductsPageContent() {
 
 	return (
 		<div className="flex min-h-screen flex-col overflow-x-clip">
-			{/* HERO */}
-			<section className="relative aspect-1440/500 lg:aspect-1440/350">
-				<Image src={WINE_IMAGES.bannerProduct} alt="banner product" fill priority className="" />
+			{/* HERO — mobile */}
+			<section className="relative aspect-428/180 lg:hidden">
+				<Image
+					src={WINE_IMAGES.bannerProductMobile}
+					alt="Tất cả sản phẩm – Viora Wine"
+					fill
+					priority
+					className="object-cover"
+				/>
+				<div className="absolute inset-0 flex items-center px-6">
+					<div className="">
+						<span className="mb-[6px] inline-block rounded-full border border-white/20 bg-transparent px-3 py-1 text-[12px] font-semibold tracking-widest text-white uppercase">
+							ĐƯỢC TUYỂN CHỌN TỪ ÚC - Ý - CHILE
+						</span>
+						<h1
+							className="text-[28px] leading-tight font-bold text-white sm:text-[36px]"
+							style={{ fontFamily: "'Libre Bodoni'" }}
+						>
+							Tất cả sản phẩm
+						</h1>
+						<h2
+							className="mb-[6px] text-[28px] leading-tight font-bold sm:text-[36px]"
+							style={{
+								background: "linear-gradient(180deg, #FFF4C9 15.33%, #FFCC00 92.67%)",
+								WebkitBackgroundClip: "text",
+								WebkitTextFillColor: "transparent",
+								backgroundClip: "text",
+								fontFamily: "'Libre Bodoni'",
+							}}
+						>
+							cho mọi dịp.
+						</h2>
+						<p className="text-sm text-white">Top sản phẩm bán chạy - giá tốt hôm nay.</p>
+					</div>
+				</div>
+			</section>
+
+			{/* HERO — desktop */}
+			<section className="relative hidden aspect-1440/350 lg:block">
+				<Image
+					src={WINE_IMAGES.bannerProduct}
+					alt="banner product"
+					fill
+					priority
+					className="object-cover object-right"
+				/>
+				<div className="absolute inset-0 flex items-center">
+					<div className="mx-auto w-full max-w-7xl px-16">
+						<div className="max-w-[50%]">
+							<span className="mb-3 inline-block rounded-full border border-white/20 px-4 py-1.5 text-xs font-semibold tracking-widest text-white uppercase">
+								ĐƯỢC TUYỂN CHỌN TỪ ÚC - Ý - CHILE
+							</span>
+							<h1
+								className="text-[56px] leading-tight font-bold text-white"
+								style={{ fontFamily: "'Libre Bodoni'" }}
+							>
+								Chọn rượu dễ dàng hơn
+							</h1>
+							<h2
+								className="mb-3 text-[56px] leading-tight font-bold"
+								style={{
+									background: "linear-gradient(180deg, #FFF4C9 15.33%, #FFCC00 92.67%)",
+									WebkitBackgroundClip: "text",
+									WebkitTextFillColor: "transparent",
+									backgroundClip: "text",
+									fontFamily: "'Libre Bodoni'",
+								}}
+							>
+								cho mọi dịp.
+							</h2>
+							<p className="mb-5 text-base text-white/60">Top sản phẩm bán chạy - giá tốt hôm nay.</p>
+							<div className="flex gap-8">
+								<div className="flex items-start gap-3">
+									<img
+										src="/statics/images/icon-authenticity.svg"
+										alt=""
+										className="h-10 w-10 shrink-0"
+									/>
+									<div>
+										<p className="text-sm font-semibold text-white">Chính hãng 100%</p>
+										<p className="text-xs text-white/50">Nhập khẩu trực tiếp</p>
+									</div>
+								</div>
+								<div className="flex items-start gap-3">
+									<img
+										src="/statics/images/icon-delivery.svg"
+										alt=""
+										className="h-10 w-10 shrink-0"
+									/>
+									<div>
+										<p className="text-sm font-semibold text-white">Freeship toàn quốc</p>
+										<p className="text-xs text-white/50">Cho đơn từ 999k</p>
+									</div>
+								</div>
+								<div className="flex items-start gap-3">
+									<img src="/statics/images/icon-return.svg" alt="" className="h-10 w-10 shrink-0" />
+									<div>
+										<p className="text-sm font-semibold text-white">Đổi trả dễ dàng</p>
+										<p className="text-xs text-white/50">Trong vòng 7 ngày</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</section>
 
 			{/* MAIN CONTENT */}
-			<div className="mx-auto w-full max-w-360 px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-				{/* Mobile search */}
-				<div className="focus-within:border-brand-primary mb-8 flex items-center gap-3 rounded-xl border border-gray-200 px-4 py-3 transition-colors lg:hidden">
-					<HiMagnifyingGlass className="shrink-0 text-gray-400" size={16} />
-					<input
-						type="text"
-						value={searchInput}
-						onChange={(e) => setSearchInput(e.target.value)}
-						placeholder={t("search_placeholder_mobile")}
-						className="w-full bg-transparent text-[14px] text-gray-700 outline-none placeholder:text-gray-400"
-					/>
-					{searchInput && (
-						<button onClick={() => setSearchInput("")} className="text-gray-400">
-							<HiX size={16} />
-						</button>
-					)}
-				</div>
-
-				<div className="flex gap-10 lg:gap-14">
+			<div className="mx-auto w-full max-w-360 px-4 py-5 sm:px-6 lg:px-8 lg:py-14">
+				<div className="flex gap-5 lg:gap-14">
 					{/* Desktop Sidebar */}
 					<aside className="sticky top-35 hidden w-52 shrink-0 self-start lg:block">
 						<FilterSidebar
@@ -541,18 +630,34 @@ export default function ProductsPageContent() {
 
 					{/* Product area */}
 					<main className="min-w-0 flex-1">
-						{/* Mobile toolbar: count + filter + sort */}
-						<div className="mb-6 flex items-center justify-between gap-2 lg:hidden">
-							<p className="text-[11px] font-bold tracking-widest text-gray-400 uppercase">
-								{loading ? t("loading") : `${filteredProducts.length} ${t("count")}`}
+						{/* Mobile: title + promotion + toolbar */}
+						<div className="mb-4 lg:hidden">
+							{/* Title */}
+							<p className="mb-3 text-xl font-bold uppercase">
+								TẤT CẢ SẢN PHẨM{" "}
+								<span className="text-sm font-normal text-gray-400">
+									({loading ? "..." : `${filteredProducts.length} sản phẩm`})
+								</span>
 							</p>
+
+							{/* Promotion banner */}
+							<div className="relative mb-4 aspect-396/103">
+								<Image
+									src={WINE_IMAGES.promotionGifts}
+									alt="Khuyến mãi MUA 5 TẶNG 1"
+									fill
+									className="rounded-2xl object-cover"
+								/>
+							</div>
+
+							{/* Toolbar: filter + sort + search in one row */}
 							<div className="flex items-center gap-2">
 								<button
 									onClick={() => setIsFilterOpen(true)}
-									className={`flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-[12px] font-semibold transition-all ${
+									className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 text-[12px] font-semibold transition-all ${
 										hasSidebarFilters
 											? "border-brand-primary text-brand-primary bg-brand-primary/5"
-											: "border-gray-200 bg-white text-gray-600"
+											: "border-transparent bg-[#EFEFEF] text-gray-600"
 									}`}
 								>
 									<HiAdjustmentsHorizontal size={13} />
@@ -566,6 +671,21 @@ export default function ProductsPageContent() {
 									)}
 								</button>
 								<SortDropdown value={sortOrder} onChange={setSortOrder} />
+								<div className="focus-within:border-brand-primary flex flex-1 items-center gap-2 rounded-full border border-transparent bg-[#EFEFEF] px-3 py-2 transition-colors">
+									<HiMagnifyingGlass className="shrink-0 text-gray-400" size={13} />
+									<input
+										type="text"
+										value={searchInput}
+										onChange={(e) => setSearchInput(e.target.value)}
+										placeholder="Tìm kiếm..."
+										className="w-full bg-transparent text-[12px] text-gray-700 outline-none placeholder:text-gray-400"
+									/>
+									{searchInput && (
+										<button onClick={() => setSearchInput("")} className="shrink-0 text-gray-400">
+											<HiX size={13} />
+										</button>
+									)}
+								</div>
 							</div>
 						</div>
 
@@ -586,56 +706,98 @@ export default function ProductsPageContent() {
 							<SortDropdown value={sortOrder} onChange={setSortOrder} />
 						</div>
 
-						<div className="relative mb-6 aspect-956/105">
+						{/* Promotion banner — desktop */}
+						<div className="relative mb-6 hidden aspect-956/105 lg:block">
 							<Image src={WINE_IMAGES.promotion} alt="promotion banner" fill />
 						</div>
 
 						{/* Shiraz collection spotlight */}
-						<div className="mb-4 flex flex-wrap items-center gap-2">
-							<span className="text-xs font-medium text-gray-400">Trang chuyên đề:</span>
-							<Link
-								href={"/shiraz" as any}
-								className="flex items-center gap-1.5 rounded-full border border-[#B22222]/30 bg-red-50 px-3.5 py-1.5 text-xs font-semibold text-[#B22222] transition-colors hover:bg-[#B22222] hover:text-white"
-							>
-								🍷 Rượu Vang Shiraz Úc →
-							</Link>
-							<Link
-								href={"/shiraz-da-nang" as any}
-								className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-[#B22222]/30 hover:text-[#B22222]"
-							>
-								Shiraz Đà Nẵng
-							</Link>
-							<Link
-								href={"/shiraz-ha-noi" as any}
-								className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-[#B22222]/30 hover:text-[#B22222]"
-							>
-								Shiraz Hà Nội
-							</Link>
+						<div className="mb-4">
+							<Swiper modules={[FreeMode]} freeMode slidesPerView="auto" spaceBetween={8}>
+								<SwiperSlide style={{ width: "auto" }}>
+									<Link
+										href={"/shiraz" as any}
+										className="flex items-center gap-1.5 rounded-lg border border-[#B22222]/30 bg-red-50 px-3 py-1.5 text-xs font-semibold text-[#B22222] transition-colors hover:bg-[#B22222] hover:text-white"
+									>
+										🍷 Rượu Vang Shiraz Úc
+									</Link>
+								</SwiperSlide>
+								<SwiperSlide style={{ width: "auto" }}>
+									<Link
+										href={"/shiraz-da-nang" as any}
+										className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-[#B22222]/30 hover:text-[#B22222]"
+									>
+										Shiraz Đà Nẵng
+									</Link>
+								</SwiperSlide>
+								<SwiperSlide style={{ width: "auto" }}>
+									<Link
+										href={"/shiraz-ha-noi" as any}
+										className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-[#B22222]/30 hover:text-[#B22222]"
+									>
+										Shiraz Hà Nội
+									</Link>
+								</SwiperSlide>
+							</Swiper>
 						</div>
 
 						{/* Quick filter tabs */}
-						<div className="mb-5 flex flex-wrap gap-2">
-							{QUICK_FILTER_TABS.map((tab) => {
-								const isActive = quickFilter === tab.id;
-								return (
-									<button
-										key={tab.id}
-										onClick={() => {
-											setQuickFilter(tab.id);
-											const params = new URLSearchParams(searchParams.toString());
-											params.delete("page");
-											router.push(`?${params.toString()}`, { scroll: false });
-										}}
-										className={`rounded-xl border px-4 py-[9px] leading-[22px] transition-all ${
-											isActive
-												? "border-brand-primary text-brand-primary font-semibold"
-												: "border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-800"
-										}`}
-									>
-										{tab.label}
-									</button>
-								);
-							})}
+						<div className="mb-5">
+							{/* Mobile: Swiper */}
+							<Swiper
+								modules={[FreeMode]}
+								freeMode
+								slidesPerView="auto"
+								spaceBetween={8}
+								className="lg:hidden"
+							>
+								{QUICK_FILTER_TABS.map((tab) => {
+									const isActive = quickFilter === tab.id;
+									return (
+										<SwiperSlide key={tab.id} style={{ width: "auto" }}>
+											<button
+												onClick={() => {
+													setQuickFilter(tab.id);
+													const params = new URLSearchParams(searchParams.toString());
+													params.delete("page");
+													router.push(`?${params.toString()}`, { scroll: false });
+												}}
+												className={`flex h-8 items-center justify-center rounded-lg border px-4 text-[14px] whitespace-nowrap transition-all ${
+													isActive
+														? "border-brand-primary text-brand-primary font-semibold"
+														: "border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-800"
+												}`}
+											>
+												{tab.label}
+											</button>
+										</SwiperSlide>
+									);
+								})}
+							</Swiper>
+							{/* Desktop: flex wrap */}
+							<div className="hidden flex-wrap gap-2 lg:flex">
+								{QUICK_FILTER_TABS.map((tab) => {
+									const isActive = quickFilter === tab.id;
+									return (
+										<button
+											key={tab.id}
+											onClick={() => {
+												setQuickFilter(tab.id);
+												const params = new URLSearchParams(searchParams.toString());
+												params.delete("page");
+												router.push(`?${params.toString()}`, { scroll: false });
+											}}
+											className={`flex h-10 items-center justify-center rounded-xl border px-4 text-[15px] transition-all ${
+												isActive
+													? "border-brand-primary text-brand-primary font-semibold"
+													: "border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-800"
+											}`}
+										>
+											{tab.label}
+										</button>
+									);
+								})}
+							</div>
 						</div>
 
 						{/* Loading skeleton */}
