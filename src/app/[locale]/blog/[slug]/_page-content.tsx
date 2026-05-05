@@ -312,7 +312,7 @@ export default function NewsDetailPageContent({
 					viewMoreLabel={t("author_view_more")}
 					socialLinks={{
 						facebook: "https://www.facebook.com/viorawine",
-						zalo: "https://zalo.me/0338909973",
+						zalo: "https://zalo.me/0325610016",
 					}}
 				/>
 			)}

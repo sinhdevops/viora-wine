@@ -3,7 +3,7 @@ import { useTranslations, useLocale } from 'next-intl';
 export const useZaloLink = () => {
   const t = useTranslations('zalo');
   const locale = useLocale();
-  const phone = '0338909973'; // Số điện thoại Zalo của shop
+  const phone = '0325610016'; // Số điện thoại Zalo của shop
 
   const getZaloLink = (productName: string) => {
     const message = t('message', { name: productName });

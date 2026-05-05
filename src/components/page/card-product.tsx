@@ -128,7 +128,7 @@ export default function CardProduct({ product }: CardProductProps) {
 					</Link>
 					<div className="mt-auto pt-2">
 						<a
-							href="https://zalo.me/0338909973"
+							href="https://zalo.me/0325610016"
 							target="_blank"
 							rel="noopener noreferrer"
 							onClick={(e) => {

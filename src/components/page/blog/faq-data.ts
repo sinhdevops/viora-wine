@@ -28,6 +28,6 @@ export const DEFAULT_FAQ_ITEMS: FaqItem[] = [
   {
     question: "Tôi mua rượu vang ở đâu uy tín tại Đà Nẵng?",
     answer:
-      "Viora Wine là cửa hàng chuyên nhập khẩu rượu vang chính hãng tại Đà Nẵng với hơn 10 năm kinh nghiệm. Tất cả sản phẩm đều có đầy đủ chứng từ nhập khẩu, tem chống hàng giả và được bảo quản theo tiêu chuẩn quốc tế. Liên hệ Zalo 033 890 9973 để được tư vấn miễn phí.",
+      "Viora Wine là cửa hàng chuyên nhập khẩu rượu vang chính hãng tại Đà Nẵng với hơn 10 năm kinh nghiệm. Tất cả sản phẩm đều có đầy đủ chứng từ nhập khẩu, tem chống hàng giả và được bảo quản theo tiêu chuẩn quốc tế. Liên hệ Zalo 032 561 0016 để được tư vấn miễn phí.",
   },
 ];

@@ -8,7 +8,7 @@ interface ZaloCtaBlockProps {
 	phone?: string;
 }
 
-export default function ZaloCtaBlock({ title, buttonLabel, phone = "0338909973" }: ZaloCtaBlockProps) {
+export default function ZaloCtaBlock({ title, buttonLabel, phone = "0325610016" }: ZaloCtaBlockProps) {
 	return (
 		<div className="my-10 overflow-hidden rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 via-sky-50 to-blue-50">
 			<div className="flex flex-col items-center gap-5 px-6 py-8 text-center sm:flex-row sm:text-left">

@@ -10,7 +10,7 @@ import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
 import Button from "../ui/button";
 
-const phone = "0338909973";
+const phone = "0325610016";
 const phoneDisplay = "0338-909-973";
 
 declare function gtag(...args: unknown[]): void;

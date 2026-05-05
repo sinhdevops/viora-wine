@@ -5,7 +5,7 @@ import type { DbProduct } from "@/@types/product";
 
 export const revalidate = 3600;
 
-const ZALO_LINK = "https://zalo.me/0338909973";
+const ZALO_LINK = "https://zalo.me/0325610016";
 
 const faqItems = [
 	{

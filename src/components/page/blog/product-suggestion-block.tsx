@@ -100,7 +100,7 @@ function ProductCard({ product, ctaLabel }: { product: DbProduct; ctaLabel: stri
 
 				{/* Zalo CTA */}
 				<a
-					href="https://zalo.me/0338909973"
+					href="https://zalo.me/0325610016"
 					target="_blank"
 					rel="noopener noreferrer"
 					className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0068FF] py-2.5 text-[13px] font-bold text-white transition-all hover:bg-[#0055CC] hover:shadow-md active:scale-95"

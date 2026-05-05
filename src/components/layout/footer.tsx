@@ -83,7 +83,7 @@ export default function Footer() {
 					</li>
 					<li className="flex items-center gap-2.5">
 						<Phone size={14} className="shrink-0 text-red-500" />
-						<a href="tel:0338909973" className="text-sm text-white/60 hover:text-white">033 890 9973</a>
+						<a href="tel:0325610016" className="text-sm text-white/60 hover:text-white">032 561 0016</a>
 					</li>
 					<li className="flex items-center gap-2.5">
 						<Mail size={14} className="shrink-0 text-red-500" />
@@ -199,7 +199,7 @@ export default function Footer() {
 							</li>
 							<li className="flex items-center gap-2.5">
 								<Phone size={15} className="shrink-0 text-red-500" />
-								<a href="tel:0338909973" className="text-sm text-white/70 hover:text-white">033 890 9973</a>
+								<a href="tel:0325610016" className="text-sm text-white/70 hover:text-white">032 561 0016</a>
 							</li>
 							<li className="flex items-center gap-2.5">
 								<Mail size={15} className="shrink-0 text-red-500" />
