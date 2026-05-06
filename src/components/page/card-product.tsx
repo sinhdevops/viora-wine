@@ -11,7 +11,7 @@ import Badge, { type BadgeProps } from "../ui/badge";
 
 type TagKey = NonNullable<DbProduct["tag"]>;
 const TAG_MAP: Record<TagKey, { label: string; variant: BadgeProps["variant"] }> = {
-	best_seller: { label: "Best seller", variant: "red" },
+	best_seller: { label: "Bán chạy", variant: "red" },
 	easy_drink: { label: "Dễ uống", variant: "orange" },
 	sweet: { label: "Ngọt nhẹ", variant: "green" },
 	everyday: { label: "Thường ngày", variant: "purple" },
@@ -43,10 +43,17 @@ export default function CardProduct({ product }: CardProductProps) {
 							{product.thumbnail_url && (
 								<Image
 									src={product.thumbnail_url}
-									alt={product.name}
+									alt={[
+										product.name,
+										product.country ? `rượu vang ${product.country}` : null,
+										product.grape_variety ?? null,
+										"nhập khẩu chính hãng",
+									]
+										.filter(Boolean)
+										.join(" – ")}
 									fill
 									sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
-									className="object-contain transition-transform duration-500"
+									className="object-contain object-center transition-transform duration-500"
 								/>
 							)}
 						</div>
@@ -90,7 +97,15 @@ export default function CardProduct({ product }: CardProductProps) {
 						<p className="line-clamp-2 min-h-11 text-[14px] font-medium wrap-break-word md:text-[15px]">
 							{product.name}
 						</p>
-						<div className="line-clamp-1">Đậm đà, dễ uống, hợp với thịt đỏ</div>
+						{(product.description || product.country) && (
+							<div className="line-clamp-1 text-[12px] text-gray-500">
+								{product.description
+									? product.description
+									: product.country
+										? `Rượu vang nhập khẩu từ ${product.country}`
+										: null}
+							</div>
+						)}
 						<div className="flex flex-wrap items-baseline gap-x-2.5">
 							{product.price === 0 ? (
 								<span className="text-brand-primary text-[15px] font-semibold">{t("contact")}</span>
@@ -124,7 +139,7 @@ export default function CardProduct({ product }: CardProductProps) {
 								)}
 							</div>
 						)}
-						<div>Nồng độ: 1% ABV*</div>
+						{product.alcohol && <div className="text-[12px] text-gray-400">Nồng độ: {product.alcohol}</div>}
 					</Link>
 					<div className="mt-auto pt-2">
 						<a

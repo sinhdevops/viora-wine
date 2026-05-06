@@ -1,7 +1,6 @@
 import HeroBannerNew from "@/components/page/home/hero-banner-new";
 import CategoryQuickNav from "@/components/page/home/category-quick-nav";
 import BelowFoldSections from "@/components/page/home/below-fold-sections";
-import ShirazTopicCluster from "@/components/page/home/shiraz-topic-cluster";
 import { createClient } from "@/utils/supabase/server";
 import { getTranslations } from "next-intl/server";
 
@@ -44,10 +43,7 @@ export default async function HomePageContent({ locale }: { locale: string }) {
 					<CategoryQuickNav />
 				</div>
 			</div>
-			{/* Padding to compensate for the overlapping quicknav */}
-			<div className="pt-50 lg:pt-40" />
-
-			<ShirazTopicCluster />
+			<div className="pt-40" />
 
 			<BelowFoldSections
 				suKienEvents={(suKienEvents ?? []) as EventItem[]}

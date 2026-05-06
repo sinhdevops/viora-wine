@@ -20,16 +20,28 @@ export async function generateMetadata({
     description: t('meta_desc'),
     ...(hasFilters && { robots: { index: false, follow: true } }),
     keywords: [
+      'rượu vang nhập khẩu chính hãng',
+      'mua rượu vang',
+      'shop rượu vang',
+      'rượu vang Úc',
       'rượu vang Úc Hà Nội',
       'rượu vang Úc Đà Nẵng',
       'rượu vang Úc Shiraz',
       'rượu vang Úc Cabernet Sauvignon',
       'rượu vang Úc cho người mới',
       'rượu vang Úc dưới 1 triệu',
+      'rượu vang đỏ nhập khẩu',
+      'rượu vang trắng nhập khẩu',
+      'rượu vang hồng',
+      'rượu vang Pháp',
+      'rượu vang Ý',
+      'rượu vang Chile',
+      'rượu vang Bordeaux',
+      'rượu vang Shiraz Barossa Valley',
+      'quà tặng rượu vang cao cấp',
+      'hộp quà rượu vang',
       'shop rượu vang Úc Hà Nội',
       'shop rượu vang Úc Đà Nẵng',
-      'rượu vang Úc nhập khẩu chính hãng',
-      'rượu vang Pháp', 'rượu vang Ý',
       common('brand'),
     ],
     alternates: buildAlternates(locale, '/products'),
@@ -67,7 +79,6 @@ export default async function Page({
   const t = await getTranslations({ locale, namespace: 'products_page' });
   return (
     <>
-      <h1 className="sr-only">{t("shop")}</h1>
       <ProductsPageContent />
     </>
   );

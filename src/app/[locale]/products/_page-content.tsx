@@ -744,36 +744,32 @@ export default function ProductsPageContent() {
 						{/* Quick filter tabs */}
 						<div className="mb-5">
 							{/* Mobile: Swiper */}
-							<Swiper
-								modules={[FreeMode]}
-								freeMode
-								slidesPerView="auto"
-								spaceBetween={8}
-								className="lg:hidden"
-							>
-								{QUICK_FILTER_TABS.map((tab) => {
-									const isActive = quickFilter === tab.id;
-									return (
-										<SwiperSlide key={tab.id} style={{ width: "auto" }}>
-											<button
-												onClick={() => {
-													setQuickFilter(tab.id);
-													const params = new URLSearchParams(searchParams.toString());
-													params.delete("page");
-													router.push(`?${params.toString()}`, { scroll: false });
-												}}
-												className={`flex h-8 items-center justify-center rounded-lg border px-4 text-[14px] whitespace-nowrap transition-all ${
-													isActive
-														? "border-brand-primary text-brand-primary font-semibold"
-														: "border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-800"
-												}`}
-											>
-												{tab.label}
-											</button>
-										</SwiperSlide>
-									);
-								})}
-							</Swiper>
+							<div className="lg:hidden">
+								<Swiper modules={[FreeMode]} freeMode slidesPerView="auto" spaceBetween={8}>
+									{QUICK_FILTER_TABS.map((tab) => {
+										const isActive = quickFilter === tab.id;
+										return (
+											<SwiperSlide key={tab.id} style={{ width: "auto" }}>
+												<button
+													onClick={() => {
+														setQuickFilter(tab.id);
+														const params = new URLSearchParams(searchParams.toString());
+														params.delete("page");
+														router.push(`?${params.toString()}`, { scroll: false });
+													}}
+													className={`flex h-8 items-center justify-center rounded-lg border px-4 text-[14px] whitespace-nowrap transition-all ${
+														isActive
+															? "border-brand-primary text-brand-primary font-semibold"
+															: "border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-800"
+													}`}
+												>
+													{tab.label}
+												</button>
+											</SwiperSlide>
+										);
+									})}
+								</Swiper>
+							</div>
 							{/* Desktop: flex wrap */}
 							<div className="hidden flex-wrap gap-2 lg:flex">
 								{QUICK_FILTER_TABS.map((tab) => {
@@ -935,6 +931,82 @@ export default function ProductsPageContent() {
 				)}
 			</AnimatePresence>
 			<TestimonialsSection />
+
+			{/* SEO Content Section */}
+			<section className="border-t border-gray-100 bg-gray-50 py-12 lg:py-16">
+				<div className="mx-auto max-w-360 px-4 sm:px-6 lg:px-8">
+					<div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+						<div className="space-y-6 text-[14px] leading-relaxed text-gray-600">
+							<div>
+								<h2 className="mb-3 text-[18px] font-bold text-gray-900">
+									Rượu Vang Nhập Khẩu Chính Hãng Tại Viora Wine
+								</h2>
+								<p>
+									Viora Wine là shop rượu vang nhập khẩu chính hãng uy tín tại Hà Nội và Đà Nẵng, chuyên
+									cung cấp <strong>rượu vang Úc</strong>, <strong>rượu vang Pháp</strong>,{" "}
+									<strong>rượu vang Ý</strong> và <strong>rượu vang Chile</strong> tuyển chọn từ các vùng
+									sản xuất nổi tiếng thế giới. Toàn bộ sản phẩm có đầy đủ giấy tờ nhập khẩu, tem chính
+									hãng và chứng nhận xuất xứ.
+								</p>
+							</div>
+							<div>
+								<h2 className="mb-3 text-[18px] font-bold text-gray-900">
+									Các Loại Rượu Vang Phổ Biến
+								</h2>
+								<ul className="space-y-1.5">
+									<li><strong>Vang đỏ Úc (Shiraz, Cabernet Sauvignon):</strong> Đậm đà, hương mận, chocolate — hợp thịt nướng & BBQ.</li>
+									<li><strong>Vang trắng (Sauvignon Blanc, Chardonnay):</strong> Tươi mát, hương chanh — tuyệt với hải sản.</li>
+									<li><strong>Vang hồng (Rosé):</strong> Cân bằng, dễ uống, linh hoạt mọi dịp.</li>
+									<li><strong>Vang Pháp (Bordeaux, Bourgogne):</strong> Tinh tế, đẳng cấp — lý tưởng làm quà tặng cao cấp.</li>
+									<li><strong>Vang Ý (Chianti, Moscato):</strong> Moscato ngọt nhẹ rất được yêu thích tại Việt Nam.</li>
+									<li><strong>Vang Chile (Concha y Toro):</strong> Giá tốt, ổn định — phù hợp người mới & bữa tiệc thường ngày.</li>
+								</ul>
+							</div>
+						</div>
+
+						<div className="space-y-6 text-[14px] leading-relaxed text-gray-600">
+							<div>
+								<h2 className="mb-3 text-[18px] font-bold text-gray-900">
+									Tại Sao Nên Mua Tại Viora Wine?
+								</h2>
+								<ul className="space-y-1.5">
+									<li>✓ <strong>Chính hãng 100%</strong> — nhập khẩu trực tiếp, có đầy đủ hồ sơ pháp lý</li>
+									<li>✓ <strong>Giá tốt nhất thị trường</strong> — không qua trung gian, tiết kiệm 15–20%</li>
+									<li>✓ <strong>Giao hàng 2–4h</strong> tại Hà Nội & Đà Nẵng, toàn quốc 1–3 ngày</li>
+									<li>✓ <strong>Tư vấn chuyên nghiệp 24/7</strong> qua Zalo miễn phí</li>
+									<li>✓ <strong>Đổi trả trong 7 ngày</strong> — cam kết hài lòng 100%</li>
+									<li>✓ <strong>Quà tặng cao cấp</strong> — hộp gỗ, khắc laser, thiệp viết tay</li>
+								</ul>
+							</div>
+							<div>
+								<h2 className="mb-3 text-[18px] font-bold text-gray-900">
+									Hướng Dẫn Chọn Rượu Phù Hợp
+								</h2>
+								<p><strong>Người mới:</strong> Chọn vang trắng Sauvignon Blanc, vang hồng hoặc Pinot Noir nhẹ. Tránh Barolo hay Cabernet Sauvignon đậm khi mới bắt đầu.</p>
+								<p className="mt-2"><strong>Bữa tiệc gia đình:</strong> Shiraz Úc hoặc Malbec Chile từ 400.000đ — dễ uống, hợp nhiều món.</p>
+								<p className="mt-2"><strong>Quà tặng doanh nghiệp:</strong> Ưu tiên vang Pháp Bordeaux hoặc Barossa Reserve từ 1.000.000đ, kèm hộp quà gỗ chuyên nghiệp.</p>
+							</div>
+							<div className="flex flex-wrap gap-2 pt-1">
+								{[
+									{ href: "/ruou-vang-shiraz", label: "🍷 Rượu Vang Shiraz Úc" },
+									{ href: "/ruou-vang-shiraz-da-nang", label: "Shiraz Đà Nẵng" },
+									{ href: "/ruou-vang-shiraz-ha-noi", label: "Shiraz Hà Nội" },
+									{ href: "/qua-tang", label: "Quà Tặng Rượu Vang" },
+									{ href: "/tin-tuc", label: "Kiến Thức Rượu Vang" },
+								].map((link) => (
+									<a
+										key={link.href}
+										href={link.href}
+										className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-[12px] font-medium text-gray-600 transition-colors hover:border-red-200 hover:text-red-700"
+									>
+										{link.label}
+									</a>
+								))}
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 		</div>
 	);
 }

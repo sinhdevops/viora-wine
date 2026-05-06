@@ -16,14 +16,16 @@ export default function ProductImageGallery({ images, productName }: Props) {
 			{/* Main image — top on mobile, right on desktop */}
 			<div className="order-1 lg:order-2 w-full rounded-2xl bg-[#F5F5F5]">
 				<div className="relative aspect-square w-full lg:aspect-auto lg:size-[450px]">
-					<Image
-						src={images[activeImg]}
-						alt={productName}
-						fill
-						className="object-contain p-6 lg:p-8"
-						priority
-						sizes="(max-width: 1024px) 90vw, 45vw"
-					/>
+					<div className="absolute inset-6 lg:inset-8">
+						<Image
+							src={images[activeImg]}
+							alt={productName}
+							fill
+							className="object-contain object-center"
+							priority
+							sizes="(max-width: 1024px) 90vw, 45vw"
+						/>
+					</div>
 				</div>
 			</div>
 

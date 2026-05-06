@@ -46,6 +46,21 @@ export async function generateMetadata({
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
+    keywords: [
+      'kiến thức rượu vang',
+      'hướng dẫn chọn rượu vang',
+      'rượu vang cho người mới',
+      'cách uống rượu vang',
+      'vang đỏ vang trắng khác nhau',
+      'rượu vang Úc đặc điểm',
+      'food pairing rượu vang',
+      'bảo quản rượu vang',
+      'rượu vang Shiraz là gì',
+      'Cabernet Sauvignon là gì',
+      'nhiệt độ uống rượu vang',
+      'blog rượu vang',
+      common('brand'),
+    ],
     alternates: buildAlternates(locale, '/blog'),
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,
@@ -82,7 +97,6 @@ export default async function EventsPage({
 
   return (
     <>
-      <h1 className="sr-only">{t("title")}</h1>
       <EventsPageContent news={events} />
     </>
   );

@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import { WINE_TYPE_LABELS } from "@/lib/schemas/product-schema";
 import Button from "@/components/ui/button";
+import Badge from "@/components/ui/badge";
+import type { BadgeProps } from "@/components/ui/badge";
 import ProductImageGallery from "@/components/page/product/product-image-gallery";
 import ProductStockUrgency from "@/components/page/product/product-stock-urgency";
 import ProductTrustBadges from "@/components/page/product/product-trust-badges";
@@ -63,11 +65,26 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 		// { label: "Kết hợp món ăn", value: product.food_pairing ?? "—", icon: Utensils },
 	];
 
+	const grapeVariety = product.grape_variety ?? null;
+
 	const accordionSections = [
 		{
 			id: "usage",
-			title: "Hướng dẫn sử dụng",
-			content: `<p>Nên thưởng thức ở nhiệt độ 16–18°C. Mở nắp trước 30 phút để rượu tiếp xúc không khí. Rót vào ly vang rộng miệng để phát huy hương thơm tốt nhất.</p>`,
+			title: "Hướng dẫn thưởng thức & bảo quản",
+			content: `<h3 style="font-weight:600;margin-bottom:6px">Nhiệt độ thưởng thức</h3><p>Nên thưởng thức ở nhiệt độ 14–18°C. Mở nắp trước 20–30 phút để rượu tiếp xúc không khí, giúp hương thơm phát triển tốt nhất.</p><h3 style="font-weight:600;margin-top:12px;margin-bottom:6px">Cách bảo quản</h3><p>Bảo quản ở nơi tối, thoáng mát, tránh ánh sáng trực tiếp và nhiệt độ biến động. Sau khi mở nút, đậy kín và dùng trong 3–5 ngày. Có thể bảo quản trong tủ lạnh để kéo dài thêm 1–2 ngày.</p>`,
+		},
+		{
+			id: "pairing",
+			title: "Món ăn phù hợp (Food Pairing)",
+			content: `<h3 style="font-weight:600;margin-bottom:6px">Kết hợp tốt nhất với ${product.name}</h3><p>${
+				wineTypeLabel === "Vang đỏ"
+					? `Rượu vang đỏ như ${product.name} đặc biệt hợp với thịt đỏ: bò nướng, cừu quay, sườn BBQ. Với khẩu vị Việt Nam, thử kết hợp với bò lúc lắc, bò hầm, lẩu bò hoặc các món sốt đậm đà. Phô mai cứng (Cheddar, Gouda) cũng là lựa chọn tuyệt vời.`
+					: wineTypeLabel === "Vang trắng"
+						? `Rượu vang trắng như ${product.name} hợp nhất với hải sản: tôm hùm, cá hồi, sushi, oyster. Với ẩm thực Việt, thử kết hợp với gỏi cuốn, nem cuốn, cá hấp gừng hành hoặc các món salad tươi mát.`
+						: wineTypeLabel === "Vang hồng"
+							? `Vang hồng như ${product.name} rất linh hoạt — hợp với charcuterie, pizza, pasta, salad Địa Trung Hải. Với ẩm thực Việt, thử kết hợp với gỏi gà, chả giò hoặc các món nhẹ nhàng.`
+							: `${product.name} là lựa chọn tuyệt vời cho bữa tiệc gia đình, gặp mặt bạn bè hoặc thưởng thức trong những dịp đặc biệt. Kết hợp với các món ăn vừa miệng để tạo trải nghiệm hoàn chỉnh.`
+			}${grapeVariety ? ` Giống nho ${grapeVariety} mang đặc trưng riêng biệt, giúp nâng tầm trải nghiệm ẩm thực.` : ""}</p>`,
 		},
 		{ id: "reviews", title: "Đánh giá & nhận xét", content: null },
 		{
@@ -103,13 +120,21 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 
 					{/* RIGHT — product info */}
 					<div className="flex flex-col gap-0">
-						{product.tag && (
-							<div className="border-brand-primary mb-3 inline-flex h-7.5 w-fit items-center rounded-md border px-2.5">
-								<span className="text-brand-primary font-semibold capitalize">
-									{product.tag.replace("_", " ")}
-								</span>
-							</div>
-						)}
+						{product.tag && (() => {
+							const TAG_MAP: Record<string, { label: string; variant: BadgeProps["variant"] }> = {
+								best_seller: { label: "Bán chạy nhất", variant: "red" },
+								easy_drink:  { label: "Dễ uống",       variant: "orange" },
+								sweet:       { label: "Ngọt nhẹ",      variant: "green" },
+								everyday:    { label: "Thường ngày",    variant: "purple" },
+								gift:        { label: "Quà tặng",       variant: "pink" },
+							};
+							const meta = TAG_MAP[product.tag];
+							return meta ? (
+								<div className="mb-3">
+									<Badge variant={meta.variant}>{meta.label}</Badge>
+								</div>
+							) : null;
+						})()}
 
 						<h1 className="mb-3 text-[20px] leading-snug font-semibold text-gray-900 lg:text-[28px]">
 							{product.name}
@@ -201,6 +226,31 @@ export default function ProductDetailPageContent({ product, related }: Props) {
 				</div>
 
 				<ProductRelatedSlider related={related} />
+
+				{/* Internal link cluster — SEO + trust */}
+				<div className="mt-10 border-t border-gray-100 pt-8">
+					<p className="mb-3 text-[11px] font-bold tracking-[0.15em] text-gray-400 uppercase">
+						Tìm hiểu thêm
+					</p>
+					<div className="flex flex-wrap gap-2">
+						{[
+							{ href: "/tin-tuc", label: "Kiến thức rượu vang" },
+							{ href: "/ruou-vang-shiraz", label: "Rượu vang Shiraz Úc" },
+							{ href: "/ruou-vang-shiraz-da-nang", label: "Shiraz Đà Nẵng" },
+							{ href: "/ruou-vang-shiraz-ha-noi", label: "Shiraz Hà Nội" },
+							{ href: "/qua-tang", label: "Quà tặng rượu vang" },
+							{ href: "/san-pham", label: "Tất cả sản phẩm" },
+						].map((link) => (
+							<a
+								key={link.href}
+								href={link.href}
+								className="rounded-lg border border-gray-200 px-3 py-1.5 text-[12px] text-gray-500 transition-colors hover:border-gray-300 hover:text-gray-700"
+							>
+								{link.label}
+							</a>
+						))}
+					</div>
+				</div>
 			</div>
 
 			{/* Sticky mobile CTA bar */}

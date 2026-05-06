@@ -10,6 +10,7 @@ const GoodWineSection = dynamic(() => import("@/components/page/home/good-wine-s
 const ExploreSection = dynamic(() => import("@/components/page/home/explore-section"), { ssr: false });
 const WineKnowledgeSection = dynamic(() => import("@/components/page/home/wine-knowledge-section"), { ssr: false });
 const TestimonialsSection = dynamic(() => import("@/components/page/home/testimonials-section"), { ssr: false });
+const ShirazTopicCluster = dynamic(() => import("@/components/page/home/shiraz-topic-cluster"), { ssr: false });
 
 interface BelowFoldSectionsProps {
 	suKienEvents: EventItem[];
@@ -19,6 +20,7 @@ interface BelowFoldSectionsProps {
 export default function BelowFoldSections({ suKienEvents, kienThucEvents }: BelowFoldSectionsProps) {
 	return (
 		<div className="flex flex-col gap-10 lg:gap-20">
+			<ShirazTopicCluster />
 			<BestSellerSlider />
 			<SavingComboSection />
 			<PromoCards />
