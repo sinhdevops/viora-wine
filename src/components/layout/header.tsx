@@ -215,7 +215,7 @@ export default function Header() {
 								{/* Rượu Vang → sub panel trigger */}
 								<button
 									onClick={() => setOpenSubMenu("wine")}
-									className="flex w-full items-center justify-between rounded-md px-3 py-4 font-medium text-gray-800 transition-colors hover:bg-gray-50 hover:text-red-600"
+									className="flex w-full items-center justify-between rounded-md px-3 py-4 font-medium text-gray-800 uppercase transition-colors hover:bg-gray-50 hover:text-red-600"
 								>
 									Rượu Vang
 									<ChevronRight size={16} className="text-gray-400" />
@@ -254,7 +254,6 @@ export default function Header() {
 										<Button className="w-full">{t("contact_zalo")}</Button>
 									</a>
 								</div>
-
 							</div>
 
 							{/* Wine sub-panel slides over the full drawer */}
