@@ -126,11 +126,7 @@ export default async function ShirazPage() {
 							</p>
 
 							<div className="flex flex-wrap gap-3 text-sm">
-								{[
-									"Nhập khẩu chính hãng 100%",
-									"Giao nhanh 2–4h tại Đà Nẵng",
-									"Tư vấn miễn phí 24/7",
-								].map((badge) => (
+								{["Nhập khẩu chính hãng 100%", "Tư vấn miễn phí 24/7"].map((badge) => (
 									<span
 										key={badge}
 										className="flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm"

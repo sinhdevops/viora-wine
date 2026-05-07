@@ -146,7 +146,6 @@ export default async function ShirazDaNangPage() {
 
 							<div className="mb-8 flex flex-wrap gap-3 text-sm">
 								{[
-									"⚡ Giao 2–4h nội thành Đà Nẵng",
 									"🏅 Shiraz Úc chính hãng 100%",
 									"⭐ 4.9/5 — 2.000+ khách hàng",
 								].map((b) => (

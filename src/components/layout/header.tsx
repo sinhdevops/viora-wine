@@ -212,14 +212,34 @@ export default function Header() {
 									{pathname === "/" && <span className="bg-brand-primary h-1.5 w-1.5 rounded-full" />}
 								</Link>
 
-								{/* Rượu Vang → sub panel trigger */}
-								<button
-									onClick={() => setOpenSubMenu("wine")}
-									className="flex w-full items-center justify-between rounded-md px-3 py-4 font-medium text-gray-800 uppercase transition-colors hover:bg-gray-50 hover:text-red-600"
-								>
-									Rượu Vang
-									<ChevronRight size={16} className="text-gray-400" />
-								</button>
+								{(() => {
+									const wineRoutes = [
+										"/red-wine",
+										"/white-wine",
+										"/rose-wine",
+										"/shiraz",
+										"/sweet-wine",
+										"/products",
+									];
+									const isWineActive = wineRoutes.some((r) => pathname.startsWith(r));
+									return (
+										<button
+											onClick={() => setOpenSubMenu("wine")}
+											className={`flex w-full items-center justify-between rounded-md px-3 py-4 font-medium uppercase transition-colors ${
+												isWineActive
+													? "text-brand-primary bg-red-50 font-semibold"
+													: "text-gray-800 hover:bg-gray-50 hover:text-red-600"
+											}`}
+										>
+											Sản phẩm
+											{isWineActive ? (
+												<span className="bg-brand-primary h-1.5 w-1.5 rounded-full" />
+											) : (
+												<ChevronRight size={16} className="text-gray-400" />
+											)}
+										</button>
+									);
+								})()}
 
 								{/* Other items */}
 								{otherNavItems.map((item) => {

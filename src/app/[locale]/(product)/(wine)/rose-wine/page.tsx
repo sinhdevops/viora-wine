@@ -32,9 +32,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 		description:
 			"Mua rượu vang hồng (rosé) nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Provence, Tây Ban Nha, Chile — màu hồng tươi, hương dâu tây, uống mát lạnh cực ngon. Từ 390.000đ. Giao nhanh 2–4h.",
 		keywords: [
-			"rượu vang hồng", "rượu vang rosé", "vang hồng nhập khẩu", "mua rượu vang hồng",
-			"rượu vang hồng Pháp", "Provence rosé", "rượu vang hồng Tây Ban Nha", "rosé Đà Nẵng",
-			"rượu vang hồng chính hãng", "Viora Wine", "rượu vang hồng ngon",
+			"rượu vang hồng",
+			"rượu vang rosé",
+			"vang hồng nhập khẩu",
+			"mua rượu vang hồng",
+			"rượu vang hồng Pháp",
+			"Provence rosé",
+			"rượu vang hồng Tây Ban Nha",
+			"rosé Đà Nẵng",
+			"rượu vang hồng chính hãng",
+			"Viora Wine",
+			"rượu vang hồng ngon",
 		],
 		alternates: buildAlternates(locale, "/rose-wine"),
 		openGraph: {
@@ -44,9 +52,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 			siteName: "Viora Wine Đà Nẵng",
 			locale: "vi_VN",
 			type: "website",
-			images: [{ url: `${SITE_URL}/statics/images/og-home.jpg`, width: 1200, height: 630, alt: "Rượu Vang Hồng – Viora Wine" }],
+			images: [
+				{
+					url: `${SITE_URL}/statics/images/og-home.jpg`,
+					width: 1200,
+					height: 630,
+					alt: "Rượu Vang Hồng – Viora Wine",
+				},
+			],
 		},
-		twitter: { card: "summary_large_image", title: "Rượu Vang Hồng (Rosé) – Viora Wine", description: "Rosé chính hãng từ 390.000đ. Giao nhanh toàn quốc." },
+		twitter: {
+			card: "summary_large_image",
+			title: "Rượu Vang Hồng (Rosé) – Viora Wine",
+			description: "Rosé chính hãng từ 390.000đ. Giao nhanh toàn quốc.",
+		},
 	};
 }
 
@@ -93,9 +112,13 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 				<section className="bg-linear-to-br from-[#9B3065] to-[#E8709A] py-14 text-white">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<nav aria-label="breadcrumb" className="mb-6 flex items-center gap-2 text-sm text-white/60">
-							<a href="/" className="transition-colors hover:text-white">Trang chủ</a>
+							<a href="/" className="transition-colors hover:text-white">
+								Trang chủ
+							</a>
 							<span>/</span>
-							<a href="/san-pham" className="transition-colors hover:text-white">Sản phẩm</a>
+							<a href="/san-pham" className="transition-colors hover:text-white">
+								Sản phẩm
+							</a>
 							<span>/</span>
 							<span className="text-white">Rượu Vang Hồng</span>
 						</nav>
@@ -104,12 +127,15 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 								Rượu Vang Hồng <span className="text-yellow-300">Nhập Khẩu Chính Hãng</span>
 							</h1>
 							<p className="mb-8 text-lg leading-relaxed text-white/85">
-								Màu hồng tươi quyến rũ, hương dâu tây và hoa tươi, vị thanh mát nhẹ nhàng — Rosé là lựa chọn
-								lý tưởng cho tiệc ngoài trời, picnic và những khoảnh khắc vui vẻ cùng bạn bè.
+								Màu hồng tươi quyến rũ, hương dâu tây và hoa tươi, vị thanh mát nhẹ nhàng — Rosé là lựa
+								chọn lý tưởng cho tiệc ngoài trời, picnic và những khoảnh khắc vui vẻ cùng bạn bè.
 							</p>
 							<div className="flex flex-wrap gap-3 text-sm">
-								{["Nhập khẩu chính hãng 100%", "Giao nhanh 2–4h tại Đà Nẵng", "Tư vấn miễn phí 24/7"].map((b) => (
-									<span key={b} className="flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm">
+								{["Nhập khẩu chính hãng 100%", "Tư vấn miễn phí 24/7"].map((b) => (
+									<span
+										key={b}
+										className="flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm"
+									>
 										<span className="text-yellow-300">✓</span> {b}
 									</span>
 								))}
@@ -121,7 +147,9 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 				{/* Product grid */}
 				<section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 					<h2 className="mb-2 text-2xl font-semibold sm:text-3xl">Rượu Vang Hồng Tại Viora Wine</h2>
-					<p className="mb-8 text-gray-500">Toàn bộ rosé nhập khẩu chính hãng — màu đẹp, vị thanh, hương thơm quyến rũ.</p>
+					<p className="mb-8 text-gray-500">
+						Toàn bộ rosé nhập khẩu chính hãng — màu đẹp, vị thanh, hương thơm quyến rũ.
+					</p>
 					<WineProductGrid wineType="rose" emptyLabel="Đang cập nhật danh sách rượu vang hồng mới nhất" />
 				</section>
 
@@ -132,22 +160,23 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 							<h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Rượu Vang Hồng (Rosé) Là Gì?</h2>
 							<div className="space-y-4 leading-relaxed text-gray-600">
 								<p>
-									<strong>Rượu vang hồng</strong> hay <strong>Rosé</strong> là loại vang được làm từ nho đỏ
-									nhưng với thời gian ngâm vỏ rất ngắn — chỉ từ vài giờ đến vài ngày. Khoảng thời gian này đủ
-									để trích xuất màu hồng đẹp từ vỏ nho mà không lấy nhiều tanin, tạo ra phong cách{" "}
-									<strong>nhẹ hơn vang đỏ nhưng đậm hơn vang trắng</strong>.
+									<strong>Rượu vang hồng</strong> hay <strong>Rosé</strong> là loại vang được làm từ
+									nho đỏ nhưng với thời gian ngâm vỏ rất ngắn — chỉ từ vài giờ đến vài ngày. Khoảng
+									thời gian này đủ để trích xuất màu hồng đẹp từ vỏ nho mà không lấy nhiều tanin, tạo
+									ra phong cách <strong>nhẹ hơn vang đỏ nhưng đậm hơn vang trắng</strong>.
 								</p>
 								<p>
-									Vùng <strong>Provence</strong> (miền Nam nước Pháp) được mệnh danh là "thủ đô rosé thế giới" —
-									nơi sản xuất loại rosé màu hồng phấn nhạt tinh tế, vị khô và elegant. Ngoài ra,{" "}
-									<strong>Tây Ban Nha</strong> (Navarra), <strong>Ý</strong> (Tuscany) và{" "}
-									<strong>Chile</strong> cũng sản xuất rosé xuất sắc với phong cách trái cây phong phú hơn.
+									Vùng <strong>Provence</strong> (miền Nam nước Pháp) được mệnh danh là "thủ đô rosé
+									thế giới" — nơi sản xuất loại rosé màu hồng phấn nhạt tinh tế, vị khô và elegant.
+									Ngoài ra, <strong>Tây Ban Nha</strong> (Navarra), <strong>Ý</strong> (Tuscany) và{" "}
+									<strong>Chile</strong> cũng sản xuất rosé xuất sắc với phong cách trái cây phong phú
+									hơn.
 								</p>
 								<p>
-									Rosé từng bị coi là "vang thứ cấp" nhưng nay đã hoàn toàn thay đổi vị thế — được giới sành
-									rượu đánh giá cao và trở thành{" "}
-									<strong>xu hướng uống rượu thống trị mùa hè toàn cầu</strong>. Tại Việt Nam, rosé ngày càng
-									được ưa chuộng nhờ màu sắc đẹp, phù hợp chụp ảnh và vị dễ uống.
+									Rosé từng bị coi là "vang thứ cấp" nhưng nay đã hoàn toàn thay đổi vị thế — được
+									giới sành rượu đánh giá cao và trở thành{" "}
+									<strong>xu hướng uống rượu thống trị mùa hè toàn cầu</strong>. Tại Việt Nam, rosé
+									ngày càng được ưa chuộng nhờ màu sắc đẹp, phù hợp chụp ảnh và vị dễ uống.
 								</p>
 							</div>
 						</div>
@@ -160,12 +189,31 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 						<h2 className="mb-8 text-center text-2xl font-semibold sm:text-3xl">Đặc Điểm Rượu Vang Hồng</h2>
 						<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 							{[
-								{ icon: "🌸", title: "Màu sắc", desc: "Từ hồng phấn nhạt tinh tế (Provence) đến hồng đào đậm (Tây Ban Nha). Màu sắc phụ thuộc thời gian ngâm vỏ nho" },
-								{ icon: "🍓", title: "Hương thơm", desc: "Dâu tây tươi, mâm xôi, đào, hoa hồng, hoa nhài — tươi mát và quyến rũ. Provence thêm hương thảo mộc Địa Trung Hải" },
-								{ icon: "👅", title: "Vị giác", desc: "Thanh mát, ít tanin, độ chua vừa phải, vị trái cây rõ ràng. Nhẹ nhàng hơn vang đỏ nhưng phong phú hơn vang trắng" },
-								{ icon: "🌡️", title: "Phục vụ", desc: "8–13°C — uống lạnh giống vang trắng. Ướp lạnh 2 tiếng trước khi uống. Hoàn hảo cho bữa tiệc hè ngoài trời" },
+								{
+									icon: "🌸",
+									title: "Màu sắc",
+									desc: "Từ hồng phấn nhạt tinh tế (Provence) đến hồng đào đậm (Tây Ban Nha). Màu sắc phụ thuộc thời gian ngâm vỏ nho",
+								},
+								{
+									icon: "🍓",
+									title: "Hương thơm",
+									desc: "Dâu tây tươi, mâm xôi, đào, hoa hồng, hoa nhài — tươi mát và quyến rũ. Provence thêm hương thảo mộc Địa Trung Hải",
+								},
+								{
+									icon: "👅",
+									title: "Vị giác",
+									desc: "Thanh mát, ít tanin, độ chua vừa phải, vị trái cây rõ ràng. Nhẹ nhàng hơn vang đỏ nhưng phong phú hơn vang trắng",
+								},
+								{
+									icon: "🌡️",
+									title: "Phục vụ",
+									desc: "8–13°C — uống lạnh giống vang trắng. Ướp lạnh 2 tiếng trước khi uống. Hoàn hảo cho bữa tiệc hè ngoài trời",
+								},
 							].map((item) => (
-								<div key={item.title} className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+								<div
+									key={item.title}
+									className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
+								>
 									<div className="mb-3 text-3xl">{item.icon}</div>
 									<h3 className="mb-2 font-semibold text-gray-900">{item.title}</h3>
 									<p className="text-sm leading-relaxed text-gray-500">{item.desc}</p>
@@ -178,18 +226,39 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 				{/* Food pairing */}
 				<section className="bg-[#9B3065] py-14 text-white">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-						<h2 className="mb-4 text-center text-2xl font-semibold sm:text-3xl">Rosé Uống Cùng Gì Ngon Nhất?</h2>
+						<h2 className="mb-4 text-center text-2xl font-semibold sm:text-3xl">
+							Rosé Uống Cùng Gì Ngon Nhất?
+						</h2>
 						<p className="mx-auto mb-10 max-w-2xl text-center text-white/75">
-							Rosé là loại vang linh hoạt nhất — đủ nhẹ để đi với salad, đủ đậm để kết hợp với thịt gà và hải sản đậm vị.
+							Rosé là loại vang linh hoạt nhất — đủ nhẹ để đi với salad, đủ đậm để kết hợp với thịt gà và
+							hải sản đậm vị.
 						</p>
 						<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 							{[
-								{ dish: "🦞 Hải sản nướng / Tôm hùm", note: "Rosé đủ đậm để đi với hải sản nướng có gia vị — nơi vang trắng đôi khi quá nhẹ" },
-								{ dish: "🥗 Salad Niçoise / Caesar", note: "Provence rosé và salad Địa Trung Hải — pairing sinh ra để dành cho nhau" },
-								{ dish: "🍗 Gà nướng BBQ", note: "Rosé đậm (Tây Ban Nha) tuyệt vời với gà nướng than, đặc biệt ngày hè" },
-								{ dish: "🥐 Charcuterie / Pâté", note: "Rosé nhẹ Provence với bảng charcuterie — phong cách Pháp hoàn hảo" },
-								{ dish: "🍕 Pizza thịt nguội", note: "Rosé đủ linh hoạt để đi với cả pizza — nhẹ hơn vang đỏ nhưng không nhạt nhẽo" },
-								{ dish: "🍜 Bún thịt nướng / Nem lụi", note: "Ẩm thực Việt thường nhẹ và thơm — rosé tươi mát là người bạn đồng hành lý tưởng" },
+								{
+									dish: "🦞 Hải sản nướng / Tôm hùm",
+									note: "Rosé đủ đậm để đi với hải sản nướng có gia vị — nơi vang trắng đôi khi quá nhẹ",
+								},
+								{
+									dish: "🥗 Salad Niçoise / Caesar",
+									note: "Provence rosé và salad Địa Trung Hải — pairing sinh ra để dành cho nhau",
+								},
+								{
+									dish: "🍗 Gà nướng BBQ",
+									note: "Rosé đậm (Tây Ban Nha) tuyệt vời với gà nướng than, đặc biệt ngày hè",
+								},
+								{
+									dish: "🥐 Charcuterie / Pâté",
+									note: "Rosé nhẹ Provence với bảng charcuterie — phong cách Pháp hoàn hảo",
+								},
+								{
+									dish: "🍕 Pizza thịt nguội",
+									note: "Rosé đủ linh hoạt để đi với cả pizza — nhẹ hơn vang đỏ nhưng không nhạt nhẽo",
+								},
+								{
+									dish: "🍜 Bún thịt nướng / Nem lụi",
+									note: "Ẩm thực Việt thường nhẹ và thơm — rosé tươi mát là người bạn đồng hành lý tưởng",
+								},
 							].map((item) => (
 								<div key={item.dish} className="rounded-2xl bg-white/10 p-5 backdrop-blur-sm">
 									<p className="mb-1.5 font-semibold">{item.dish}</p>
@@ -206,11 +275,27 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 						<h2 className="mb-6 text-xl font-semibold sm:text-2xl">Khám Phá Thêm Các Loại Rượu Vang</h2>
 						<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 							{[
-								{ href: "/ruou-vang-do", label: "🍷 Rượu Vang Đỏ", desc: "Đậm đà, tanin cân bằng — Cabernet Sauvignon, Merlot" },
-								{ href: "/ruou-vang-trang", label: "🥂 Rượu Vang Trắng", desc: "Tươi mát, thanh thoát — Chardonnay, Sauvignon Blanc" },
-								{ href: "/ruou-vang-shiraz", label: "🍇 Shiraz Úc", desc: "Đậm đà, cay nhẹ — đặc sản từ Barossa Valley" },
+								{
+									href: "/ruou-vang-do",
+									label: "🍷 Rượu Vang Đỏ",
+									desc: "Đậm đà, tanin cân bằng — Cabernet Sauvignon, Merlot",
+								},
+								{
+									href: "/ruou-vang-trang",
+									label: "🥂 Rượu Vang Trắng",
+									desc: "Tươi mát, thanh thoát — Chardonnay, Sauvignon Blanc",
+								},
+								{
+									href: "/ruou-vang-shiraz",
+									label: "🍇 Shiraz Úc",
+									desc: "Đậm đà, cay nhẹ — đặc sản từ Barossa Valley",
+								},
 							].map((item) => (
-								<a key={item.href} href={item.href} className="group flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 px-6 py-5 transition-all hover:border-[#E8709A] hover:bg-pink-50">
+								<a
+									key={item.href}
+									href={item.href}
+									className="group flex items-center justify-between rounded-2xl border border-gray-200 bg-gray-50 px-6 py-5 transition-all hover:border-[#E8709A] hover:bg-pink-50"
+								>
 									<div>
 										<p className="font-semibold group-hover:text-[#9B3065]">{item.label}</p>
 										<p className="mt-0.5 text-sm text-gray-500">{item.desc}</p>
@@ -225,7 +310,9 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 				{/* FAQ */}
 				<section className="bg-gray-50 py-14">
 					<div className="mx-auto max-w-3xl px-4 sm:px-6">
-						<h2 className="mb-8 text-center text-xl font-semibold sm:text-3xl">Câu Hỏi Thường Gặp Về Rượu Vang Hồng</h2>
+						<h2 className="mb-8 text-center text-xl font-semibold sm:text-3xl">
+							Câu Hỏi Thường Gặp Về Rượu Vang Hồng
+						</h2>
 						<div className="space-y-4">
 							{faqItems.map((item) => (
 								<div key={item.q} className="rounded-2xl border border-gray-200 bg-white p-6">
@@ -241,12 +328,19 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 				<section className="py-16">
 					<div className="mx-auto max-w-xl px-4 text-center">
 						<h2 className="mb-3 text-2xl font-semibold text-gray-900">Đặt Rượu Vang Hồng Ngay Hôm Nay</h2>
-						<p className="mb-8 text-gray-500">Giao nhanh 2–4h tại Đà Nẵng &nbsp;•&nbsp; Miễn phí tư vấn &nbsp;•&nbsp; Giá tốt nhất thị trường</p>
 						<div className="flex flex-wrap justify-center gap-4">
-							<a href={ZALO_LINK} target="_blank" rel="noopener noreferrer" className="rounded-lg bg-[#9B3065] px-8 py-3.5 font-semibold text-white transition-colors hover:bg-[#7a2450]">
+							<a
+								href={ZALO_LINK}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="rounded-lg bg-[#9B3065] px-8 py-3.5 font-semibold text-white transition-colors hover:bg-[#7a2450]"
+							>
 								Tư vấn &amp; đặt hàng qua Zalo
 							</a>
-							<a href="/san-pham" className="rounded-lg border border-gray-300 px-8 py-3.5 font-semibold text-gray-700 transition-colors hover:border-gray-500">
+							<a
+								href="/san-pham"
+								className="rounded-lg border border-gray-300 px-8 py-3.5 font-semibold text-gray-700 transition-colors hover:border-gray-500"
+							>
 								Xem tất cả sản phẩm
 							</a>
 						</div>

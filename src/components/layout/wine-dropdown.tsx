@@ -35,7 +35,7 @@ interface WineDropdownDesktopProps {
 
 export function WineDropdownDesktop({ isOpen, onOpen, onClose }: WineDropdownDesktopProps) {
 	const pathname = usePathname();
-	const allWineRoutes = [...WINE_TYPES.map((w) => w.href as string), "/sweet-wine"];
+	const allWineRoutes = [...WINE_TYPES.map((w) => w.href as string), "/sweet-wine", "/products"];
 	const isActive = allWineRoutes.some((r) => pathname.startsWith(r));
 
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -178,6 +178,8 @@ interface WineMobileSubPanelProps {
 }
 
 export function WineMobileSubPanel({ isOpen, onClose, onNavigate }: WineMobileSubPanelProps) {
+	const pathname = usePathname();
+
 	return (
 		<AnimatePresence>
 			{isOpen && (
@@ -203,17 +205,21 @@ export function WineMobileSubPanel({ isOpen, onClose, onNavigate }: WineMobileSu
 								Loại Rượu
 							</p>
 							<ul className="divide-y divide-white/10">
-								{WINE_TYPES.map((item) => (
-									<li key={item.href}>
-										<Link
-											href={item.href}
-											onClick={onNavigate}
-											className="block py-3.5 text-sm font-medium text-white"
-										>
-											{item.label}
-										</Link>
-									</li>
-								))}
+								{WINE_TYPES.map((item) => {
+									const isActive = pathname.startsWith(item.href);
+									return (
+										<li key={item.href}>
+											<Link
+												href={item.href}
+												onClick={onNavigate}
+												className={`flex items-center justify-between py-3.5 text-sm font-medium ${isActive ? "font-semibold text-yellow-300" : "text-white"}`}
+											>
+												{item.label}
+												{isActive && <span className="h-1.5 w-1.5 rounded-full bg-yellow-300" />}
+											</Link>
+										</li>
+									);
+								})}
 								<li>
 									<Link
 										href="/products"
