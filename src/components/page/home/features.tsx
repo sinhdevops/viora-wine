@@ -44,7 +44,7 @@ export default function Features() {
 								<h3 className="text-[11px] font-semibold tracking-wider text-white uppercase lg:text-base lg:tracking-widest">
 									{feature.title}
 								</h3>
-								<p className="text-[11px] tracking-wide text-gray-400 lg:text-[15px]">
+								<p className="text-[11px] tracking-wide text-gray-600 lg:text-[15px]">
 									{feature.description}
 								</p>
 							</div>

@@ -1,7 +1,5 @@
-import { createClient } from "@/utils/supabase/server";
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
-import CardProduct from "@/components/page/card-product";
-import type { DbProduct } from "@/@types/product";
+import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
 
 export const revalidate = 3600;
 
@@ -72,18 +70,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function ShirazHaNoiPage() {
-	const supabase = await createClient();
-
-	const { data: products } = await supabase
-		.from("products")
-		.select(
-			"id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, tag, rating, sold_count, grape_variety, wine_type, country",
-		)
-		.or("grape_variety.ilike.%Shiraz%,name.ilike.%Shiraz%")
-		.order("sold_count", { ascending: false })
-		.limit(8);
-
-	const shirazProducts = (products ?? []) as DbProduct[];
 	const pageUrl = buildPageUrl("vi", "/shiraz-ha-noi");
 
 	const localBusinessJsonLd = {
@@ -231,19 +217,7 @@ export default async function ShirazHaNoiPage() {
 						Shiraz Úc Barossa Valley nhập khẩu chính hãng — giao tận nhà Hà Nội trong 2–4h.
 					</p>
 
-					{shirazProducts.length > 0 ? (
-						<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
-							{shirazProducts.map((p) => <CardProduct key={p.id} product={p} />)}
-						</div>
-					) : (
-						<div className="rounded-2xl border border-gray-100 bg-gray-50 py-16 text-center">
-							<p className="mb-4 text-gray-500">Đang cập nhật sản phẩm. Liên hệ Zalo để đặt hàng.</p>
-							<a href={ZALO_LINK} target="_blank" rel="noopener noreferrer"
-								className="inline-block rounded-lg bg-[#B22222] px-6 py-3 text-sm font-semibold text-white hover:bg-[#8B0000]">
-								Tư vấn qua Zalo
-							</a>
-						</div>
-					)}
+					<WineProductGrid grapeVariety="Shiraz" emptyLabel="Đang cập nhật sản phẩm Shiraz Hà Nội mới nhất" />
 				</section>
 
 				{/* ── Why Shiraz Hà Nội ────────────────────────────────── */}

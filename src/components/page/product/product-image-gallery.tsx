@@ -36,6 +36,8 @@ export default function ProductImageGallery({ images, productName }: Props) {
 						<button
 							key={i}
 							onClick={() => setActiveImg(i)}
+							aria-label={`Xem ảnh ${i + 1} của ${productName}`}
+							aria-pressed={activeImg === i}
 							className={`relative h-[68px] w-[68px] lg:h-[114px] lg:w-[114px] shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
 								activeImg === i ? "border-brand-primary" : "border-gray-200 hover:border-gray-300"
 							}`}

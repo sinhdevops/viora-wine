@@ -96,7 +96,7 @@ export default function GoodWineSection() {
 					</div>
 				) : (
 					<div className="flex flex-col items-center justify-center py-16 text-center">
-						<p className="text-sm text-gray-400">{t("good_wine_empty")}</p>
+						<p className="text-sm text-gray-600">{t("good_wine_empty")}</p>
 					</div>
 				)}
 			</div>

@@ -65,7 +65,7 @@ export default function EventsPageContent({ news }: Props) {
 			{/* Breadcrumb */}
 			<div className="border-b border-gray-100">
 				<div className="mx-auto max-w-360 px-4 py-3 sm:px-6 lg:px-8">
-					<nav className="flex items-center gap-1.5 text-[12px] text-gray-400" aria-label="breadcrumb">
+					<nav className="flex items-center gap-1.5 text-[12px] text-gray-600" aria-label="breadcrumb">
 						<Link href="/" className="hover:text-gray-700">
 							{t("breadcrumb_home")}
 						</Link>
@@ -145,7 +145,7 @@ export default function EventsPageContent({ news }: Props) {
 					</div>
 				) : (
 					<div className="flex flex-col items-center justify-center py-20 text-center">
-						<p className="text-sm text-gray-400">{t("empty")}</p>
+						<p className="text-sm text-gray-600">{t("empty")}</p>
 						<button
 							onClick={() => handleTabChange("all")}
 							className="bg-brand-primary mt-4 rounded-lg px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#a30000]"

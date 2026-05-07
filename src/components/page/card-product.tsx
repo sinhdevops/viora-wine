@@ -80,6 +80,7 @@ export default function CardProduct({ product }: CardProductProps) {
 									fill="none"
 									stroke="currentColor"
 									strokeWidth="2"
+									aria-hidden="true"
 									className="shrink-0 text-gray-500"
 								>
 									<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -129,6 +130,7 @@ export default function CardProduct({ product }: CardProductProps) {
 									height="14"
 									viewBox="0 0 24 24"
 									fill="#FACC15"
+									aria-hidden="true"
 									xmlns="http://www.w3.org/2000/svg"
 								>
 									<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -139,7 +141,7 @@ export default function CardProduct({ product }: CardProductProps) {
 								)}
 							</div>
 						)}
-						{product.alcohol && <div className="text-[12px] text-gray-400">Nồng độ: {product.alcohol}</div>}
+						{product.alcohol && <div className="text-[12px] text-gray-600">Nồng độ: {product.alcohol}</div>}
 					</Link>
 					<div className="mt-auto pt-2">
 						<a

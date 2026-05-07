@@ -87,7 +87,7 @@ function ProductCard({ product, ctaLabel }: { product: DbProduct; ctaLabel: stri
 					) : (
 						<>
 							{originalPrice && (
-								<span className="text-[12px] text-gray-400 line-through">
+								<span className="text-[12px] text-gray-600 line-through">
 									{formatCurrency(originalPrice)}
 								</span>
 							)}

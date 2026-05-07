@@ -106,7 +106,7 @@ export default function TableOfContents({ headings, tocTitle, mode }: TableOfCon
 				</span>
 				<ChevronDown
 					size={16}
-					className={`text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+					className={`text-gray-600 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
 				/>
 			</button>
 

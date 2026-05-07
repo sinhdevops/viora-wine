@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import ProductsPageContent from './_page-content';
+import ProductsHero from './_products-hero';
 import { buildAlternates, buildPageUrl, SITE_URL } from '@/lib/seo';
 
 export async function generateMetadata({
@@ -79,6 +80,7 @@ export default async function Page({
   const t = await getTranslations({ locale, namespace: 'products_page' });
   return (
     <>
+      <ProductsHero />
       <ProductsPageContent />
     </>
   );

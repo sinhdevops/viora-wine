@@ -28,6 +28,7 @@ export default function CategoryQuickNav() {
 								src={cat.image}
 								alt={cat.label}
 								fill
+								sizes="(max-width: 1024px) 48px, 80px"
 								className="object-contain transition-transform duration-200 group-hover:scale-110"
 							/>
 						</div>

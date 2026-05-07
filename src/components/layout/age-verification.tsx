@@ -52,7 +52,7 @@ export default function AgeVerification() {
               </button>
               <button
                 onClick={handleCancel}
-                className="text-gray-400 hover:text-brand-primary transition-colors"
+                className="text-gray-600 hover:text-brand-primary transition-colors"
               >
                 {t('cancel')}
               </button>

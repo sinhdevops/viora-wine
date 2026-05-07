@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { Star, Truck, ShieldCheck } from "lucide-react";
 import { WINE_IMAGES } from "../../../../public/statics/images";

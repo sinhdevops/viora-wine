@@ -36,7 +36,6 @@ export default function ContactPageContent() {
 
   const onSubmit = async (data: ContactFormValues) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log(data);
     toast.success(t('success'));
     reset();
   };

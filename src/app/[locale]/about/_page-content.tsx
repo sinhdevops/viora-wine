@@ -104,7 +104,7 @@ export default function AboutPageContent() {
                 {stats.map((stat, idx) => (
                   <div key={idx}>
                     <p className="text-3xl font-serif text-brand-primary mb-1">{stat.value}</p>
-                    <p className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">{stat.label}</p>
+                    <p className="text-[10px] uppercase tracking-wider text-gray-600 font-bold">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -151,7 +151,7 @@ export default function AboutPageContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-gray-400 font-light mb-16 max-w-2xl mx-auto"
+            className="text-gray-600 font-light mb-16 max-w-2xl mx-auto"
           >
             {t('selection_subtitle')}
           </motion.p>

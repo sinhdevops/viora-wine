@@ -5,6 +5,7 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  productionBrowserSourceMaps: true,
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },

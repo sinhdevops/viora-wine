@@ -31,7 +31,7 @@ const QUICK_FILTER_TABS = [
 const PRODUCTS_PER_PAGE = 12;
 const MAX_PRICE = 5_000_000;
 
-const COUNTRY_OPTIONS = ["Pháp", "Ý", "Úc", "Chile"];
+const COUNTRY_OPTIONS = ["Pháp", "Ý", "Chile", "Úc"];
 
 const WINE_TYPE_OPTIONS: { id: string; label: string; field: "category" | "wine_type" }[] = [
 	{ id: "wine", label: "Vang", field: "category" },
@@ -86,6 +86,7 @@ function CheckItem({ label, checked, onChange }: { label: string; checked: boole
 function FilterSidebar({
 	priceRange,
 	onPriceChange,
+	onPriceCommit,
 	selectedCountries,
 	onCountryToggle,
 	selectedWineTypes,
@@ -95,6 +96,7 @@ function FilterSidebar({
 }: {
 	priceRange: [number, number];
 	onPriceChange: (v: [number, number]) => void;
+	onPriceCommit: (v: [number, number]) => void;
 	selectedCountries: string[];
 	onCountryToggle: (c: string) => void;
 	selectedWineTypes: string[];
@@ -127,6 +129,7 @@ function FilterSidebar({
 					step={500_000}
 					value={priceRange}
 					onValueChange={(v) => onPriceChange(v as [number, number])}
+					onValueCommit={(v) => onPriceCommit(v as [number, number])}
 				>
 					<Slider.Track className="relative h-1 w-full grow overflow-hidden rounded-full bg-gray-200">
 						<Slider.Range className="bg-brand-primary absolute h-full" />
@@ -298,9 +301,10 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
 			) : (
 				<Link
 					href={getPageUrl(currentPage - 1) as any}
+					aria-label={t("pagination.prev")}
 					className="hover:bg-brand-primary hover:border-brand-primary hover:shadow-brand-primary/30 flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-semibold tracking-[0.15em] text-gray-500 uppercase transition-all duration-200 hover:text-white hover:shadow-md"
 				>
-					<HiChevronLeft size={13} />
+					<HiChevronLeft size={13} aria-hidden="true" />
 					<span className="hidden sm:inline">{t("pagination.prev")}</span>
 				</Link>
 			)}
@@ -310,7 +314,7 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
 					page === "..." ? (
 						<span
 							key={`ellipsis-${i}`}
-							className="flex h-9 w-9 items-center justify-center text-[12px] text-gray-300 select-none"
+							className="flex h-9 w-9 items-center justify-center text-[12px] text-gray-500 select-none"
 						>
 							···
 						</span>
@@ -338,10 +342,11 @@ function Pagination({ currentPage, totalPages }: { currentPage: number; totalPag
 			) : (
 				<Link
 					href={getPageUrl(currentPage + 1) as any}
+					aria-label={t("pagination.next")}
 					className="hover:bg-brand-primary hover:border-brand-primary hover:shadow-brand-primary/30 flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2 text-[10px] font-semibold tracking-[0.15em] text-gray-500 uppercase transition-all duration-200 hover:text-white hover:shadow-md"
 				>
 					<span className="hidden sm:inline">{t("pagination.next")}</span>
-					<HiChevronRight size={13} />
+					<HiChevronRight size={13} aria-hidden="true" />
 				</Link>
 			)}
 		</motion.div>
@@ -353,30 +358,38 @@ export default function ProductsPageContent() {
 	const t = useTranslations("products_page");
 	const searchParams = useSearchParams();
 	const router = useRouter();
+	const pathname = usePathname();
 
+	// All filter state derived from URL — survives reload, back/forward
 	const categoryFilter = searchParams.get("cat") || "all";
 	const currentPage = Number(searchParams.get("page")) || 1;
 	const qParam = searchParams.get("q") || "";
-	const wtParam = searchParams.get("wt") || "";
-	const sortParam = searchParams.get("sort") || "";
+	const sortOrder = searchParams.get("sort") || "default";
+	const quickFilter = searchParams.get("tab") || "all";
+	const priceMinParam = Number(searchParams.get("price_min")) || 0;
+	const priceMaxParam = Number(searchParams.get("price_max")) || MAX_PRICE;
+	const selectedCountries = useMemo(
+		() => searchParams.get("countries")?.split(",").filter(Boolean) ?? [],
+		[searchParams],
+	);
+	const selectedWineTypes = useMemo(() => searchParams.get("wt")?.split(",").filter(Boolean) ?? [], [searchParams]);
 
 	const [products, setProducts] = useState<DbProduct[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [searchInput, setSearchInput] = useState(qParam);
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
-	const [sortOrder, setSortOrder] = useState(sortParam || "default");
-	const [priceRange, setPriceRange] = useState<[number, number]>([0, MAX_PRICE]);
-	const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-	const [selectedWineTypes, setSelectedWineTypes] = useState<string[]>(wtParam ? [wtParam] : []);
-	const [quickFilter, setQuickFilter] = useState<string>("all");
 
+	// Local price state for smooth slider drag; synced from URL on change
+	const [priceRange, setPriceRange] = useState<[number, number]>([priceMinParam, priceMaxParam]);
+	useEffect(() => {
+		setPriceRange([priceMinParam, priceMaxParam]);
+	}, [priceMinParam, priceMaxParam]);
+
+	// Local search state with debounced URL sync
+	const [searchInput, setSearchInput] = useState(qParam);
+	const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	useEffect(() => {
 		setSearchInput(qParam);
 	}, [qParam]);
-
-	useEffect(() => {
-		setSelectedWineTypes(wtParam ? [wtParam] : []);
-	}, [wtParam]);
 
 	useEffect(() => {
 		supabase
@@ -391,44 +404,58 @@ export default function ProductsPageContent() {
 			});
 	}, []);
 
-	const updateCategoryFilter = (value: string) => {
+	const updateParams = (updates: Record<string, string | null>, resetPage = true) => {
 		const params = new URLSearchParams(searchParams.toString());
-		if (value === "all") params.delete("cat");
-		else params.set("cat", value);
-		params.delete("page");
-		router.push(`/products?${params.toString()}`, { scroll: false });
+		for (const [key, value] of Object.entries(updates)) {
+			if (!value) params.delete(key);
+			else params.set(key, value);
+		}
+		if (resetPage) params.delete("page");
+		const qs = params.toString();
+		router.push(`${pathname}${qs ? `?${qs}` : ""}`, { scroll: false });
 	};
 
-	const resetPage = () => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.delete("page");
-		router.push(`?${params.toString()}`, { scroll: false });
+	const handleSearchChange = (value: string) => {
+		setSearchInput(value);
+		if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+		searchDebounceRef.current = setTimeout(() => {
+			updateParams({ q: value || null });
+		}, 400);
 	};
 
 	const toggleCountry = (c: string) => {
 		if (c === "__all__") {
-			setSelectedCountries([]);
+			updateParams({ countries: null });
 		} else {
-			setSelectedCountries((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
+			const next = selectedCountries.includes(c)
+				? selectedCountries.filter((x) => x !== c)
+				: [...selectedCountries, c];
+			updateParams({ countries: next.join(",") || null });
 		}
-		resetPage();
 	};
 
 	const toggleWineType = (type: string) => {
 		if (type === "__all__") {
-			setSelectedWineTypes([]);
+			updateParams({ wt: null });
 		} else {
-			setSelectedWineTypes((prev) => (prev.includes(type) ? prev.filter((x) => x !== type) : [...prev, type]));
+			const next = selectedWineTypes.includes(type)
+				? selectedWineTypes.filter((x) => x !== type)
+				: [...selectedWineTypes, type];
+			updateParams({ wt: next.join(",") || null });
 		}
-		resetPage();
+	};
+
+	const handlePriceCommit = (v: [number, number]) => {
+		updateParams({
+			price_min: v[0] > 0 ? v[0].toString() : null,
+			price_max: v[1] < MAX_PRICE ? v[1].toString() : null,
+		});
 	};
 
 	const clearAll = () => {
 		setSearchInput("");
 		setPriceRange([0, MAX_PRICE]);
-		setSelectedCountries([]);
-		setSelectedWineTypes([]);
-		router.push("/products", { scroll: false });
+		router.push(pathname, { scroll: false });
 	};
 
 	const filteredProducts = useMemo(() => {
@@ -500,113 +527,6 @@ export default function ProductsPageContent() {
 
 	return (
 		<div className="flex min-h-screen flex-col overflow-x-clip">
-			{/* HERO — mobile */}
-			<section className="relative aspect-428/180 lg:hidden">
-				<Image
-					src={WINE_IMAGES.bannerProductMobile}
-					alt="Tất cả sản phẩm – Viora Wine"
-					fill
-					priority
-					className="object-cover"
-				/>
-				<div className="absolute inset-0 flex items-center px-6">
-					<div className="">
-						<span className="mb-[6px] inline-block rounded-full border border-white/20 bg-transparent px-3 py-1 text-[12px] font-semibold tracking-widest text-white uppercase">
-							ĐƯỢC TUYỂN CHỌN TỪ ÚC - Ý - CHILE
-						</span>
-						<h1
-							className="text-[28px] leading-tight font-bold text-white sm:text-[36px]"
-							style={{ fontFamily: "'Libre Bodoni'" }}
-						>
-							Tất cả sản phẩm
-						</h1>
-						<h2
-							className="mb-[6px] text-[28px] leading-tight font-bold sm:text-[36px]"
-							style={{
-								background: "linear-gradient(180deg, #FFF4C9 15.33%, #FFCC00 92.67%)",
-								WebkitBackgroundClip: "text",
-								WebkitTextFillColor: "transparent",
-								backgroundClip: "text",
-								fontFamily: "'Libre Bodoni'",
-							}}
-						>
-							cho mọi dịp.
-						</h2>
-						<p className="text-sm text-white">Top sản phẩm bán chạy - giá tốt hôm nay.</p>
-					</div>
-				</div>
-			</section>
-
-			{/* HERO — desktop */}
-			<section className="relative hidden aspect-1440/350 lg:block">
-				<Image
-					src={WINE_IMAGES.bannerProduct}
-					alt="banner product"
-					fill
-					priority
-					className="object-cover object-right"
-				/>
-				<div className="absolute inset-0 flex items-center">
-					<div className="mx-auto w-full max-w-7xl px-16">
-						<div className="max-w-[50%]">
-							<span className="mb-3 inline-block rounded-full border border-white/20 px-4 py-1.5 text-xs font-semibold tracking-widest text-white uppercase">
-								ĐƯỢC TUYỂN CHỌN TỪ ÚC - Ý - CHILE
-							</span>
-							<h1
-								className="text-[56px] leading-tight font-bold text-white"
-								style={{ fontFamily: "'Libre Bodoni'" }}
-							>
-								Chọn rượu dễ dàng hơn
-							</h1>
-							<h2
-								className="mb-3 text-[56px] leading-tight font-bold"
-								style={{
-									background: "linear-gradient(180deg, #FFF4C9 15.33%, #FFCC00 92.67%)",
-									WebkitBackgroundClip: "text",
-									WebkitTextFillColor: "transparent",
-									backgroundClip: "text",
-									fontFamily: "'Libre Bodoni'",
-								}}
-							>
-								cho mọi dịp.
-							</h2>
-							<p className="mb-5 text-base text-white/60">Top sản phẩm bán chạy - giá tốt hôm nay.</p>
-							<div className="flex gap-8">
-								<div className="flex items-start gap-3">
-									<img
-										src="/statics/images/icon-authenticity.svg"
-										alt=""
-										className="h-10 w-10 shrink-0"
-									/>
-									<div>
-										<p className="text-sm font-semibold text-white">Chính hãng 100%</p>
-										<p className="text-xs text-white/50">Nhập khẩu trực tiếp</p>
-									</div>
-								</div>
-								<div className="flex items-start gap-3">
-									<img
-										src="/statics/images/icon-delivery.svg"
-										alt=""
-										className="h-10 w-10 shrink-0"
-									/>
-									<div>
-										<p className="text-sm font-semibold text-white">Freeship toàn quốc</p>
-										<p className="text-xs text-white/50">Cho đơn từ 999k</p>
-									</div>
-								</div>
-								<div className="flex items-start gap-3">
-									<img src="/statics/images/icon-return.svg" alt="" className="h-10 w-10 shrink-0" />
-									<div>
-										<p className="text-sm font-semibold text-white">Đổi trả dễ dàng</p>
-										<p className="text-xs text-white/50">Trong vòng 7 ngày</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
 			{/* MAIN CONTENT */}
 			<div className="mx-auto w-full max-w-360 px-4 py-5 sm:px-6 lg:px-8 lg:py-14">
 				<div className="flex gap-5 lg:gap-14">
@@ -615,6 +535,7 @@ export default function ProductsPageContent() {
 						<FilterSidebar
 							priceRange={priceRange}
 							onPriceChange={setPriceRange}
+							onPriceCommit={handlePriceCommit}
 							selectedCountries={selectedCountries}
 							onCountryToggle={toggleCountry}
 							selectedWineTypes={selectedWineTypes}
@@ -622,8 +543,7 @@ export default function ProductsPageContent() {
 							hasActive={hasSidebarFilters}
 							onClearAll={() => {
 								setPriceRange([0, MAX_PRICE]);
-								setSelectedCountries([]);
-								setSelectedWineTypes([]);
+								updateParams({ price_min: null, price_max: null, countries: null, wt: null });
 							}}
 						/>
 					</aside>
@@ -635,7 +555,7 @@ export default function ProductsPageContent() {
 							{/* Title */}
 							<p className="mb-3 text-xl font-bold uppercase">
 								TẤT CẢ SẢN PHẨM{" "}
-								<span className="text-sm font-normal text-gray-400">
+								<span className="text-sm font-normal text-gray-600">
 									({loading ? "..." : `${filteredProducts.length} sản phẩm`})
 								</span>
 							</p>
@@ -670,18 +590,24 @@ export default function ProductsPageContent() {
 										</span>
 									)}
 								</button>
-								<SortDropdown value={sortOrder} onChange={setSortOrder} />
+								<SortDropdown
+									value={sortOrder}
+									onChange={(v) => updateParams({ sort: v === "default" ? null : v })}
+								/>
 								<div className="focus-within:border-brand-primary flex flex-1 items-center gap-2 rounded-full border border-transparent bg-[#EFEFEF] px-3 py-2 transition-colors">
 									<HiMagnifyingGlass className="shrink-0 text-gray-400" size={13} />
 									<input
 										type="text"
 										value={searchInput}
-										onChange={(e) => setSearchInput(e.target.value)}
+										onChange={(e) => handleSearchChange(e.target.value)}
 										placeholder="Tìm kiếm..."
 										className="w-full bg-transparent text-[12px] text-gray-700 outline-none placeholder:text-gray-400"
 									/>
 									{searchInput && (
-										<button onClick={() => setSearchInput("")} className="shrink-0 text-gray-400">
+										<button
+											onClick={() => handleSearchChange("")}
+											className="shrink-0 text-gray-400"
+										>
 											<HiX size={13} />
 										</button>
 									)}
@@ -703,7 +629,10 @@ export default function ProductsPageContent() {
 									</button>
 								)}
 							</div>
-							<SortDropdown value={sortOrder} onChange={setSortOrder} />
+							<SortDropdown
+								value={sortOrder}
+								onChange={(v) => updateParams({ sort: v === "default" ? null : v })}
+							/>
 						</div>
 
 						{/* Promotion banner — desktop */}
@@ -752,10 +681,7 @@ export default function ProductsPageContent() {
 											<SwiperSlide key={tab.id} style={{ width: "auto" }}>
 												<button
 													onClick={() => {
-														setQuickFilter(tab.id);
-														const params = new URLSearchParams(searchParams.toString());
-														params.delete("page");
-														router.push(`?${params.toString()}`, { scroll: false });
+														updateParams({ tab: tab.id === "all" ? null : tab.id });
 													}}
 													className={`flex h-8 items-center justify-center rounded-lg border px-4 text-[14px] whitespace-nowrap transition-all ${
 														isActive
@@ -778,10 +704,7 @@ export default function ProductsPageContent() {
 										<button
 											key={tab.id}
 											onClick={() => {
-												setQuickFilter(tab.id);
-												const params = new URLSearchParams(searchParams.toString());
-												params.delete("page");
-												router.push(`?${params.toString()}`, { scroll: false });
+												updateParams({ tab: tab.id === "all" ? null : tab.id });
 											}}
 											className={`flex h-10 items-center justify-center rounded-xl border px-4 text-[15px] transition-all ${
 												isActive
@@ -808,25 +731,21 @@ export default function ProductsPageContent() {
 						{/* Product grid */}
 						{!loading && filteredProducts.length > 0 && (
 							<>
-								<motion.div
-									layout
-									className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-3 xl:grid-cols-4"
-								>
-									<AnimatePresence mode="popLayout">
+								<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+									<AnimatePresence mode="sync">
 										{paginatedProducts.map((product) => (
 											<motion.div
 												key={product.id}
-												layout
-												initial={{ opacity: 0, scale: 0.96 }}
-												animate={{ opacity: 1, scale: 1 }}
-												exit={{ opacity: 0, scale: 0.96 }}
-												transition={{ duration: 0.3 }}
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
+												transition={{ duration: 0.2 }}
 											>
 												<CardProduct product={product} />
 											</motion.div>
 										))}
 									</AnimatePresence>
-								</motion.div>
+								</div>
 								<Pagination currentPage={currentPage} totalPages={totalPages} />
 							</>
 						)}
@@ -896,6 +815,7 @@ export default function ProductsPageContent() {
 								<FilterSidebar
 									priceRange={priceRange}
 									onPriceChange={setPriceRange}
+									onPriceCommit={handlePriceCommit}
 									selectedCountries={selectedCountries}
 									onCountryToggle={toggleCountry}
 									selectedWineTypes={selectedWineTypes}
@@ -903,8 +823,7 @@ export default function ProductsPageContent() {
 									hasActive={hasSidebarFilters}
 									onClearAll={() => {
 										setPriceRange([0, MAX_PRICE]);
-										setSelectedCountries([]);
-										setSelectedWineTypes([]);
+										updateParams({ price_min: null, price_max: null, countries: null, wt: null });
 									}}
 								/>
 							</div>
@@ -942,11 +861,11 @@ export default function ProductsPageContent() {
 									Rượu Vang Nhập Khẩu Chính Hãng Tại Viora Wine
 								</h2>
 								<p>
-									Viora Wine là shop rượu vang nhập khẩu chính hãng uy tín tại Hà Nội và Đà Nẵng, chuyên
-									cung cấp <strong>rượu vang Úc</strong>, <strong>rượu vang Pháp</strong>,{" "}
-									<strong>rượu vang Ý</strong> và <strong>rượu vang Chile</strong> tuyển chọn từ các vùng
-									sản xuất nổi tiếng thế giới. Toàn bộ sản phẩm có đầy đủ giấy tờ nhập khẩu, tem chính
-									hãng và chứng nhận xuất xứ.
+									Viora Wine là shop rượu vang nhập khẩu chính hãng uy tín tại Hà Nội và Đà Nẵng,
+									chuyên cung cấp <strong>rượu vang Úc</strong>, <strong>rượu vang Pháp</strong>,{" "}
+									<strong>rượu vang Ý</strong> và <strong>rượu vang Chile</strong> tuyển chọn từ các
+									vùng sản xuất nổi tiếng thế giới. Toàn bộ sản phẩm có đầy đủ giấy tờ nhập khẩu, tem
+									chính hãng và chứng nhận xuất xứ.
 								</p>
 							</div>
 							<div>
@@ -954,12 +873,29 @@ export default function ProductsPageContent() {
 									Các Loại Rượu Vang Phổ Biến
 								</h2>
 								<ul className="space-y-1.5">
-									<li><strong>Vang đỏ Úc (Shiraz, Cabernet Sauvignon):</strong> Đậm đà, hương mận, chocolate — hợp thịt nướng & BBQ.</li>
-									<li><strong>Vang trắng (Sauvignon Blanc, Chardonnay):</strong> Tươi mát, hương chanh — tuyệt với hải sản.</li>
-									<li><strong>Vang hồng (Rosé):</strong> Cân bằng, dễ uống, linh hoạt mọi dịp.</li>
-									<li><strong>Vang Pháp (Bordeaux, Bourgogne):</strong> Tinh tế, đẳng cấp — lý tưởng làm quà tặng cao cấp.</li>
-									<li><strong>Vang Ý (Chianti, Moscato):</strong> Moscato ngọt nhẹ rất được yêu thích tại Việt Nam.</li>
-									<li><strong>Vang Chile (Concha y Toro):</strong> Giá tốt, ổn định — phù hợp người mới & bữa tiệc thường ngày.</li>
+									<li>
+										<strong>Vang đỏ Úc (Shiraz, Cabernet Sauvignon):</strong> Đậm đà, hương mận,
+										chocolate — hợp thịt nướng & BBQ.
+									</li>
+									<li>
+										<strong>Vang trắng (Sauvignon Blanc, Chardonnay):</strong> Tươi mát, hương chanh
+										— tuyệt với hải sản.
+									</li>
+									<li>
+										<strong>Vang hồng (Rosé):</strong> Cân bằng, dễ uống, linh hoạt mọi dịp.
+									</li>
+									<li>
+										<strong>Vang Pháp (Bordeaux, Bourgogne):</strong> Tinh tế, đẳng cấp — lý tưởng
+										làm quà tặng cao cấp.
+									</li>
+									<li>
+										<strong>Vang Ý (Chianti, Moscato):</strong> Moscato ngọt nhẹ rất được yêu thích
+										tại Việt Nam.
+									</li>
+									<li>
+										<strong>Vang Chile (Concha y Toro):</strong> Giá tốt, ổn định — phù hợp người
+										mới & bữa tiệc thường ngày.
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -970,21 +906,44 @@ export default function ProductsPageContent() {
 									Tại Sao Nên Mua Tại Viora Wine?
 								</h2>
 								<ul className="space-y-1.5">
-									<li>✓ <strong>Chính hãng 100%</strong> — nhập khẩu trực tiếp, có đầy đủ hồ sơ pháp lý</li>
-									<li>✓ <strong>Giá tốt nhất thị trường</strong> — không qua trung gian, tiết kiệm 15–20%</li>
-									<li>✓ <strong>Giao hàng 2–4h</strong> tại Hà Nội & Đà Nẵng, toàn quốc 1–3 ngày</li>
-									<li>✓ <strong>Tư vấn chuyên nghiệp 24/7</strong> qua Zalo miễn phí</li>
-									<li>✓ <strong>Đổi trả trong 7 ngày</strong> — cam kết hài lòng 100%</li>
-									<li>✓ <strong>Quà tặng cao cấp</strong> — hộp gỗ, khắc laser, thiệp viết tay</li>
+									<li>
+										✓ <strong>Chính hãng 100%</strong> — nhập khẩu trực tiếp, có đầy đủ hồ sơ pháp
+										lý
+									</li>
+									<li>
+										✓ <strong>Giá tốt nhất thị trường</strong> — không qua trung gian, tiết kiệm
+										15–20%
+									</li>
+									<li>
+										✓ <strong>Giao hàng 2–4h</strong> tại Hà Nội & Đà Nẵng, toàn quốc 1–3 ngày
+									</li>
+									<li>
+										✓ <strong>Tư vấn chuyên nghiệp 24/7</strong> qua Zalo miễn phí
+									</li>
+									<li>
+										✓ <strong>Đổi trả trong 7 ngày</strong> — cam kết hài lòng 100%
+									</li>
+									<li>
+										✓ <strong>Quà tặng cao cấp</strong> — hộp gỗ, khắc laser, thiệp viết tay
+									</li>
 								</ul>
 							</div>
 							<div>
 								<h2 className="mb-3 text-[18px] font-bold text-gray-900">
 									Hướng Dẫn Chọn Rượu Phù Hợp
 								</h2>
-								<p><strong>Người mới:</strong> Chọn vang trắng Sauvignon Blanc, vang hồng hoặc Pinot Noir nhẹ. Tránh Barolo hay Cabernet Sauvignon đậm khi mới bắt đầu.</p>
-								<p className="mt-2"><strong>Bữa tiệc gia đình:</strong> Shiraz Úc hoặc Malbec Chile từ 400.000đ — dễ uống, hợp nhiều món.</p>
-								<p className="mt-2"><strong>Quà tặng doanh nghiệp:</strong> Ưu tiên vang Pháp Bordeaux hoặc Barossa Reserve từ 1.000.000đ, kèm hộp quà gỗ chuyên nghiệp.</p>
+								<p>
+									<strong>Người mới:</strong> Chọn vang trắng Sauvignon Blanc, vang hồng hoặc Pinot
+									Noir nhẹ. Tránh Barolo hay Cabernet Sauvignon đậm khi mới bắt đầu.
+								</p>
+								<p className="mt-2">
+									<strong>Bữa tiệc gia đình:</strong> Shiraz Úc hoặc Malbec Chile từ 400.000đ — dễ
+									uống, hợp nhiều món.
+								</p>
+								<p className="mt-2">
+									<strong>Quà tặng doanh nghiệp:</strong> Ưu tiên vang Pháp Bordeaux hoặc Barossa
+									Reserve từ 1.000.000đ, kèm hộp quà gỗ chuyên nghiệp.
+								</p>
 							</div>
 							<div className="flex flex-wrap gap-2 pt-1">
 								{[

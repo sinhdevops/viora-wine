@@ -76,7 +76,7 @@ function ReviewCard({ review }: { review: Review }) {
 					</div>
 					<div>
 						<p className="text-sm font-semibold text-gray-900">{review.name}</p>
-						<p className="text-xs text-gray-400">{review.city}</p>
+						<p className="text-xs text-gray-600">{review.city}</p>
 					</div>
 				</div>
 				{review.productImage && (

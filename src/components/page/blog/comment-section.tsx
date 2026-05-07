@@ -105,7 +105,7 @@ function CommentCard({ comment }: { comment: Comment }) {
 				<div className="rounded-xl rounded-tl-none border border-gray-100 bg-gray-50 px-4 py-3">
 					<div className="mb-1 flex flex-wrap items-baseline gap-2">
 						<span className="text-[13px] font-bold text-gray-900">{comment.name}</span>
-						<span className="text-[11px] text-gray-400">{formatDate(comment.createdAt)}</span>
+						<span className="text-[11px] text-gray-600">{formatDate(comment.createdAt)}</span>
 					</div>
 					<p className="text-[13px] leading-relaxed whitespace-pre-wrap text-gray-700">{comment.body}</p>
 				</div>
@@ -296,7 +296,7 @@ export default function CommentSection({ articleId }: CommentSectionProps) {
 						{sorted.length === 0 ? (
 							<div className="flex flex-col items-center gap-3 py-10 text-center">
 								<MessageCircle size={36} className="text-gray-200" />
-								<p className="text-[13px] text-gray-400">{t("empty")}</p>
+								<p className="text-[13px] text-gray-600">{t("empty")}</p>
 							</div>
 						) : (
 							<div className="space-y-5">

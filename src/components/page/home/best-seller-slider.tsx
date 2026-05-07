@@ -9,7 +9,6 @@ import { supabase } from "@/lib/supabase-client";
 import type { DbProduct } from "@/@types/product";
 import CardProduct from "@/components/page/card-product";
 import { useTranslations } from "next-intl";
-
 import "swiper/css";
 import "swiper/css/grid";
 
@@ -46,9 +45,10 @@ export default function BestSellerSlider() {
 					{/* Prev button */}
 					<button
 						onClick={() => swiperRef.current?.slidePrev()}
+						aria-label="Sản phẩm trước"
 						className="absolute top-1/2 -left-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500 transition-all hover:border-gray-400 hover:text-gray-900 md:-left-5"
 					>
-						<ChevronLeft size={18} />
+						<ChevronLeft size={18} aria-hidden="true" />
 					</button>
 
 					<Swiper
@@ -75,9 +75,10 @@ export default function BestSellerSlider() {
 					{/* Next button */}
 					<button
 						onClick={() => swiperRef.current?.slideNext()}
+						aria-label="Sản phẩm tiếp theo"
 						className="absolute top-1/2 -right-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500 transition-all hover:border-gray-400 hover:text-gray-900 md:-right-5"
 					>
-						<ChevronRight size={18} />
+						<ChevronRight size={18} aria-hidden="true" />
 					</button>
 				</div>
 			</div>

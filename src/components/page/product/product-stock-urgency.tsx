@@ -26,7 +26,7 @@ export default function ProductStockUrgency({ stock, stockPercent }: Props) {
 					<Clock size={13} className="shrink-0" />
 					<span>Chỉ còn {stock} chai trong kho</span>
 				</div>
-				<div className="flex items-center gap-1.5 text-[13px] text-gray-400">
+				<div className="flex items-center gap-1.5 text-[13px] text-gray-600">
 					<Eye size={13} className="shrink-0" />
 					<span>{viewersCount} người đang xem</span>
 				</div>

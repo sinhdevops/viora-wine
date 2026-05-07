@@ -25,6 +25,11 @@ export const routing = defineRouting({
 		"/shiraz": "/ruou-vang-shiraz",
 		"/shiraz-da-nang": "/ruou-vang-shiraz-da-nang",
 		"/shiraz-ha-noi": "/ruou-vang-shiraz-ha-noi",
+		"/red-wine": "/ruou-vang-do",
+		"/white-wine": "/ruou-vang-trang",
+		"/rose-wine": "/ruou-vang-hong",
+		"/sweet-wine": "/ruou-vang-ngot",
+		"/spirits": "/ruou-manh",
 	},
 });
 

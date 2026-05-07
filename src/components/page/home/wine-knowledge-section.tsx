@@ -6,7 +6,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import { type EventItem } from "@/app/[locale]/_page-content";
 import { useTranslations } from "next-intl";
-
 import "swiper/css";
 import "swiper/css/free-mode";
 

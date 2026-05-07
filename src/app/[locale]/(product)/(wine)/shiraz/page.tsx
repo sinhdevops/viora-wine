@@ -1,7 +1,5 @@
-import { createClient } from "@/utils/supabase/server";
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
-import CardProduct from "@/components/page/card-product";
-import type { DbProduct } from "@/@types/product";
+import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
 
 export const revalidate = 3600;
 
@@ -74,19 +72,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function ShirazPage() {
-	const supabase = await createClient();
-
-	const { data: products } = await supabase
-		.from("products")
-		.select(
-			"id, slug, name, description, thumbnail_url, content, price, discount_percentage, category, stock, tag, rating, sold_count, grape_variety, wine_type, country",
-		)
-		.or("grape_variety.ilike.%Shiraz%,name.ilike.%Shiraz%")
-		.order("sold_count", { ascending: false })
-		.limit(12);
-
-	const shirazProducts = (products ?? []) as DbProduct[];
-
 	const pageUrl = buildPageUrl("vi", "/shiraz");
 
 	const faqJsonLd = {
@@ -167,38 +152,7 @@ export default async function ShirazPage() {
 						Toàn bộ Shiraz Úc nhập khẩu chính hãng, chọn lọc kỹ từ Barossa Valley & McLaren Vale — Nam Úc.
 					</p>
 
-					{shirazProducts.length > 0 ? (
-						<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-5 lg:grid-cols-4">
-							{shirazProducts.map((product) => (
-								<CardProduct key={product.id} product={product} />
-							))}
-						</div>
-					) : (
-						<div className="rounded-2xl border border-gray-100 bg-gray-50 py-20 text-center">
-							<p className="mb-2 text-lg font-medium text-gray-700">
-								Đang cập nhật sản phẩm Shiraz mới nhất
-							</p>
-							<p className="mb-6 text-sm text-gray-400">
-								Liên hệ Zalo để được tư vấn và đặt hàng trực tiếp
-							</p>
-							<div className="flex flex-wrap justify-center gap-3">
-								<a
-									href={ZALO_LINK}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="rounded-lg bg-[#B22222] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#8B0000]"
-								>
-									Tư vấn qua Zalo
-								</a>
-								<a
-									href="/san-pham"
-									className="rounded-lg border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 transition-colors hover:border-gray-400"
-								>
-									Xem tất cả sản phẩm
-								</a>
-							</div>
-						</div>
-					)}
+					<WineProductGrid grapeVariety="Shiraz" emptyLabel="Đang cập nhật sản phẩm Shiraz mới nhất" />
 				</section>
 
 				{/* ── What is Shiraz ───────────────────────────────────── */}
@@ -389,7 +343,7 @@ export default async function ShirazPage() {
 									</p>
 									<p className="mt-0.5 text-sm text-gray-500">Giao nhanh 2–4h nội thành Đà Nẵng</p>
 								</div>
-								<span className="text-gray-400 group-hover:text-[#B22222]">→</span>
+								<span className="text-gray-600 group-hover:text-[#B22222]">→</span>
 							</a>
 							<a
 								href="/ruou-vang-shiraz-ha-noi"
@@ -401,7 +355,7 @@ export default async function ShirazPage() {
 									</p>
 									<p className="mt-0.5 text-sm text-gray-500">Giao nhanh 2–4h nội thành Hà Nội</p>
 								</div>
-								<span className="text-gray-400 group-hover:text-[#B22222]">→</span>
+								<span className="text-gray-600 group-hover:text-[#B22222]">→</span>
 							</a>
 						</div>
 					</div>

@@ -4,11 +4,12 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, Phone, ShieldCheck, Truck, RotateCcw } from "lucide-react";
+import { Menu, Phone, ShieldCheck, Truck, RotateCcw, ChevronRight } from "lucide-react";
 import SearchBar from "./search-bar";
 import Image from "next/image";
 import { WINE_IMAGES } from "../../../public/statics/images";
 import Button from "../ui/button";
+import { WineDropdownDesktop, WineMobileSubPanel } from "./wine-dropdown";
 
 const phone = "0325610016";
 const phoneDisplay = "0338-909-973";
@@ -23,15 +24,20 @@ function trackContactConversion() {
 export default function Header() {
 	const t = useTranslations("common");
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const [isWineOpen, setIsWineOpen] = useState(false);
+	const [openSubMenu, setOpenSubMenu] = useState<null | "wine">(null);
 	const pathname = usePathname();
 
-	const navItems = [
-		{ name: t("home"), path: "/" as const },
-		{ name: t("products"), path: "/products" as const },
+	const otherNavItems = [
 		{ name: t("news"), path: "/blog" as const },
 		{ name: t("promotion"), path: "/promotion" as const },
 		{ name: t("gifts"), path: "/gifts" as const },
 	];
+
+	function closeMenu() {
+		setIsMobileMenuOpen(false);
+		setOpenSubMenu(null);
+	}
 
 	return (
 		<header className="sticky top-0 z-50">
@@ -118,8 +124,23 @@ export default function Header() {
 
 						{/* Desktop Navigation */}
 						<nav className="hidden items-center gap-7 md:flex">
-							{navItems.map((item) => {
-								const isActive = item.path === "/" ? pathname === "/" : pathname.startsWith(item.path);
+							<Link
+								href="/"
+								className={`text-sm font-semibold tracking-wide transition-colors hover:text-red-600 ${
+									pathname === "/" ? "border-b-2 border-red-600 pb-0.5 text-red-600" : "text-gray-800"
+								}`}
+							>
+								{t("home")}
+							</Link>
+
+							<WineDropdownDesktop
+								isOpen={isWineOpen}
+								onOpen={() => setIsWineOpen(true)}
+								onClose={() => setIsWineOpen(false)}
+							/>
+
+							{otherNavItems.map((item) => {
+								const isActive = pathname.startsWith(item.path);
 								return (
 									<Link
 										key={item.path}
@@ -134,7 +155,7 @@ export default function Header() {
 							})}
 						</nav>
 
-						{/* Right: Search + Language */}
+						{/* Right: Search */}
 						<div className="hidden items-center gap-3 md:flex">
 							<SearchBar className="w-64" />
 						</div>
@@ -142,9 +163,11 @@ export default function Header() {
 						{/* Mobile menu toggle */}
 						<button
 							onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+							aria-label={isMobileMenuOpen ? "Đóng menu" : "Mở menu"}
+							aria-expanded={isMobileMenuOpen}
 							className="text-gray-700 hover:text-black md:hidden"
 						>
-							<Menu size={28} />
+							<Menu size={28} aria-hidden="true" />
 						</button>
 					</div>
 				</div>
@@ -160,29 +183,52 @@ export default function Header() {
 							exit={{ opacity: 0 }}
 							transition={{ duration: 0.2 }}
 							className="fixed inset-0 z-40 md:hidden"
-							onClick={() => setIsMobileMenuOpen(false)}
+							onClick={closeMenu}
 						/>
 						<motion.div
 							initial={{ x: "100%" }}
 							animate={{ x: 0 }}
 							exit={{ x: "100%" }}
 							transition={{ duration: 0.25, ease: "easeInOut" }}
-							className="fixed top-[117px] right-0 z-50 h-full w-72 bg-white pt-10 shadow-2xl md:hidden"
+							className="fixed top-[117px] right-0 z-50 h-full w-72 overflow-hidden bg-white pt-10 shadow-2xl md:hidden"
 						>
 							{/* Mobile search */}
 							<div className="mx-3 mb-2">
-								<SearchBar onNavigate={() => setIsMobileMenuOpen(false)} />
+								<SearchBar onNavigate={closeMenu} />
 							</div>
 
 							<div className="space-y-1 px-3 py-2">
-								{navItems.map((item) => {
-									const isActive =
-										item.path === "/" ? pathname === "/" : pathname.startsWith(item.path);
+								{/* Home */}
+								<Link
+									href="/"
+									onClick={closeMenu}
+									className={`flex items-center justify-between rounded-md px-3 py-4 font-medium transition-colors ${
+										pathname === "/"
+											? "text-brand-primary bg-red-50 font-semibold"
+											: "text-gray-800 hover:bg-gray-50 hover:text-red-600"
+									}`}
+								>
+									{t("home")}
+									{pathname === "/" && <span className="bg-brand-primary h-1.5 w-1.5 rounded-full" />}
+								</Link>
+
+								{/* Rượu Vang → sub panel trigger */}
+								<button
+									onClick={() => setOpenSubMenu("wine")}
+									className="flex w-full items-center justify-between rounded-md px-3 py-4 font-medium text-gray-800 transition-colors hover:bg-gray-50 hover:text-red-600"
+								>
+									Rượu Vang
+									<ChevronRight size={16} className="text-gray-400" />
+								</button>
+
+								{/* Other items */}
+								{otherNavItems.map((item) => {
+									const isActive = pathname.startsWith(item.path);
 									return (
 										<Link
 											key={item.path}
 											href={item.path}
-											onClick={() => setIsMobileMenuOpen(false)}
+											onClick={closeMenu}
 											className={`flex items-center justify-between rounded-md px-3 py-4 font-medium transition-colors ${
 												isActive
 													? "text-brand-primary bg-red-50 font-semibold"
@@ -194,20 +240,29 @@ export default function Header() {
 										</Link>
 									);
 								})}
+
 								<div className="px-3 py-4">
 									<a
 										href={`https://zalo.me/${phone}`}
 										target="_blank"
 										rel="noopener noreferrer"
 										onClick={() => {
-											setIsMobileMenuOpen(false);
+											closeMenu();
 											trackContactConversion();
 										}}
 									>
 										<Button className="w-full">{t("contact_zalo")}</Button>
 									</a>
 								</div>
+
 							</div>
+
+							{/* Wine sub-panel slides over the full drawer */}
+							<WineMobileSubPanel
+								isOpen={openSubMenu === "wine"}
+								onClose={() => setOpenSubMenu(null)}
+								onNavigate={closeMenu}
+							/>
 						</motion.div>
 					</>
 				)}

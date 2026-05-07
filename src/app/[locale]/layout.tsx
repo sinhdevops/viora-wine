@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import MainLayout from "@/components/layout/main-layout";
+import CookieConsent from "@/components/layout/cookie-consent";
+import DeferredTracking from "@/components/layout/deferred-tracking";
 import { Montserrat } from "next/font/google";
 import Script from "next/script";
 import "../globals.css";
@@ -13,7 +15,8 @@ const montserrat = Montserrat({
 	subsets: ["vietnamese"],
 	weight: ["300", "400", "500", "600", "700", "800"],
 	variable: "--font-montserrat",
-	display: "swap",
+	display: "optional",
+	preload: true,
 });
 
 export function generateStaticParams() {
@@ -158,6 +161,10 @@ export default async function RootLayout({
 	return (
 		<html lang={locale} className={montserrat.variable} suppressHydrationWarning>
 			<head>
+				{/* Preconnect to external domains to reduce LCP latency */}
+				<link rel="preconnect" href="https://towanokxdpotleqzcrim.supabase.co" />
+				<link rel="preconnect" href="https://res.cloudinary.com" />
+				<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 				<script
 					type="application/ld+json"
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
@@ -168,6 +175,21 @@ export default async function RootLayout({
 				/>
 			</head>
 			<body suppressHydrationWarning>
+				{/* Consent Mode v2 — must run BEFORE GTM to prevent cookies before consent */}
+				<Script id="consent-init" strategy="beforeInteractive">{`
+					window.dataLayer = window.dataLayer || [];
+					function gtag(){window.dataLayer.push(arguments);}
+					var _c = 'denied';
+					try { _c = localStorage.getItem('cookie-consent') === 'granted' ? 'granted' : 'denied'; } catch(e){}
+					gtag('consent', 'default', {
+						ad_storage: _c,
+						analytics_storage: _c,
+						ad_user_data: _c,
+						ad_personalization: _c,
+						wait_for_update: _c === 'denied' ? 2000 : 0
+					});
+				`}</Script>
+				{/* GTM noscript fallback for no-JS users */}
 				<noscript>
 					<iframe
 						src="https://www.googletagmanager.com/ns.html?id=GTM-5P3662VX"
@@ -176,25 +198,11 @@ export default async function RootLayout({
 						style={{ display: "none", visibility: "hidden" }}
 					/>
 				</noscript>
-				<Script id="gtm" strategy="afterInteractive">
-					{`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5P3662VX');`}
-				</Script>
-				<Script src="https://www.googletagmanager.com/gtag/js?id=G-C1XWMDYLVB" strategy="afterInteractive" />
-				<Script id="google-analytics" strategy="afterInteractive">
-					{`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-C1XWMDYLVB');
-            gtag('config', 'AW-18100193809');
-          `}
-				</Script>
 				<NextIntlClientProvider messages={messages} locale={locale}>
 					<MainLayout>{children}</MainLayout>
+					<CookieConsent />
+					{/* Load GTM/GA only after first user interaction or 4s timeout */}
+					<DeferredTracking />
 				</NextIntlClientProvider>
 			</body>
 		</html>

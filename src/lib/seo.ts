@@ -20,6 +20,11 @@ const VI_PATH_MAP: Record<string, string> = {
   '/shiraz-ha-noi': '/ruou-vang-shiraz-ha-noi',
   '/da-nang': '/ruou-vang-da-nang',
   '/ha-noi': '/ruou-vang-ha-noi',
+  '/red-wine': '/ruou-vang-do',
+  '/white-wine': '/ruou-vang-trang',
+  '/rose-wine': '/ruou-vang-hong',
+  '/sweet-wine': '/ruou-vang-ngot',
+  '/spirits': '/ruou-manh',
 };
 
 export function getLocalizedPath(path: string): string {

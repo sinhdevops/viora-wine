@@ -45,7 +45,7 @@ function FloatingButtonItem({ href, icon, label, bgClass, rippleColor, delay = 0
         )}
       </AnimatePresence>
 
-      <a href={href} target="_blank" rel="noopener noreferrer" className="relative" onClick={trackContactConversion}>
+      <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="relative" onClick={trackContactConversion}>
         {/* Ripple rings — CSS animation, không dùng framer */}
         <span
           className="absolute inset-0 rounded-full animate-ping opacity-40"
@@ -92,7 +92,7 @@ export default function FloatingZalo() {
     <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-10 items-center">
       <FloatingButtonItem
         href={messengerLink}
-        icon={<SiFacebook size={28} />}
+        icon={<SiFacebook size={28} aria-hidden="true" />}
         label={t('chat_messenger')}
         bgClass="bg-gradient-to-br from-[#00B2FF] to-[#006AFF]"
         rippleColor="#00B2FF"
@@ -100,7 +100,7 @@ export default function FloatingZalo() {
       />
       <FloatingButtonItem
         href={`https://zalo.me/${phone}`}
-        icon={<SiZalo size={32} />}
+        icon={<SiZalo size={32} aria-hidden="true" />}
         label={t('chat_zalo')}
         bgClass="bg-gradient-to-br from-[#2196F3] to-[#01579B]"
         rippleColor="#2196F3"

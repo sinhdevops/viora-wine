@@ -49,7 +49,7 @@ export default function Footer() {
 				<ul className="space-y-3 pb-4">
 					{categories.map((item) => (
 						<li key={item.path}>
-							<Link href={item.path as any} className="text-sm text-white/60 transition-colors hover:text-white">
+							<Link href={item.path as any} className="text-sm text-white/80 transition-colors hover:text-white">
 								{item.name}
 							</Link>
 						</li>
@@ -64,7 +64,7 @@ export default function Footer() {
 				<ul className="space-y-3 pb-4">
 					{supportItems.map((item) => (
 						<li key={item.path}>
-							<Link href={item.path} className="text-sm text-white/60 transition-colors hover:text-white">
+							<Link href={item.path} className="text-sm text-white/80 transition-colors hover:text-white">
 								{item.name}
 							</Link>
 						</li>
@@ -79,19 +79,19 @@ export default function Footer() {
 				<ul className="space-y-3 pb-4">
 					<li className="flex items-start gap-2.5">
 						<MapPin size={14} className="mt-0.5 shrink-0 text-red-500" />
-						<span className="text-sm text-white/60">Ngõ 44/65 đường Nguyễn Cơ Thạch, Phường Từ Liêm, TP Hà Nội</span>
+						<span className="text-sm text-white/80">Ngõ 44/65 đường Nguyễn Cơ Thạch, Phường Từ Liêm, TP Hà Nội</span>
 					</li>
 					<li className="flex items-center gap-2.5">
 						<Phone size={14} className="shrink-0 text-red-500" />
-						<a href="tel:0325610016" className="text-sm text-white/60 hover:text-white">032 561 0016</a>
+						<a href="tel:0325610016" className="text-sm text-white/80 hover:text-white">032 561 0016</a>
 					</li>
 					<li className="flex items-center gap-2.5">
 						<Mail size={14} className="shrink-0 text-red-500" />
-						<a href="mailto:viorawine@gmail.com" className="text-sm text-white/60 hover:text-white">viorawine@gmail.com</a>
+						<a href="mailto:viorawine@gmail.com" className="text-sm text-white/80 hover:text-white">viorawine@gmail.com</a>
 					</li>
 					<li className="flex items-start gap-2.5">
 						<Clock size={14} className="mt-0.5 shrink-0 text-red-500" />
-						<div className="text-sm text-white/60">
+						<div className="text-sm text-white/80">
 							<p>T2–T6: 08:00 – 22:00</p>
 							<p>T7–CN: 09:00 – 23:00</p>
 						</div>
@@ -111,7 +111,7 @@ export default function Footer() {
 						<Link href="/">
 							<Image src={WINE_IMAGES.logoDark} alt="Logo dark" />
 						</Link>
-						<p className="text-sm leading-relaxed text-white/60">
+						<p className="text-sm leading-relaxed text-white/80">
 							Chuyên rượu vang nhập khẩu - Cam kết chính hãng, rượu ngon – Giao nhanh – Tư vấn tận tình
 						</p>
 
@@ -126,7 +126,7 @@ export default function Footer() {
 									rel="noopener noreferrer"
 									className={`flex h-9 w-9 items-center justify-center rounded-lg ${bg} text-white transition-opacity hover:opacity-80`}
 								>
-									<Icon size={16} />
+									<Icon size={16} aria-hidden="true" />
 								</a>
 							))}
 							<div className="ml-1 flex h-8 w-8 items-center justify-center rounded-full border-2 border-red-500 text-[11px] font-extrabold text-red-500">
@@ -135,8 +135,8 @@ export default function Footer() {
 						</div>
 
 						{/* Legal */}
-						<div className="space-y-1 text-xs text-white/50">
-							<p className="font-semibold text-white/70">{t("legal_company_name")}</p>
+						<div className="space-y-1 text-xs text-white/75">
+							<p className="font-semibold text-white/90">{t("legal_company_name")}</p>
 							<p>{t("legal_business_license")}</p>
 							<p>{t("legal_alcohol_license")}</p>
 						</div>
@@ -150,12 +150,13 @@ export default function Footer() {
 									onClick={() => toggle(section.id)}
 									className="flex w-full items-center justify-between py-4 text-left"
 								>
-									<span className="text-sm font-bold tracking-wider text-white/80 uppercase">
+									<span className="text-sm font-bold tracking-wider text-white/90 uppercase">
 										{section.title}
 									</span>
 									<ChevronDown
 										size={16}
-										className={`shrink-0 text-white/40 transition-transform duration-200 ${openSection === section.id ? "rotate-180" : ""}`}
+										aria-hidden="true"
+										className={`shrink-0 text-white/70 transition-transform duration-200 ${openSection === section.id ? "rotate-180" : ""}`}
 									/>
 								</button>
 								{openSection === section.id && section.content}
@@ -169,7 +170,7 @@ export default function Footer() {
 						<ul className="space-y-3">
 							{categories.map((item) => (
 								<li key={item.path}>
-									<Link href={item.path as any} className="text-sm text-white/60 transition-colors hover:text-white">
+									<Link href={item.path as any} className="text-sm text-white/80 transition-colors hover:text-white">
 										{item.name}
 									</Link>
 								</li>
@@ -182,7 +183,7 @@ export default function Footer() {
 						<ul className="space-y-3">
 							{supportItems.map((item) => (
 								<li key={item.path}>
-									<Link href={item.path} className="text-sm text-white/60 transition-colors hover:text-white">
+									<Link href={item.path} className="text-sm text-white/80 transition-colors hover:text-white">
 										{item.name}
 									</Link>
 								</li>
@@ -220,14 +221,14 @@ export default function Footer() {
 			{/* Bottom bar */}
 			<div className="border-t border-white/10">
 				<div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 py-5 sm:flex-row sm:justify-between sm:px-6 lg:px-8">
-					<p className="text-center text-xs text-white/50 sm:text-sm">
-						© {new Date().getFullYear()} <span className="font-semibold text-white/70">VIORA WINE</span>. ĐÃ ĐĂNG KÝ BẢN QUYỀN.
+					<p className="text-center text-xs text-white/75 sm:text-sm">
+						© {new Date().getFullYear()} <span className="font-semibold text-white/90">VIORA WINE</span>. ĐÃ ĐĂNG KÝ BẢN QUYỀN.
 					</p>
 					<div className="flex gap-5">
-						<Link href="/privacy-policy" className="text-xs tracking-widest text-white/50 uppercase transition-colors hover:text-white sm:text-sm">
+						<Link href="/privacy-policy" className="text-xs tracking-widest text-white/75 uppercase transition-colors hover:text-white sm:text-sm">
 							{t("privacy_link")}
 						</Link>
-						<Link href="/terms" className="text-xs tracking-widest text-white/50 uppercase transition-colors hover:text-white sm:text-sm">
+						<Link href="/terms" className="text-xs tracking-widest text-white/75 uppercase transition-colors hover:text-white sm:text-sm">
 							{t("terms_link")}
 						</Link>
 					</div>

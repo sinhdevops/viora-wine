@@ -36,7 +36,7 @@ export default function AuthorBlock({
 		<div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
 			<div className="rounded-2xl border border-gray-100 bg-linear-to-br from-amber-50/60 via-white to-gray-50 p-6">
 				{/* Label */}
-				<p className="mb-4 text-[10px] font-semibold tracking-widest text-gray-400 uppercase">{label}</p>
+				<p className="mb-4 text-[10px] font-semibold tracking-widest text-gray-600 uppercase">{label}</p>
 
 				<div className="flex items-start gap-5">
 					{/* Avatar */}
@@ -66,7 +66,7 @@ export default function AuthorBlock({
 						</div>
 
 						{/* Title */}
-						<p className="mb-2 text-[12px] font-semibold tracking-wide text-gray-400 uppercase">{title}</p>
+						<p className="mb-2 text-[12px] font-semibold tracking-wide text-gray-600 uppercase">{title}</p>
 
 						{/* Bio */}
 						<p className="text-[13px] leading-relaxed text-gray-600">{bio}</p>

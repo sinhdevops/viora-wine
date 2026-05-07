@@ -140,7 +140,7 @@ export default function NewsDetailPageContent({
 			{/* ①  Breadcrumb ─────────────────────────────────────────────────────── */}
 			<div className="border-b border-gray-100">
 				<div className="mx-auto max-w-360 px-4 py-3 sm:px-6 lg:px-8">
-					<nav className="flex items-center gap-1.5 text-[12px] text-gray-400" aria-label="breadcrumb">
+					<nav className="flex items-center gap-1.5 text-[12px] text-gray-600" aria-label="breadcrumb">
 						<Link href="/" className="hover:text-gray-700">
 							{t("breadcrumb_home")}
 						</Link>
@@ -190,7 +190,7 @@ export default function NewsDetailPageContent({
 
 						{/* Share — desktop */}
 						<div className="hidden items-center gap-2 sm:flex">
-							<span className="text-[12px] font-semibold text-gray-400">{t("share_label")}</span>
+							<span className="text-[12px] font-semibold text-gray-600">{t("share_label")}</span>
 							<ShareButtons />
 						</div>
 					</div>
@@ -269,7 +269,7 @@ export default function NewsDetailPageContent({
 
 							{/* Share — mobile */}
 							<div className="mt-6 flex items-center gap-3 sm:hidden">
-								<span className="text-[12px] font-semibold text-gray-400">
+								<span className="text-[12px] font-semibold text-gray-600">
 									{t("share_mobile_label")}
 								</span>
 								<ShareButtons />

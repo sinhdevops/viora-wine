@@ -37,7 +37,7 @@ function FaqAccordionItem({
 				</span>
 				<ChevronDown
 					size={16}
-					className={`shrink-0 text-gray-400 transition-transform duration-200 ${
+					className={`shrink-0 text-gray-600 transition-transform duration-200 ${
 						isOpen ? "text-brand-primary rotate-180" : ""
 					}`}
 				/>

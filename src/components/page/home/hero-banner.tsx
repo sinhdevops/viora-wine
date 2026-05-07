@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -63,11 +62,11 @@ export default function HeroBanner({ banners }: HeroBannerProps) {
 				))}
 
 				{/* Nav — hidden on mobile, show on desktop hover */}
-				<button className="prev-btn absolute top-1/2 left-4 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 text-white backdrop-blur-sm transition-all duration-300 sm:flex sm:opacity-0 group-hover:sm:opacity-100 hover:cursor-pointer hover:bg-white hover:text-black sm:left-10">
-					<ChevronLeft size={24} />
+				<button aria-label="Ảnh trước" className="prev-btn absolute top-1/2 left-4 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 text-white backdrop-blur-sm transition-all duration-300 sm:flex sm:opacity-0 group-hover:sm:opacity-100 hover:cursor-pointer hover:bg-white hover:text-black sm:left-10">
+					<ChevronLeft size={24} aria-hidden="true" />
 				</button>
-				<button className="next-btn absolute top-1/2 right-4 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 text-white backdrop-blur-sm transition-all duration-300 sm:flex sm:opacity-0 group-hover:sm:opacity-100 hover:cursor-pointer hover:bg-white hover:text-black sm:right-10">
-					<ChevronRight size={24} />
+				<button aria-label="Ảnh tiếp theo" className="next-btn absolute top-1/2 right-4 z-20 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 text-white backdrop-blur-sm transition-all duration-300 sm:flex sm:opacity-0 group-hover:sm:opacity-100 hover:cursor-pointer hover:bg-white hover:text-black sm:right-10">
+					<ChevronRight size={24} aria-hidden="true" />
 				</button>
 
 				<div className="custom-pagination absolute right-0 bottom-4 left-0 z-20 flex items-center justify-center gap-2 sm:bottom-8" />
