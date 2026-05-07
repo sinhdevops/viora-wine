@@ -141,7 +141,7 @@ export default function CardProduct({ product }: CardProductProps) {
 								)}
 							</div>
 						)}
-						{product.alcohol && <div className="text-[12px] text-gray-600">Nồng độ: {product.alcohol}</div>}
+						<div className="text-[12px] text-gray-600">Nồng độ: 1% ABV* </div>
 					</Link>
 					<div className="mt-auto pt-2">
 						<a
