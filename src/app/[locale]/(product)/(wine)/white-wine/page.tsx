@@ -1,5 +1,9 @@
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
 import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
+import TrustBar from "@/components/conversion/trust-bar";
+import UrgencyStrip from "@/components/conversion/urgency-strip";
+import ComboSection from "@/components/conversion/combo-section";
+import FaqAccordion from "@/components/conversion/faq-accordion";
 
 export const revalidate = 3600;
 
@@ -23,6 +27,7 @@ const faqItems = [
 ];
 
 const ZALO_LINK = "https://zalo.me/0325610016";
+const PHONE = "tel:0338909973";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
@@ -30,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 	return {
 		title: "Rượu Vang Trắng Nhập Khẩu Chính Hãng – Viora Wine Đà Nẵng",
 		description:
-			"Mua rượu vang trắng nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Chardonnay, Sauvignon Blanc, Riesling, Pinot Grigio từ Pháp, Ý, Úc. Từ 350.000đ. Giao nhanh 2–4h.",
+			"Mua rượu vang trắng nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Chardonnay, Sauvignon Blanc, Riesling, Pinot Grigio từ Pháp, Ý, Úc. Từ 350.000đ. Giao hàng toàn quốc.",
 		keywords: [
 			"rượu vang trắng",
 			"rượu vang trắng nhập khẩu",
@@ -109,10 +114,27 @@ export default async function WhiteWinePage({ params }: { params: Promise<{ loca
 			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
 
 			<div className="min-h-screen bg-white">
-				{/* Hero */}
-				<section className="bg-linear-to-br from-[#7B6D3A] to-[#C8A951] py-14 text-white">
-					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-						<nav aria-label="breadcrumb" className="mb-6 flex items-center gap-2 text-sm text-white/60">
+				{/* Hero — cinematic golden gradient */}
+				<section
+					className="relative flex flex-col justify-center overflow-hidden text-white"
+					style={{
+						background: "linear-gradient(160deg, #1a1500 0%, #3d2e05 40%, #7B6D3A 100%)",
+						minHeight: "70vh",
+					}}
+				>
+					{/* Decorative blur orbs */}
+					<div
+						className="pointer-events-none absolute top-0 right-0 h-[420px] w-[420px] translate-x-1/4 -translate-y-1/4 rounded-full opacity-20 blur-3xl"
+						style={{ background: "#C8A951" }}
+					/>
+					<div
+						className="pointer-events-none absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/4 translate-y-1/4 rounded-full opacity-15 blur-3xl"
+						style={{ background: "#f0d080" }}
+					/>
+
+					<div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:py-20 lg:pt-28">
+						{/* Breadcrumb */}
+						<nav aria-label="breadcrumb" className="mb-6 flex items-center gap-2 text-sm text-white/70">
 							<a href="/" className="transition-colors hover:text-white">
 								Trang chủ
 							</a>
@@ -121,29 +143,75 @@ export default async function WhiteWinePage({ params }: { params: Promise<{ loca
 								Sản phẩm
 							</a>
 							<span>/</span>
-							<span className="text-white">Rượu Vang Trắng</span>
+							<span className="text-white/90">Rượu Vang Trắng</span>
 						</nav>
+
 						<div className="max-w-3xl">
-							<h1 className="mb-4 text-3xl leading-tight font-semibold sm:text-4xl lg:text-5xl">
-								Rượu Vang Trắng <span className="text-yellow-300">Nhập Khẩu Chính Hãng</span>
+							{/* Category pill */}
+							<span className="mb-4 inline-block rounded-full border border-[#C8A951]/40 bg-[#C8A951]/10 px-4 py-1.5 text-xs font-semibold tracking-widest text-[#f0d896] uppercase">
+								Vang Trắng Nhập Khẩu
+							</span>
+
+							<h1 className="mb-5 text-4xl leading-tight font-bold sm:text-5xl lg:text-6xl">
+								Rượu Vang Trắng{" "}
+								<span
+									className="block"
+									style={{
+										background: "linear-gradient(90deg, #f0d896, #C8A951)",
+										WebkitBackgroundClip: "text",
+										WebkitTextFillColor: "transparent",
+									}}
+								>
+									Chính Hãng
+								</span>
 							</h1>
-							<p className="mb-8 text-lg leading-relaxed text-white/85">
+
+							<p className="mb-8 max-w-xl text-lg leading-relaxed text-white/80">
 								Tươi mát, thanh thoát với hương hoa quả tinh tế — Chardonnay, Sauvignon Blanc, Riesling
 								và nhiều hơn nữa. Lựa chọn hoàn hảo cho hải sản, salad và những buổi chiều hè.
 							</p>
-							<div className="flex flex-wrap gap-3 text-sm">
-								{["Nhập khẩu chính hãng 100%", "Tư vấn miễn phí 24/7"].map((b) => (
-									<span
-										key={b}
-										className="flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm"
-									>
-										<span className="text-yellow-300">✓</span> {b}
-									</span>
-								))}
+
+							{/* Trust badges */}
+							<div className="mb-10 flex flex-wrap gap-3 text-sm">
+								{["✓ Nhập khẩu chính hãng 100%", "✓ Tư vấn miễn phí 24/7", "✓ Giao hàng toàn quốc"].map(
+									(b) => (
+										<span
+											key={b}
+											className="rounded-full bg-white/10 px-4 py-2 text-white/90 backdrop-blur-sm"
+										>
+											{b}
+										</span>
+									),
+								)}
+							</div>
+
+							{/* CTA buttons */}
+							<div className="flex flex-wrap gap-4">
+								<a
+									href={ZALO_LINK}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-bold text-[#1a1500] shadow-lg transition-all hover:scale-[1.03] active:scale-[.98]"
+									style={{ background: "linear-gradient(135deg, #f0d896, #C8A951)" }}
+								>
+									Tư vấn ngay qua Zalo
+								</a>
+								<a
+									href={PHONE}
+									className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20"
+								>
+									Gọi ngay
+								</a>
 							</div>
 						</div>
 					</div>
 				</section>
+
+				{/* Trust bar */}
+				<TrustBar />
+
+				{/* Urgency strip */}
+				<UrgencyStrip />
 
 				{/* Product grid */}
 				<section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -153,6 +221,9 @@ export default async function WhiteWinePage({ params }: { params: Promise<{ loca
 					</p>
 					<WineProductGrid wineType="white" emptyLabel="Đang cập nhật danh sách rượu vang trắng mới nhất" />
 				</section>
+
+				{/* Combo section */}
+				<ComboSection />
 
 				{/* What is white wine */}
 				<section className="bg-gray-50 py-14">
@@ -199,7 +270,7 @@ export default async function WhiteWinePage({ params }: { params: Promise<{ loca
 								{
 									icon: "🌸",
 									title: "Hương thơm",
-									desc: "Chanh, táo, lê, đào (vang trẻ) — bơ, vanilla, mật ong, nấm (vang ủ gỗ lâu năm). Riesling thêm hương khoáng chất và xăng",
+									desc: "Chanh, táo, lê, đào (vang trẻ) — bơ, vanilla, mật ong, nấm (vang ủ gỗ lâu năm). Riesling thêm hương khoáng chất",
 								},
 								{
 									icon: "👅",
@@ -226,7 +297,10 @@ export default async function WhiteWinePage({ params }: { params: Promise<{ loca
 				</section>
 
 				{/* Food pairing */}
-				<section className="bg-[#7B6D3A] py-14 text-white">
+				<section
+					className="py-14 text-white"
+					style={{ background: "linear-gradient(135deg, #3d2e05, #7B6D3A)" }}
+				>
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<h2 className="mb-4 text-center text-2xl font-semibold sm:text-3xl">
 							Rượu Vang Trắng Uống Cùng Gì Ngon Nhất?
@@ -243,7 +317,7 @@ export default async function WhiteWinePage({ params }: { params: Promise<{ loca
 								},
 								{
 									dish: "🐟 Cá hấp / Cá nướng",
-									note: "Chardonnay nhẹ hoàn hảo với cá trắng, tránh lấn át hương vị繊細 của cá",
+									note: "Chardonnay nhẹ hoàn hảo với cá trắng, tránh lấn át hương vị tinh tế của cá",
 								},
 								{
 									dish: "🥗 Salad / Rau củ",
@@ -309,43 +383,41 @@ export default async function WhiteWinePage({ params }: { params: Promise<{ loca
 					</div>
 				</section>
 
-				{/* FAQ */}
+				{/* FAQ accordion */}
 				<section className="bg-gray-50 py-14">
 					<div className="mx-auto max-w-3xl px-4 sm:px-6">
 						<h2 className="mb-8 text-center text-xl font-semibold sm:text-3xl">
 							Câu Hỏi Thường Gặp Về Rượu Vang Trắng
 						</h2>
-						<div className="space-y-4">
-							{faqItems.map((item) => (
-								<div key={item.q} className="rounded-2xl border border-gray-200 bg-white p-6">
-									<h3 className="mb-3 font-semibold text-gray-900">{item.q}</h3>
-									<p className="text-sm leading-relaxed text-gray-600">{item.a}</p>
-								</div>
-							))}
-						</div>
+						<FaqAccordion items={faqItems} />
 					</div>
 				</section>
 
-				{/* CTA */}
-				<section className="py-16">
+				{/* Final CTA */}
+				<section className="py-16" style={{ background: "linear-gradient(135deg, #1a1500, #3d2e05)" }}>
 					<div className="mx-auto max-w-xl px-4 text-center">
-						<h2 className="mb-3 text-2xl font-semibold text-gray-900">Đặt Rượu Vang Trắng Ngay Hôm Nay</h2>
-						<p className="mb-8 text-gray-500">
-							Giao nhanh 2–4h tại Đà Nẵng &nbsp;•&nbsp; Miễn phí tư vấn &nbsp;•&nbsp; Giá tốt nhất thị
-							trường
+						<p className="mb-3 text-sm font-semibold tracking-widest text-[#C8A951] uppercase">
+							Viora Wine Đà Nẵng
 						</p>
-						<div className="flex flex-wrap justify-center gap-4">
+						<h2 className="mb-3 text-2xl font-bold text-white sm:text-3xl">
+							Đặt Rượu Vang Trắng Ngay Hôm Nay
+						</h2>
+						<p className="mb-8 text-white/60">
+							Giao hàng toàn quốc &nbsp;•&nbsp; Miễn phí tư vấn &nbsp;•&nbsp; Giá tốt nhất thị trường
+						</p>
+						<div className="mx-auto flex w-full max-w-xs flex-col gap-3">
 							<a
 								href={ZALO_LINK}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="rounded-lg bg-[#B22222] px-8 py-3.5 font-semibold text-white transition-colors hover:bg-[#8B0000]"
+								className="w-full rounded-xl px-8 py-3.5 text-center text-sm font-bold text-[#1a1500] shadow-lg transition-all hover:scale-[1.03] active:scale-[.98]"
+								style={{ background: "linear-gradient(135deg, #f0d896, #C8A951)" }}
 							>
 								Tư vấn &amp; đặt hàng qua Zalo
 							</a>
 							<a
 								href="/san-pham"
-								className="rounded-lg border border-gray-300 px-8 py-3.5 font-semibold text-gray-700 transition-colors hover:border-gray-500"
+								className="w-full rounded-xl border border-white/20 bg-white/10 px-8 py-3.5 text-center text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
 							>
 								Xem tất cả sản phẩm
 							</a>

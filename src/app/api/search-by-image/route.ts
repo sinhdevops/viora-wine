@@ -1,9 +1,23 @@
+import { checkRateLimit } from "@/lib/rate-limit";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+	const ip =
+		req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+		req.headers.get("x-real-ip") ??
+		"unknown";
+
+	// Max 5 image searches per minute per IP
+	if (!checkRateLimit(`search-by-image:${ip}`, 5, 60_000)) {
+		return NextResponse.json(
+			{ error: "Too many requests. Please try again later." },
+			{ status: 429 },
+		);
+	}
+
 	try {
 		const formData = await req.formData();
 		const file = formData.get("image") as File | null;

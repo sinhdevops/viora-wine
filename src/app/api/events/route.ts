@@ -1,3 +1,5 @@
+import { requireAuth } from "@/lib/api-auth";
+import { eventSchema } from "@/lib/schemas/event-schema";
 import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -40,15 +42,25 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/events
+// POST /api/events — admin only
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const supabase = await createClient();
+    const { error: authError } = await requireAuth();
+    if (authError) return authError;
 
+    const body = await request.json();
+    const parsed = eventSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 422 },
+      );
+    }
+
+    const supabase = await createClient();
     const { data, error } = await supabase
       .from("events")
-      .insert(body)
+      .insert(parsed.data)
       .select(EVENT_FIELDS)
       .single();
 

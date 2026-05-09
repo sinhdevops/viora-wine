@@ -1,3 +1,5 @@
+import { requireAuth } from "@/lib/api-auth";
+import { eventSchema } from "@/lib/schemas/event-schema";
 import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -30,16 +32,26 @@ export async function GET(_request: NextRequest, { params }: Params) {
   }
 }
 
-// PATCH /api/events/[slug]
+// PATCH /api/events/[slug] — admin only
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
+    const { error: authError } = await requireAuth();
+    if (authError) return authError;
+
     const { slug } = await params;
     const body = await request.json();
-    const supabase = await createClient();
+    const parsed = eventSchema.partial().safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 422 },
+      );
+    }
 
+    const supabase = await createClient();
     const { data, error } = await supabase
       .from("events")
-      .update(body)
+      .update(parsed.data)
       .eq("slug", slug)
       .select(EVENT_FIELDS)
       .single();
@@ -58,16 +70,16 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   }
 }
 
-// DELETE /api/events/[slug]
+// DELETE /api/events/[slug] — admin only
 export async function DELETE(_request: NextRequest, { params }: Params) {
   try {
+    const { error: authError } = await requireAuth();
+    if (authError) return authError;
+
     const { slug } = await params;
     const supabase = await createClient();
 
-    const { error } = await supabase
-      .from("events")
-      .delete()
-      .eq("slug", slug);
+    const { error } = await supabase.from("events").delete().eq("slug", slug);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });

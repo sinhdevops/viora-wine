@@ -49,7 +49,7 @@ export default function CookieConsent() {
 					transition={{ duration: 0.3, ease: "easeOut" }}
 					role="dialog"
 					aria-label="Thông báo cookie"
-					className="fixed bottom-0 left-0 right-0 z-[9998] border-t border-gray-200 bg-white px-4 py-4 shadow-2xl sm:px-6"
+					className="fixed bottom-14 left-0 right-0 z-9998 border-t border-gray-200 bg-white px-4 py-4 shadow-2xl sm:px-6 md:bottom-0"
 				>
 					<div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
 						<p className="text-sm text-gray-700">

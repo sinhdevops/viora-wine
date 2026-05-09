@@ -1,6 +1,7 @@
 import Header from './header';
 import Footer from './footer';
 import FloatingZalo from './floating-zalo';
+import MobileBottomNav from './mobile-bottom-nav';
 import AgeVerification from './age-verification';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'sonner';
@@ -14,7 +15,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         {children}
       </main>
       <Footer />
-      <FloatingZalo />
+      <div className="hidden md:block"><FloatingZalo /></div>
+      <MobileBottomNav />
       <AgeVerification />
       <Toaster position="top-center" richColors />
     </div>

@@ -89,7 +89,7 @@ export default async function Page({
       ratingValue: '4.9',
       bestRating: '5',
       worstRating: '1',
-      reviewCount: '2000',
+      reviewCount: 2000,
     },
   };
 

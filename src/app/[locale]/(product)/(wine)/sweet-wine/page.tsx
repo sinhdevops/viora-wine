@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 	return {
 		title: "Rượu Vang Ngọt Nhập Khẩu Chính Hãng – Viora Wine Đà Nẵng",
 		description:
-			"Mua rượu vang ngọt nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Moscato, Riesling, Sauternes — vị ngọt dịu, hương trái cây, dễ uống. Từ 380.000đ. Giao nhanh 2–4h.",
+			"Mua rượu vang ngọt nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Moscato, Riesling, Sauternes — vị ngọt dịu, hương trái cây, dễ uống. Từ 380.000đ. Giao hàng toàn quốc.",
 		keywords: [
 			"rượu vang ngọt",
 			"vang ngọt nhập khẩu",
@@ -331,8 +331,7 @@ export default async function SweetWinePage({ params }: { params: Promise<{ loca
 					<div className="mx-auto max-w-xl px-4 text-center">
 						<h2 className="mb-3 text-2xl font-semibold text-gray-900">Đặt Rượu Vang Ngọt Ngay Hôm Nay</h2>
 						<p className="mb-8 text-gray-500">
-							Giao nhanh 2–4h tại Đà Nẵng &nbsp;•&nbsp; Miễn phí tư vấn &nbsp;•&nbsp; Giá tốt nhất thị
-							trường
+							Giao hàng toàn quốc &nbsp;•&nbsp; Miễn phí tư vấn &nbsp;•&nbsp; Giá tốt nhất thị trường
 						</p>
 						<div className="flex flex-wrap justify-center gap-4">
 							<a

@@ -119,7 +119,7 @@ const organizationJsonLd = {
 	aggregateRating: {
 		"@type": "AggregateRating",
 		ratingValue: "4.9",
-		reviewCount: "2000",
+		reviewCount: 2000,
 		bestRating: "5",
 		worstRating: "1",
 	},
@@ -161,7 +161,6 @@ export default async function RootLayout({
 	return (
 		<html lang={locale} className={montserrat.variable} suppressHydrationWarning>
 			<head>
-				{/* Preconnect to external domains to reduce LCP latency */}
 				<link rel="preconnect" href="https://towanokxdpotleqzcrim.supabase.co" />
 				<link rel="preconnect" href="https://res.cloudinary.com" />
 				<link rel="dns-prefetch" href="https://www.googletagmanager.com" />

@@ -7,7 +7,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 	return {
 		title: "Rượu Mạnh Nhập Khẩu Chính Hãng – Viora Wine",
 		description:
-			"Mua rượu mạnh nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Whisky, Cognac, Brandy và nhiều loại rượu mạnh cao cấp. Giao nhanh 2–4h.",
+			"Mua rượu mạnh nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Whisky, Cognac, Brandy và nhiều loại rượu mạnh cao cấp. Giao hàng toàn quốc.",
 		keywords: ["rượu mạnh", "rượu mạnh nhập khẩu", "whisky", "cognac", "brandy", "rượu mạnh chính hãng"],
 		alternates: buildAlternates(locale, "/spirits"),
 		openGraph: {

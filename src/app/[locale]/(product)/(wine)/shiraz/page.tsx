@@ -1,9 +1,14 @@
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
 import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
+import TrustBar from "@/components/conversion/trust-bar";
+import UrgencyStrip from "@/components/conversion/urgency-strip";
+import ComboSection from "@/components/conversion/combo-section";
+import FaqAccordion from "@/components/conversion/faq-accordion";
 
 export const revalidate = 3600;
 
 const ZALO_LINK = "https://zalo.me/0325610016";
+const PHONE = "tel:0338909973";
 
 const faqItems = [
 	{
@@ -24,7 +29,7 @@ const faqItems = [
 	},
 	{
 		q: "Viora Wine có giao rượu Shiraz toàn quốc không?",
-		a: "Có! Viora Wine giao hàng toàn quốc với đóng gói chuyên dụng chống vỡ. Tại Đà Nẵng giao nhanh 2–4 giờ. Các tỉnh khác giao 1–3 ngày làm việc qua J&T và GHN. Đặt hàng và tư vấn miễn phí qua Zalo: 0338-909-973.",
+		a: "Có! Viora Wine giao hàng toàn quốc với đóng gói chuyên dụng chống vỡ. Giao 1–3 ngày làm việc qua J&T và GHN. Đặt hàng và tư vấn miễn phí qua Zalo: 0338-909-973.",
 	},
 ];
 
@@ -33,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 	return {
 		title: "Rượu Vang Shiraz Úc Nhập Khẩu Chính Hãng – Viora Wine Đà Nẵng",
 		description:
-			"Mua rượu vang Shiraz Úc nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Đậm đà, cay nhẹ, hợp bò nướng & thịt đỏ. Từ 490.000đ. Giao nhanh 2–4h. Tư vấn miễn phí: 0338-909-973.",
+			"Mua rượu vang Shiraz Úc nhập khẩu chính hãng tại Đà Nẵng & Hà Nội. Đậm đà, cay nhẹ, hợp bò nướng & thịt đỏ. Từ 490.000đ. Giao hàng toàn quốc. Tư vấn miễn phí: 0338-909-973.",
 		keywords: [
 			"rượu vang Shiraz",
 			"rượu vang Shiraz Úc",
@@ -49,7 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 		openGraph: {
 			title: "Rượu Vang Shiraz Úc Nhập Khẩu Chính Hãng – Viora Wine",
 			description:
-				"Shiraz Úc nhập khẩu chính hãng. Đậm đà, cay nhẹ, hợp thịt đỏ. Từ 490.000đ. Giao nhanh toàn quốc.",
+				"Shiraz Úc nhập khẩu chính hãng. Đậm đà, cay nhẹ, hợp thịt đỏ. Từ 490.000đ. Giao hàng toàn quốc.",
 			url: buildPageUrl(locale, "/shiraz"),
 			siteName: "Viora Wine Đà Nẵng",
 			locale: "vi_VN",
@@ -66,13 +71,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 		twitter: {
 			card: "summary_large_image",
 			title: "Rượu Vang Shiraz Úc – Viora Wine Đà Nẵng",
-			description: "Shiraz Úc chính hãng từ 490.000đ. Giao nhanh toàn quốc.",
+			description: "Shiraz Úc chính hãng từ 490.000đ. Giao hàng toàn quốc.",
 		},
 	};
 }
 
-export default async function ShirazPage() {
-	const pageUrl = buildPageUrl("vi", "/shiraz");
+export default async function ShirazPage({ params }: { params: Promise<{ locale: string }> }) {
+	const { locale } = await params;
+	const pageUrl = buildPageUrl(locale, "/shiraz");
 
 	const faqJsonLd = {
 		"@context": "https://schema.org",
@@ -94,16 +100,43 @@ export default async function ShirazPage() {
 		],
 	};
 
+	const webPageJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "CollectionPage",
+		name: "Rượu Vang Shiraz Úc Nhập Khẩu Chính Hãng",
+		description: "Tuyển chọn rượu vang Shiraz Úc nhập khẩu chính hãng từ Barossa Valley & McLaren Vale tại Viora Wine.",
+		url: pageUrl,
+		breadcrumb: breadcrumbJsonLd,
+	};
+
 	return (
 		<>
 			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
 
 			<div className="min-h-screen bg-white">
-				{/* ── Hero ─────────────────────────────────────────────── */}
-				<section className="bg-gradient-to-br from-[#6B0F1A] to-[#B22222] py-14 text-white">
-					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-						<nav aria-label="breadcrumb" className="mb-6 flex items-center gap-2 text-sm text-white/60">
+				{/* Hero — cinematic dark red gradient */}
+				<section
+					className="relative flex flex-col justify-center overflow-hidden text-white"
+					style={{
+						background: "linear-gradient(160deg, #0d0103 0%, #2e0a10 40%, #6B0F1A 100%)",
+						minHeight: "70vh",
+					}}
+				>
+					{/* Decorative blur orbs */}
+					<div
+						className="pointer-events-none absolute top-0 right-0 h-[500px] w-[500px] translate-x-1/4 -translate-y-1/4 rounded-full opacity-20 blur-3xl"
+						style={{ background: "#B22222" }}
+					/>
+					<div
+						className="pointer-events-none absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/4 translate-y-1/4 rounded-full opacity-10 blur-3xl"
+						style={{ background: "#ff6b6b" }}
+					/>
+
+					<div className="relative mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:py-20 lg:pt-28">
+						{/* Breadcrumb */}
+						<nav aria-label="breadcrumb" className="mb-6 flex items-center gap-2 text-sm text-white/70">
 							<a href="/" className="transition-colors hover:text-white">
 								Trang chủ
 							</a>
@@ -112,34 +145,76 @@ export default async function ShirazPage() {
 								Sản phẩm
 							</a>
 							<span>/</span>
-							<span className="text-white">Rượu Vang Shiraz</span>
+							<span className="text-white/90">Rượu Vang Shiraz</span>
 						</nav>
 
 						<div className="max-w-3xl">
-							<h1 className="mb-4 text-3xl leading-tight font-semibold sm:text-4xl lg:text-5xl">
-								Rượu Vang Shiraz Úc <span className="text-yellow-400">Nhập Khẩu Chính Hãng</span>
+							{/* Category pill */}
+							<span className="mb-4 inline-block rounded-full border border-red-400/30 bg-red-400/10 px-4 py-1.5 text-xs font-semibold tracking-widest text-red-300 uppercase">
+								Shiraz Barossa Valley · Úc
+							</span>
+
+							<h1 className="mb-5 text-4xl leading-tight font-bold sm:text-5xl lg:text-6xl">
+								Rượu Vang Shiraz Úc{" "}
+								<span
+									className="block"
+									style={{
+										background: "linear-gradient(90deg, #fca5a5, #ef4444)",
+										WebkitBackgroundClip: "text",
+										WebkitTextFillColor: "transparent",
+									}}
+								>
+									Chính Hãng
+								</span>
 							</h1>
-							<p className="mb-8 text-lg leading-relaxed text-white/85">
-								Shiraz là giống nho đặc trưng của Úc — đậm đà, cay nhẹ với hương mận chín, chocolate đen
-								và hạt tiêu. Được chọn lọc kỹ từ Barossa Valley & McLaren Vale, hoàn hảo cho bữa tiệc
-								thịt nướng và những khoảnh khắc kết nối bạn bè.
+
+							<p className="mb-8 max-w-xl text-lg leading-relaxed text-white/80">
+								Đậm đà, cay nhẹ với hương mận chín, chocolate đen và hạt tiêu — chọn lọc kỹ từ Barossa
+								Valley & McLaren Vale. Hoàn hảo cho bữa tiệc thịt nướng và những khoảnh khắc kết nối.
 							</p>
 
-							<div className="flex flex-wrap gap-3 text-sm">
-								{["Nhập khẩu chính hãng 100%", "Tư vấn miễn phí 24/7"].map((badge) => (
-									<span
-										key={badge}
-										className="flex items-center gap-1.5 rounded-full bg-white/15 px-4 py-2 backdrop-blur-sm"
-									>
-										<span className="text-yellow-400">✓</span> {badge}
-									</span>
-								))}
+							{/* Trust badges */}
+							<div className="mb-10 flex flex-wrap gap-3 text-sm">
+								{["✓ Nhập khẩu chính hãng 100%", "✓ Tư vấn miễn phí 24/7", "✓ Giao hàng toàn quốc"].map(
+									(b) => (
+										<span
+											key={b}
+											className="rounded-full bg-white/10 px-4 py-2 text-white/90 backdrop-blur-sm"
+										>
+											{b}
+										</span>
+									),
+								)}
+							</div>
+
+							{/* CTA buttons */}
+							<div className="flex flex-wrap gap-4">
+								<a
+									href={ZALO_LINK}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="inline-flex items-center gap-2 rounded-xl bg-[#E1001E] px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-red-900/40 transition-all hover:scale-[1.03] hover:bg-[#c0001a] active:scale-[.98]"
+								>
+									Tư vấn ngay qua Zalo
+								</a>
+								<a
+									href={PHONE}
+									className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20"
+								>
+									Gọi ngay
+								</a>
 							</div>
 						</div>
 					</div>
 				</section>
 
-				{/* ── Product grid ─────────────────────────────────────── */}
+				{/* Trust bar */}
+				<TrustBar />
+
+				{/* Urgency strip */}
+				<UrgencyStrip />
+
+				{/* Product grid */}
 				<section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 					<h2 className="mb-2 text-2xl font-semibold sm:text-3xl">
 						Các Loại Rượu Vang Shiraz Tại Viora Wine
@@ -147,11 +222,13 @@ export default async function ShirazPage() {
 					<p className="mb-8 text-gray-500">
 						Toàn bộ Shiraz Úc nhập khẩu chính hãng, chọn lọc kỹ từ Barossa Valley & McLaren Vale — Nam Úc.
 					</p>
-
 					<WineProductGrid grapeVariety="Shiraz" emptyLabel="Đang cập nhật sản phẩm Shiraz mới nhất" />
 				</section>
 
-				{/* ── What is Shiraz ───────────────────────────────────── */}
+				{/* Combo section */}
+				<ComboSection />
+
+				{/* What is Shiraz */}
 				<section className="bg-gray-50 py-14">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<div className="mx-auto max-w-3xl">
@@ -181,7 +258,7 @@ export default async function ShirazPage() {
 					</div>
 				</section>
 
-				{/* ── Characteristics ──────────────────────────────────── */}
+				{/* Characteristics */}
 				<section className="py-14">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<h2 className="mb-8 text-center text-xl font-semibold sm:text-3xl">
@@ -223,8 +300,11 @@ export default async function ShirazPage() {
 					</div>
 				</section>
 
-				{/* ── Food pairing ─────────────────────────────────────── */}
-				<section className="bg-[#6B0F1A] py-14 text-white">
+				{/* Food pairing */}
+				<section
+					className="py-14 text-white"
+					style={{ background: "linear-gradient(135deg, #2e0a10, #6B0F1A)" }}
+				>
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<h2 className="mb-4 text-center text-2xl font-semibold sm:text-3xl">
 							Shiraz Uống Cùng Gì Ngon Nhất?
@@ -269,10 +349,10 @@ export default async function ShirazPage() {
 					</div>
 				</section>
 
-				{/* ── Why Viora Wine ───────────────────────────────────── */}
+				{/* Why Viora Wine */}
 				<section className="py-14">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-						<h2 className="mb-10 text-center text-xl font-semibold sm:text-xl">
+						<h2 className="mb-10 text-center text-2xl font-semibold sm:text-3xl">
 							Tại Sao Nên Mua Shiraz Tại Viora Wine?
 						</h2>
 						<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -289,8 +369,8 @@ export default async function ShirazPage() {
 								},
 								{
 									icon: "🚀",
-									title: "Giao nhanh 2–4h tại Đà Nẵng",
-									desc: "Đặt buổi sáng, nhận buổi chiều. Giao toàn quốc qua J&T, GHN với đóng gói chuyên dụng chống vỡ.",
+									title: "Giao hàng toàn quốc",
+									desc: "Giao toàn quốc qua J&T, GHN với đóng gói chuyên dụng chống vỡ. 1–3 ngày làm việc tùy khu vực.",
 								},
 								{
 									icon: "🎁",
@@ -320,13 +400,12 @@ export default async function ShirazPage() {
 					</div>
 				</section>
 
-				{/* ── City links (internal link cluster) ──────────────── */}
+				{/* City links */}
 				<section className="border-y border-gray-100 bg-white py-12">
 					<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 						<h2 className="mb-2 text-xl font-semibold sm:text-2xl">Mua Rượu Vang Shiraz Theo Thành Phố</h2>
 						<p className="mb-6 text-sm text-gray-500">
-							Giao hàng nhanh 2–4h, giá như nhau — chọn thành phố để xem thông tin giao hàng và ưu đãi địa
-							phương.
+							Giao hàng toàn quốc, giá như nhau — chọn thành phố để xem thông tin và ưu đãi địa phương.
 						</p>
 						<div className="grid gap-4 sm:grid-cols-2">
 							<a
@@ -337,7 +416,7 @@ export default async function ShirazPage() {
 									<p className="font-semibold group-hover:text-[#B22222]">
 										🏖️ Rượu Vang Shiraz Đà Nẵng
 									</p>
-									<p className="mt-0.5 text-sm text-gray-500">Giao nhanh 2–4h nội thành Đà Nẵng</p>
+									<p className="mt-0.5 text-sm text-gray-500">Giao hàng toàn quốc</p>
 								</div>
 								<span className="text-gray-600 group-hover:text-[#B22222]">→</span>
 							</a>
@@ -349,7 +428,7 @@ export default async function ShirazPage() {
 									<p className="font-semibold group-hover:text-[#B22222]">
 										🏙️ Rượu Vang Shiraz Hà Nội
 									</p>
-									<p className="mt-0.5 text-sm text-gray-500">Giao nhanh 2–4h nội thành Hà Nội</p>
+									<p className="mt-0.5 text-sm text-gray-500">Giao hàng toàn quốc</p>
 								</div>
 								<span className="text-gray-600 group-hover:text-[#B22222]">→</span>
 							</a>
@@ -357,43 +436,40 @@ export default async function ShirazPage() {
 					</div>
 				</section>
 
-				{/* ── FAQ ──────────────────────────────────────────────── */}
+				{/* FAQ accordion */}
 				<section className="bg-gray-50 py-14">
 					<div className="mx-auto max-w-3xl px-4 sm:px-6">
 						<h2 className="mb-8 text-center text-xl font-semibold sm:text-3xl">
 							Câu Hỏi Thường Gặp Về Rượu Vang Shiraz
 						</h2>
-						<div className="space-y-4">
-							{faqItems.map((item) => (
-								<div key={item.q} className="rounded-2xl border border-gray-200 bg-white p-6">
-									<h3 className="mb-3 font-semibold text-gray-900">{item.q}</h3>
-									<p className="text-sm leading-relaxed text-gray-600">{item.a}</p>
-								</div>
-							))}
-						</div>
+						<FaqAccordion items={faqItems} />
 					</div>
 				</section>
 
-				{/* ── CTA ──────────────────────────────────────────────── */}
-				<section className="py-16">
+				{/* Final CTA */}
+				<section className="py-16" style={{ background: "linear-gradient(135deg, #0d0103, #2e0a10)" }}>
 					<div className="mx-auto max-w-xl px-4 text-center">
-						<h2 className="mb-3 text-2xl font-semibold text-gray-900">Đặt Rượu Vang Shiraz Ngay Hôm Nay</h2>
-						<p className="mb-8 text-gray-500">
-							Giao nhanh 2–4h tại Đà Nẵng &nbsp;•&nbsp; Miễn phí tư vấn &nbsp;•&nbsp; Giá tốt nhất thị
-							trường
+						<p className="mb-3 text-sm font-semibold tracking-widest text-red-400 uppercase">
+							Viora Wine Đà Nẵng
 						</p>
-						<div className="flex flex-wrap justify-center gap-4">
+						<h2 className="mb-3 text-2xl font-bold text-white sm:text-3xl">
+							Đặt Rượu Vang Shiraz Ngay Hôm Nay
+						</h2>
+						<p className="mb-8 text-white/60">
+							Giao hàng toàn quốc &nbsp;•&nbsp; Miễn phí tư vấn &nbsp;•&nbsp; Giá tốt nhất thị trường
+						</p>
+						<div className="mx-auto flex w-full max-w-xs flex-col gap-3">
 							<a
 								href={ZALO_LINK}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="rounded-lg bg-[#B22222] px-8 py-3.5 font-semibold text-white transition-colors hover:bg-[#8B0000]"
+								className="w-full rounded-xl bg-[#E1001E] px-8 py-3.5 text-center text-sm font-bold text-white shadow-lg shadow-red-900/40 transition-all hover:scale-[1.03] hover:bg-[#c0001a] active:scale-[.98]"
 							>
-								Tư vấn & đặt hàng qua Zalo
+								Tư vấn &amp; đặt hàng qua Zalo
 							</a>
 							<a
 								href="/san-pham"
-								className="rounded-lg border border-gray-300 px-8 py-3.5 font-semibold text-gray-700 transition-colors hover:border-gray-500"
+								className="w-full rounded-xl border border-white/20 bg-white/10 px-8 py-3.5 text-center text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
 							>
 								Xem tất cả sản phẩm
 							</a>

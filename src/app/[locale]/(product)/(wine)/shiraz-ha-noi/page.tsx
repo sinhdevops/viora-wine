@@ -45,9 +45,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 		],
 		alternates: buildAlternates(locale, "/shiraz-ha-noi"),
 		openGraph: {
-			title: "Rượu Vang Shiraz Hà Nội – Giao 2-4h | Viora Wine",
+			title: "Rượu Vang Shiraz Hà Nội – Chính Hãng | Viora Wine",
 			description:
-				"Shiraz Úc chính hãng tại Hà Nội. Giao nhanh 2–4h nội thành. Từ 490.000đ.",
+				"Shiraz Úc chính hãng tại Hà Nội. Giao hàng toàn quốc. Từ 490.000đ.",
 			url: buildPageUrl(locale, "/shiraz-ha-noi"),
 			siteName: "Viora Wine Đà Nẵng",
 			locale: "vi_VN",
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 		twitter: {
 			card: "summary_large_image",
 			title: "Rượu Vang Shiraz Hà Nội – Viora Wine",
-			description: "Shiraz Úc chính hãng. Giao nhanh 2–4h nội thành Hà Nội. Từ 490.000đ.",
+			description: "Shiraz Úc chính hãng. Giao hàng toàn quốc. Từ 490.000đ.",
 		},
 	};
 }
@@ -89,7 +89,7 @@ export default async function ShirazHaNoiPage() {
 		areaServed: { "@type": "City", name: "Hà Nội" },
 		openingHours: ["Mo-Fr 08:00-22:00", "Sa-Su 09:00-23:00"],
 		priceRange: "490000-2000000 VND",
-		aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "2000", bestRating: "5" },
+		aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: 2000, bestRating: "5", worstRating: "1" },
 	};
 
 	const faqJsonLd = {

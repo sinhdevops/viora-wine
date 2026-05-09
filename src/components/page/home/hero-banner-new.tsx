@@ -152,7 +152,7 @@ export default function HeroBannerNew() {
 							</span>
 							<span className="flex items-center gap-1.5">
 								<Truck size={20} />
-								Giao nhanh 2-4h
+								Giao hàng toàn quốc
 							</span>
 							<span className="flex items-center gap-1.5">
 								<ShieldCheck size={20} />
