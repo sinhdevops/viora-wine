@@ -78,10 +78,30 @@ export default async function Page({
       '@type': 'OfferCatalog',
       name: 'Rượu Vang Nhập Khẩu Chính Hãng',
       itemListElement: [
-        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Rượu Vang Úc Shiraz' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Rượu Vang Pháp' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Rượu Vang Ý' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Rượu Vang Chile' } },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Product',
+            name: 'Rượu Vang Đỏ Úc Monash Shiraz',
+            offers: { '@type': 'Offer', priceCurrency: 'VND', price: 1050000, availability: 'https://schema.org/InStock' },
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Product',
+            name: 'Imperium Primitivo 16% – Vang đỏ cao cấp từ Ý',
+            offers: { '@type': 'Offer', priceCurrency: 'VND', price: 950000, availability: 'https://schema.org/InStock' },
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Product',
+            name: 'ANDARO Cabernet Sauvignon',
+            offers: { '@type': 'Offer', priceCurrency: 'VND', price: 210000, availability: 'https://schema.org/InStock' },
+          },
+        },
       ],
     },
     aggregateRating: {
