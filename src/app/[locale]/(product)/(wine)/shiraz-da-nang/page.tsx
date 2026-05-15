@@ -42,6 +42,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 			"giao rượu vang Đà Nẵng",
 			"rượu vang nhập khẩu Đà Nẵng",
 			"Shiraz Barossa Valley Đà Nẵng",
+			"Viora Wine",
+			"viorawine",
+			"viora wine",
 		],
 		alternates: buildAlternates(locale, "/shiraz-da-nang"),
 		openGraph: {

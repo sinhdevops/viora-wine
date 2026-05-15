@@ -16,6 +16,7 @@ export async function generateMetadata({
   return {
     title: t('meta_title'),
     description: t('meta_desc'),
+    keywords: ['viorawine', 'viora wine', 'Viora Wine', 'khuyến mãi rượu vang', 'rượu vang giảm giá', 'shop rượu vang Đà Nẵng'],
     alternates: buildAlternates(locale, '/promotion'),
     openGraph: {
       title: `${t('meta_title')} | ${common('brand')}`,

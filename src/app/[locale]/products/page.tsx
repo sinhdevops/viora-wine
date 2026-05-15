@@ -43,6 +43,8 @@ export async function generateMetadata({
       'hộp quà rượu vang',
       'shop rượu vang Úc Hà Nội',
       'shop rượu vang Úc Đà Nẵng',
+      'viorawine',
+      'viora wine',
       common('brand'),
     ],
     alternates: buildAlternates(locale, '/products'),

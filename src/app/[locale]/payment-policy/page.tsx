@@ -10,6 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 	return {
 		title: t("meta_title"),
 		description: t("updated"),
+		keywords: ["viorawine", "viora wine", "Viora Wine", "chính sách thanh toán rượu vang"],
 		robots: { index: true },
 		openGraph: {
 			title: `${t("meta_title")} | ${common("brand")}`,

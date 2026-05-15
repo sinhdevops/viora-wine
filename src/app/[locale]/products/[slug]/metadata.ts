@@ -68,6 +68,8 @@ export async function generateMetadata({
       product.country ? `rượu vang ${product.country}` : null,
       product.grape_variety ?? null,
       common('brand'),
+      'viorawine',
+      'viora wine',
       'rượu vang nhập khẩu chính hãng',
       'mua rượu vang',
       'rượu vang Đà Nẵng',

@@ -39,6 +39,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 			"rượu vang",
 			"rượu vang đỏ",
 			"ly rượu vang",
+			"viorawine",
+			"viora wine",
 			"Viora Wine",
 			"Viora Wine Đà Nẵng",
 			"rượu vang Úc Hà Nội",

@@ -59,6 +59,8 @@ export async function generateMetadata({
       'Cabernet Sauvignon là gì',
       'nhiệt độ uống rượu vang',
       'blog rượu vang',
+      'viorawine',
+      'viora wine',
       common('brand'),
     ],
     alternates: buildAlternates(locale, '/blog'),
