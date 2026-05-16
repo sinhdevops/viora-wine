@@ -1,26 +1,19 @@
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildCategoryFAQ, buildFAQSchema, buildItemListSchema, jsonLdScript } from "@/lib/geo-schemas";
+import { createClient } from "@/utils/supabase/server";
 import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
 
 export const revalidate = 3600;
 
-const faqItems = [
-	{
-		q: "Rượu vang ngọt khác gì rượu vang khô?",
-		a: "Rượu vang ngọt (sweet wine) có lượng đường dư cao hơn 45g/L sau lên men, tạo vị ngọt rõ ràng. Vang khô (dry wine) lên men gần hết đường, có vị chua và khô. Vang ngọt thường dễ uống hơn, phù hợp người mới bắt đầu và các dịp uống nhẹ nhàng.",
-	},
-	{
-		q: "Rượu vang ngọt nổi tiếng nào đáng thử?",
-		a: "Moscato d'Asti (Ý) — sủi bọt nhẹ, hương đào và hoa cam. Riesling Auslese (Đức) — ngọt cân bằng, hương khoáng chất độc đáo. Sauternes (Pháp) — ngọt phức tạp, hương mật ong và mơ. Port (Bồ Đào Nha) — ngọt đậm, mạnh, uống sau bữa tối.",
-	},
-	{
-		q: "Rượu vang ngọt uống cùng gì ngon nhất?",
-		a: "Tráng miệng là pairing kinh điển — nhưng vang ngọt không được ngọt hơn món tráng miệng nếu không sẽ mất cân bằng. Moscato hợp với bánh ngọt nhẹ, trái cây tươi. Riesling ngọt hợp với pâté và foie gras (béo ngậy cân bằng vị ngọt). Port hợp với phô mai xanh và chocolate đen.",
-	},
-	{
-		q: "Rượu vang ngọt có cồn nhiều không?",
-		a: "Hầu hết rượu vang ngọt có độ cồn thấp hơn vang khô — Moscato thường 5–7% ABV, Riesling ngọt 7–9% ABV. Riêng Port và Sherry ngọt có 17–20% do quá trình fortified (thêm rượu mạnh). Đây là lý do rượu vang ngọt được nhiều người ưa thích vì dễ uống hơn.",
-	},
-];
+const faqItems = buildCategoryFAQ({
+	name: "Rượu Vang Ngọt",
+	description: "Rượu vang ngọt (sweet wine) có lượng đường dư trên 45g/L sau lên men, tạo vị ngọt dịu dễ uống. Phổ biến nhất: Moscato d'Asti (Ý — sủi bọt nhẹ 5–7% cồn), Riesling Auslese (Đức — hương khoáng chất), Sauternes (Pháp — mật ong và mơ), Port (Bồ Đào Nha — ngọt đậm 17–20% cồn).",
+	servingTemp: "6–10°C — uống lạnh để giữ vị ngọt thanh và hương thơm trái cây",
+	pairingFoods: "bánh ngọt, trái cây tươi (dâu tây, đào, mận), phô mai xanh (Roquefort, Gorgonzola), foie gras, chocolate đen, bánh kem tráng miệng, các món tráng miệng nhẹ",
+	origin: "Ý (Moscato d'Asti, Piedmont), Đức (Riesling Auslese, Spätlese — Mosel, Rhine), Pháp (Sauternes, Bordeaux), Bồ Đào Nha (Port — Douro Valley), Hungary (Tokaj)",
+	priceRange: "từ 380.000đ đến hàng triệu đồng — Moscato phổ thông đến Sauternes và Port cao cấp",
+	phone: "0325-610-016",
+});
 
 const ZALO_LINK = "https://zalo.me/0325610016";
 
@@ -75,39 +68,58 @@ export default async function SweetWinePage({ params }: { params: Promise<{ loca
 	const { locale } = await params;
 	const pageUrl = buildPageUrl(locale, "/sweet-wine");
 
-	const breadcrumbJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		itemListElement: [
-			{ "@type": "ListItem", position: 1, name: "Trang chủ", item: SITE_URL },
-			{ "@type": "ListItem", position: 2, name: "Sản phẩm", item: `${SITE_URL}/san-pham` },
-			{ "@type": "ListItem", position: 3, name: "Rượu Vang Ngọt", item: pageUrl },
-		],
-	};
+	const supabase = await createClient();
+	const { data: topProducts } = await supabase
+		.from("products")
+		.select("slug, name, thumbnail_url, description, price, discount_percentage")
+		.eq("category", "wine")
+		.in("wine_type", ["sweet", "ngọt", "Ngọt", "Sweet"])
+		.gt("stock", 0)
+		.order("sold_count", { ascending: false })
+		.limit(8);
 
-	const faqJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "FAQPage",
-		mainEntity: faqItems.map((item) => ({
-			"@type": "Question",
-			name: item.q,
-			acceptedAnswer: { "@type": "Answer", text: item.a },
-		})),
-	};
+	const breadcrumbJsonLd = buildBreadcrumbSchema([
+		{ name: "Trang chủ", url: SITE_URL },
+		{ name: "Sản phẩm", url: `${SITE_URL}/san-pham` },
+		{ name: "Rượu Vang Ngọt", url: pageUrl },
+	]);
+
+	const faqJsonLd = buildFAQSchema(faqItems);
 
 	const webPageJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "CollectionPage",
 		name: "Rượu Vang Ngọt Nhập Khẩu Chính Hãng",
-		description: "Tuyển chọn rượu vang ngọt nhập khẩu chính hãng: Moscato, Riesling, Sauternes tại Viora Wine.",
+		description: "Tuyển chọn rượu vang ngọt nhập khẩu chính hãng: Moscato Ý, Riesling Đức, Sauternes Pháp tại Viora Wine. Vị ngọt dịu, dễ uống, phù hợp người mới. Từ 380.000đ. Giao toàn quốc.",
 		url: pageUrl,
+		inLanguage: "vi-VN",
+		breadcrumb: breadcrumbJsonLd,
+		speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", ".category-description"] },
+		publisher: { "@type": "Organization", name: "Viora Wine", url: SITE_URL },
 	};
+
+	const itemListJsonLd = topProducts?.length
+		? buildItemListSchema(
+				topProducts.map((p) => ({
+					name: p.name,
+					url: `${SITE_URL}/san-pham/${p.slug}`,
+					image: p.thumbnail_url ?? undefined,
+					description: p.description ?? undefined,
+					price: p.discount_percentage ? Math.round(p.price * (1 - p.discount_percentage / 100)) : p.price,
+				})),
+				"Rượu Vang Ngọt Bán Chạy Tại Viora Wine",
+				"Danh sách rượu vang ngọt nhập khẩu chính hãng bán chạy nhất tại Viora Wine",
+			)
+		: null;
 
 	return (
 		<>
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(webPageJsonLd) }} />
+			{itemListJsonLd && (
+				<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(itemListJsonLd) }} />
+			)}
 
 			<div className="min-h-screen bg-white">
 				{/* Hero */}

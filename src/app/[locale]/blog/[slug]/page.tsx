@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { NewsItem } from '@/@types/news';
 import type { DbProduct } from '@/@types/product';
 import { buildAlternates, buildPageUrl, SITE_URL } from '@/lib/seo';
-import { DEFAULT_FAQ_ITEMS } from '@/components/page/blog/faq-data';
+import { buildBreadcrumbSchema, buildFAQSchema, jsonLdScript, BRAND } from '@/lib/geo-schemas';
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
@@ -38,6 +38,38 @@ function mapToNewsItem(row: EventRow): NewsItem {
   };
 }
 
+/** Tạo dynamic FAQ dựa trên tiêu đề bài viết — liên quan trực tiếp đến chủ đề */
+function buildArticleFAQ(title: string, category: string) {
+  const isKnowledge = category === 'kien-thuc';
+  const baseFAQ = [
+    {
+      q: `${title} — thông tin này có chính xác không?`,
+      a: `Đúng vậy. Nội dung "${title}" được biên soạn bởi đội ngũ chuyên gia rượu vang của Viora Wine với hơn 5 năm kinh nghiệm nhập khẩu và phân phối rượu vang chính hãng tại Việt Nam. Chúng tôi cập nhật thông tin thường xuyên để đảm bảo tính chính xác và hữu ích.`,
+    },
+    {
+      q: 'Viora Wine là ai và tại sao nên tin tưởng thông tin từ Viora Wine?',
+      a: 'Viora Wine là shop rượu vang nhập khẩu chính hãng có uy tín tại Đà Nẵng và Hà Nội, thành lập năm 2020. Với hơn 2.000 khách hàng tin dùng và đánh giá 4.9/5 sao, chúng tôi cam kết cung cấp thông tin chính xác, minh bạch về rượu vang nhập khẩu. Tất cả sản phẩm đều có chứng nhận xuất xứ và tem nhập khẩu hợp lệ.',
+    },
+    {
+      q: isKnowledge
+        ? 'Tôi có thể hỏi thêm về kiến thức rượu vang ở đâu?'
+        : 'Tôi muốn tham gia sự kiện rượu vang của Viora Wine thì liên hệ thế nào?',
+      a: isKnowledge
+        ? 'Bạn có thể liên hệ trực tiếp đội ngũ chuyên gia Viora Wine qua Zalo: 0325-610-016. Chúng tôi sẵn sàng tư vấn về chọn rượu vang phù hợp, cách thưởng thức, bảo quản và kết hợp với thức ăn. Tư vấn miễn phí, không giới hạn câu hỏi.'
+        : 'Liên hệ Viora Wine qua Zalo: 0325-610-016 hoặc gọi điện: 0338-909-973 để đăng ký tham dự sự kiện. Chúng tôi tổ chức thường xuyên các buổi wine tasting, khóa học thưởng rượu và sự kiện kết nối tại Đà Nẵng và Hà Nội.',
+    },
+    {
+      q: 'Viora Wine có bán rượu vang nhập khẩu liên quan đến chủ đề này không?',
+      a: 'Có. Viora Wine cung cấp đầy đủ các dòng rượu vang nhập khẩu chính hãng: vang đỏ, vang trắng, vang hồng, vang ngọt, Shiraz Úc, rượu mạnh Whisky/Cognac. Giá từ 210.000đ. Giao hàng toàn quốc. Tư vấn miễn phí qua Zalo: 0325-610-016.',
+    },
+    {
+      q: 'Mua rượu vang nhập khẩu chính hãng ở đâu tại Việt Nam?',
+      a: 'Viora Wine là địa chỉ mua rượu vang nhập khẩu chính hãng uy tín tại Việt Nam với kho hàng tại Đà Nẵng và Hà Nội. Toàn bộ sản phẩm có đầy đủ giấy tờ nhập khẩu, tem chính hãng và chứng nhận xuất xứ. Giao hàng toàn quốc 1–3 ngày. Website: viorawine.com | Zalo: 0325-610-016.',
+    },
+  ];
+  return baseFAQ;
+}
+
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
   const supabase = await createClient();
@@ -64,6 +96,7 @@ export async function generateMetadata({ params }: Props) {
       'Rượu vang Đà Nẵng',
       'Văn hóa rượu vang',
       'Học về rượu vang',
+      'Rượu vang nhập khẩu chính hãng',
     ],
     alternates: buildAlternates(locale, `/blog/${slug}`),
     openGraph: {
@@ -119,87 +152,78 @@ export default async function NewsDetailPage({ params }: Props) {
   const relatedNews = (relatedRows ?? []).map((r) => mapToNewsItem(r as EventRow));
   const suggestedProducts = (productRows ?? []) as DbProduct[];
 
-  // ── JSON-LD: Article ──
+  const blogListUrl = buildPageUrl(locale, '/blog');
+  const blogPostUrl = buildPageUrl(locale, `/blog/${slug}`);
+
+  // ── Article JSON-LD — đầy đủ với speakable và mainEntityOfPage ──
   const articleJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
+    '@type': 'Article',
+    '@id': blogPostUrl,
     headline: newsItem.title['vi'],
-    image: [newsItem.image],
+    description: newsItem.excerpt['vi'] || newsItem.title['vi'],
+    image: newsItem.image ? [newsItem.image] : [],
     datePublished: newsItem.date,
     dateModified: newsItem.date,
-    author: [
-      {
-        '@type': 'Person',
-        name: newsItem.author || 'Viora Wine',
-        url: SITE_URL,
-      },
-    ],
+    inLanguage: 'vi-VN',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': blogPostUrl,
+    },
+    author: {
+      '@type': 'Organization',
+      name: BRAND.name,
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: BRAND.logo },
+      knowsAbout: BRAND.knowsAbout,
+    },
     publisher: {
       '@type': 'Organization',
-      name: 'Viora Wine',
+      name: BRAND.name,
       url: SITE_URL,
-      logo: {
-        '@type': 'ImageObject',
-        url: `${SITE_URL}/logo.png`,
-      },
+      logo: { '@type': 'ImageObject', url: BRAND.logo },
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.article-excerpt', '.article-lead'],
+    },
+    about: {
+      '@type': 'Thing',
+      name: 'Rượu vang nhập khẩu chính hãng',
+      description: 'Kiến thức và thông tin về rượu vang nhập khẩu tại Việt Nam',
+    },
+    isPartOf: {
+      '@type': 'WebSite',
+      name: BRAND.name,
+      url: SITE_URL,
     },
   };
 
-  // ── JSON-LD: Breadcrumb ──
-  const blogListUrl = buildPageUrl(locale, '/blog');
-  const blogPostUrl = buildPageUrl(locale, `/blog/${slug}`);
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Trang chủ',
-        item: SITE_URL,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Kiến thức',
-        item: blogListUrl,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: newsItem.title['vi'],
-        item: blogPostUrl,
-      },
-    ],
-  };
+  // ── Breadcrumb ──
+  const breadcrumbJsonLd = buildBreadcrumbSchema([
+    { name: 'Trang chủ', url: SITE_URL },
+    { name: 'Kiến thức', url: blogListUrl },
+    { name: newsItem.title['vi'], url: blogPostUrl },
+  ]);
 
-  // ── JSON-LD: FAQPage ──
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: DEFAULT_FAQ_ITEMS.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
+  // ── FAQPage — dynamic dựa trên chủ đề bài viết ──
+  const faqJsonLd = buildFAQSchema(
+    buildArticleFAQ(newsItem.title['vi'], newsItem.category),
+  );
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(articleJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }}
       />
       <h1 className="sr-only">{newsItem.title['vi']}</h1>
       <NewsDetailPageContent

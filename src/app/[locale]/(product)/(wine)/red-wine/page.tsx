@@ -1,4 +1,6 @@
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildCategoryFAQ, buildFAQSchema, buildItemListSchema, jsonLdScript } from "@/lib/geo-schemas";
+import { createClient } from "@/utils/supabase/server";
 import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
 import TrustBar from "@/components/conversion/trust-bar";
 import UrgencyStrip from "@/components/conversion/urgency-strip";
@@ -10,24 +12,15 @@ export const revalidate = 3600;
 const PHONE = "0338909973";
 const ZALO_LINK = "https://zalo.me/0325610016";
 
-const faqItems = [
-	{
-		q: "Rượu vang đỏ là gì?",
-		a: "Rượu vang đỏ được lên men từ nho đỏ hoặc nho đen nguyên vỏ, tạo màu đỏ đặc trưng từ anthocyanin. Vị đậm đà, tanin cao, hương trái cây đỏ và đen, thích hợp uống cùng thịt đỏ và phô mai cứng.",
-	},
-	{
-		q: "Rượu vang đỏ nào ngon nhất cho người mới bắt đầu?",
-		a: "Merlot và Pinot Noir là lựa chọn tốt nhất — tanin mềm, vị trái cây dễ chịu, ít chát hơn Cabernet Sauvignon. Shiraz Úc cũng rất được ưa chuộng nhờ vị fruit-forward và cay nhẹ đặc trưng.",
-	},
-	{
-		q: "Uống rượu vang đỏ ở nhiệt độ bao nhiêu?",
-		a: "Nhiệt độ lý tưởng là 16–18°C. Không nên uống quá lạnh vì làm mất hương vị, không nên uống quá ấm vì cồn sẽ nổi bật hơn. Nếu bảo quản tủ lạnh, để ra ngoài 20–30 phút trước khi uống.",
-	},
-	{
-		q: "Viora Wine có giao rượu vang đỏ toàn quốc không?",
-		a: "Có! Viora Wine giao hàng toàn quốc với đóng gói chuyên dụng chống vỡ. Giao 1–3 ngày làm việc tùy khu vực. Tư vấn miễn phí qua Zalo: 0338-909-973.",
-	},
-];
+const faqItems = buildCategoryFAQ({
+	name: "Rượu Vang Đỏ",
+	description: "Rượu vang đỏ được lên men từ nho đỏ hoặc nho đen nguyên vỏ, tạo màu đỏ đặc trưng từ anthocyanin. Vị đậm đà, tanin cao, hương trái cây đỏ và đen. Các giống nho phổ biến: Cabernet Sauvignon, Merlot, Shiraz, Pinot Noir, Sangiovese.",
+	servingTemp: "16–18°C",
+	pairingFoods: "bò nướng, steak, cừu quay, sườn BBQ, phô mai cứng (Cheddar, Manchego), pasta thịt bò, lẩu bò, bò lúc lắc",
+	origin: "Úc (Barossa Valley, McLaren Vale), Pháp (Bordeaux, Rhône), Ý (Tuscany, Puglia), Chile (Colchagua Valley), Tây Ban Nha (Rioja)",
+	priceRange: "từ 390.000đ đến hơn 5.000.000đ — phù hợp mọi ngân sách từ uống hàng ngày đến quà biếu cao cấp",
+	phone: "0325-610-016",
+});
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
@@ -83,41 +76,70 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function RedWinePage({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
 	const pageUrl = buildPageUrl(locale, "/red-wine");
+	const productsPath = `${SITE_URL}/san-pham`;
 
-	const breadcrumbJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		itemListElement: [
-			{ "@type": "ListItem", position: 1, name: "Trang chủ", item: SITE_URL },
-			{ "@type": "ListItem", position: 2, name: "Sản phẩm", item: `${SITE_URL}/san-pham` },
-			{ "@type": "ListItem", position: 3, name: "Rượu Vang Đỏ", item: pageUrl },
-		],
-	};
+	// Fetch top red wine products for ItemList schema
+	const supabase = await createClient();
+	const { data: topProducts } = await supabase
+		.from("products")
+		.select("slug, name, thumbnail_url, description, price, discount_percentage")
+		.eq("category", "wine")
+		.in("wine_type", ["red", "đỏ", "Đỏ", "Red"])
+		.gt("stock", 0)
+		.order("sold_count", { ascending: false })
+		.limit(8);
 
-	const faqJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "FAQPage",
-		mainEntity: faqItems.map((item) => ({
-			"@type": "Question",
-			name: item.q,
-			acceptedAnswer: { "@type": "Answer", text: item.a },
-		})),
-	};
+	const breadcrumbJsonLd = buildBreadcrumbSchema([
+		{ name: "Trang chủ", url: SITE_URL },
+		{ name: "Sản phẩm", url: `${SITE_URL}/san-pham` },
+		{ name: "Rượu Vang Đỏ", url: pageUrl },
+	]);
+
+	const faqJsonLd = buildFAQSchema(faqItems);
 
 	const webPageJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "CollectionPage",
 		name: "Rượu Vang Đỏ Nhập Khẩu Chính Hãng",
-		description: "Tuyển chọn rượu vang đỏ nhập khẩu chính hãng từ Pháp, Ý, Úc, Chile tại Viora Wine.",
+		description: "Tuyển chọn rượu vang đỏ nhập khẩu chính hãng từ Pháp, Ý, Úc, Chile, Tây Ban Nha tại Viora Wine Đà Nẵng. Cabernet Sauvignon, Merlot, Shiraz, Pinot Noir từ 390.000đ. Giao toàn quốc.",
 		url: pageUrl,
+		inLanguage: "vi-VN",
 		breadcrumb: breadcrumbJsonLd,
+		speakable: {
+			"@type": "SpeakableSpecification",
+			cssSelector: ["h1", ".category-description", ".faq-answer"],
+		},
+		publisher: {
+			"@type": "Organization",
+			name: "Viora Wine",
+			url: SITE_URL,
+		},
 	};
+
+	const itemListJsonLd = topProducts?.length
+		? buildItemListSchema(
+				topProducts.map((p) => ({
+					name: p.name,
+					url: `${productsPath}/${p.slug}`,
+					image: p.thumbnail_url ?? undefined,
+					description: p.description ?? undefined,
+					price: p.discount_percentage
+						? Math.round(p.price * (1 - p.discount_percentage / 100))
+						: p.price,
+				})),
+				"Rượu Vang Đỏ Bán Chạy Tại Viora Wine",
+				"Danh sách rượu vang đỏ nhập khẩu chính hãng bán chạy nhất tại Viora Wine Đà Nẵng",
+			)
+		: null;
 
 	return (
 		<>
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(webPageJsonLd) }} />
+			{itemListJsonLd && (
+				<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(itemListJsonLd) }} />
+			)}
 
 			<div className="min-h-screen bg-white">
 				{/* ── HERO ── Cinematic, mobile-first */}

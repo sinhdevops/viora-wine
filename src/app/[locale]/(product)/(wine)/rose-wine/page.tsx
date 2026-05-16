@@ -1,4 +1,6 @@
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildCategoryFAQ, buildFAQSchema, buildItemListSchema, jsonLdScript } from "@/lib/geo-schemas";
+import { createClient } from "@/utils/supabase/server";
 import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
 import TrustBar from "@/components/conversion/trust-bar";
 import UrgencyStrip from "@/components/conversion/urgency-strip";
@@ -7,24 +9,15 @@ import FaqAccordion from "@/components/conversion/faq-accordion";
 
 export const revalidate = 3600;
 
-const faqItems = [
-	{
-		q: "Rượu vang hồng (rosé) là gì?",
-		a: "Rượu vang hồng được làm từ nho đỏ nhưng tiếp xúc vỏ trong thời gian ngắn (2–20 giờ) thay vì vài tuần như vang đỏ. Kết quả là màu hồng tươi đẹp, ít tanin hơn vang đỏ, tươi mát hơn vang đỏ nhưng đậm hơn vang trắng.",
-	},
-	{
-		q: "Rượu vang hồng uống lạnh hay ấm?",
-		a: "Nên uống lạnh 8–13°C — tương tự vang trắng. Uống lạnh giúp giữ hương thơm trái cây tươi và vị thanh mát. Đây là điểm làm cho rosé đặc biệt phù hợp với mùa hè và bữa tiệc ngoài trời.",
-	},
-	{
-		q: "Rượu vang hồng Provence khác gì các loại rosé khác?",
-		a: "Provence (miền Nam nước Pháp) nổi tiếng với rosé màu hồng phấn nhạt, vị khô, thanh elegant với hương đào trắng và hoa hồng. Đây là phong cách rosé được coi là 'chuẩn mực thế giới'. Rosé Tây Ban Nha thường đậm hơn, rosé Chile trái cây hơn.",
-	},
-	{
-		q: "Viora Wine có rosé nào giá tốt không?",
-		a: "Viora Wine luôn có rosé từ 390.000đ, nhập khẩu chính hãng từ Pháp, Ý, Tây Ban Nha. Liên hệ Zalo 0338-909-973 để được tư vấn chai phù hợp ngân sách và dịp uống.",
-	},
-];
+const faqItems = buildCategoryFAQ({
+	name: "Rượu Vang Hồng (Rosé)",
+	description: "Rượu vang hồng (rosé) được làm từ nho đỏ nhưng tiếp xúc vỏ trong thời gian ngắn 2–20 giờ — tạo màu hồng đặc trưng, ít tanin, tươi mát hơn vang đỏ. Phong cách Provence (Pháp) là chuẩn mực thế giới với màu hồng phấn nhạt, hương đào trắng, hoa hồng và vị khô thanh.",
+	servingTemp: "8–13°C — uống lạnh như vang trắng, giúp giữ hương thơm trái cây tươi",
+	pairingFoods: "hải sản nướng, salad Địa Trung Hải, thịt gà, pizza, đồ ăn nhẹ, sushi, thịt nguội (charcuterie board), bánh mì sandwich",
+	origin: "Pháp (Provence, Languedoc, Rhône), Tây Ban Nha (Navarra, Rioja), Ý (Pinot Grigio Rosé, Bardolino), Chile, Úc",
+	priceRange: "từ 390.000đ đến hơn 3.000.000đ — rosé Provence cao cấp đến rosé uống hàng ngày giá tốt",
+	phone: "0325-610-016",
+});
 
 const ZALO_LINK = "https://zalo.me/0325610016";
 const PHONE = "tel:0338909973";
@@ -80,39 +73,58 @@ export default async function RoseWinePage({ params }: { params: Promise<{ local
 	const { locale } = await params;
 	const pageUrl = buildPageUrl(locale, "/rose-wine");
 
-	const breadcrumbJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		itemListElement: [
-			{ "@type": "ListItem", position: 1, name: "Trang chủ", item: SITE_URL },
-			{ "@type": "ListItem", position: 2, name: "Sản phẩm", item: `${SITE_URL}/san-pham` },
-			{ "@type": "ListItem", position: 3, name: "Rượu Vang Hồng", item: pageUrl },
-		],
-	};
+	const supabase = await createClient();
+	const { data: topProducts } = await supabase
+		.from("products")
+		.select("slug, name, thumbnail_url, description, price, discount_percentage")
+		.eq("category", "wine")
+		.in("wine_type", ["rose", "hồng", "Hồng", "Rose", "Rosé"])
+		.gt("stock", 0)
+		.order("sold_count", { ascending: false })
+		.limit(8);
 
-	const faqJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "FAQPage",
-		mainEntity: faqItems.map((item) => ({
-			"@type": "Question",
-			name: item.q,
-			acceptedAnswer: { "@type": "Answer", text: item.a },
-		})),
-	};
+	const breadcrumbJsonLd = buildBreadcrumbSchema([
+		{ name: "Trang chủ", url: SITE_URL },
+		{ name: "Sản phẩm", url: `${SITE_URL}/san-pham` },
+		{ name: "Rượu Vang Hồng", url: pageUrl },
+	]);
+
+	const faqJsonLd = buildFAQSchema(faqItems);
 
 	const webPageJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "CollectionPage",
 		name: "Rượu Vang Hồng (Rosé) Nhập Khẩu Chính Hãng",
-		description: "Tuyển chọn rượu vang hồng (rosé) nhập khẩu chính hãng từ Pháp, Ý, Tây Ban Nha tại Viora Wine.",
+		description: "Tuyển chọn rượu vang hồng (rosé) nhập khẩu chính hãng từ Pháp (Provence), Tây Ban Nha, Ý tại Viora Wine. Màu hồng tươi, hương dâu tây, uống mát lạnh. Từ 390.000đ. Giao toàn quốc.",
 		url: pageUrl,
+		inLanguage: "vi-VN",
+		breadcrumb: breadcrumbJsonLd,
+		speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", ".category-description"] },
+		publisher: { "@type": "Organization", name: "Viora Wine", url: SITE_URL },
 	};
+
+	const itemListJsonLd = topProducts?.length
+		? buildItemListSchema(
+				topProducts.map((p) => ({
+					name: p.name,
+					url: `${SITE_URL}/san-pham/${p.slug}`,
+					image: p.thumbnail_url ?? undefined,
+					description: p.description ?? undefined,
+					price: p.discount_percentage ? Math.round(p.price * (1 - p.discount_percentage / 100)) : p.price,
+				})),
+				"Rượu Vang Hồng Bán Chạy Tại Viora Wine",
+				"Danh sách rượu vang hồng (rosé) nhập khẩu chính hãng bán chạy nhất tại Viora Wine",
+			)
+		: null;
 
 	return (
 		<>
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(webPageJsonLd) }} />
+			{itemListJsonLd && (
+				<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(itemListJsonLd) }} />
+			)}
 
 			<div className="min-h-screen bg-white">
 				{/* Hero — cinematic rose gradient */}

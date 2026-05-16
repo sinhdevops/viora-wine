@@ -1,4 +1,6 @@
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildCategoryFAQ, buildFAQSchema, buildItemListSchema, jsonLdScript } from "@/lib/geo-schemas";
+import { createClient } from "@/utils/supabase/server";
 import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
 import TrustBar from "@/components/conversion/trust-bar";
 import UrgencyStrip from "@/components/conversion/urgency-strip";
@@ -7,24 +9,15 @@ import FaqAccordion from "@/components/conversion/faq-accordion";
 
 export const revalidate = 3600;
 
-const faqItems = [
-	{
-		q: "Rượu vang trắng khác gì rượu vang đỏ?",
-		a: "Rượu vang trắng được lên men không tiếp xúc với vỏ nho, nên không có tanin và màu nhạt hơn. Vị thanh mát, độ chua cao hơn, hương hoa quả tươi. Thích hợp uống lạnh 8–12°C và kết hợp với hải sản, gà, salad.",
-	},
-	{
-		q: "Chardonnay và Sauvignon Blanc khác nhau như thế nào?",
-		a: "Chardonnay thường đầy đặn hơn, hương bơ, vanilla và tropical fruit nếu ủ gỗ sồi. Sauvignon Blanc tươi mát hơn, hương chanh, bưởi, cỏ xanh — không qua gỗ sồi. Người mới bắt đầu thường thích Chardonnay vì vị dễ uống hơn.",
-	},
-	{
-		q: "Rượu vang trắng uống với gì ngon nhất?",
-		a: "Hải sản (tôm, cá, sò) là pairing kinh điển. Chardonnay hợp với gà nướng, risotto, phô mai mềm. Sauvignon Blanc tuyệt vời với salad, sushi, các món rau củ nhẹ nhàng.",
-	},
-	{
-		q: "Rượu vang trắng bảo quản và phục vụ ở nhiệt độ bao nhiêu?",
-		a: "Phục vụ 8–12°C — uống lạnh giúp giữ hương thơm và vị tươi mát. Bảo quản trong tủ wine 10–14°C hoặc tủ lạnh thông thường. Sau khi mở nút, dùng trong 3–5 ngày nếu bảo quản trong tủ lạnh.",
-	},
-];
+const faqItems = buildCategoryFAQ({
+	name: "Rượu Vang Trắng",
+	description: "Rượu vang trắng được lên men không tiếp xúc với vỏ nho — không có tanin, màu vàng rơm nhạt, vị thanh mát và độ chua cao hơn vang đỏ. Các giống nho phổ biến: Chardonnay (đầy đặn, hương bơ), Sauvignon Blanc (sắc nét, hương chanh cỏ xanh), Riesling (hoa và khoáng chất), Pinot Grigio (nhẹ nhàng, dễ uống).",
+	servingTemp: "8–12°C — nhất thiết phải uống lạnh để giữ hương thơm tươi mát",
+	pairingFoods: "hải sản (tôm, cá, sò điệp), gà nướng, salad, sushi, phô mai mềm (Brie, ricotta), các món rau củ nhẹ nhàng, phở gà, bún cá",
+	origin: "Pháp (Burgundy, Loire, Alsace), Úc (Margaret River, Adelaide Hills), Ý (Alto Adige, Friuli), New Zealand (Marlborough), Đức (Mosel)",
+	priceRange: "từ 350.000đ đến hơn 4.000.000đ — đa dạng lựa chọn từ uống hàng ngày đến tiệc đặc biệt",
+	phone: "0325-610-016",
+});
 
 const ZALO_LINK = "https://zalo.me/0325610016";
 const PHONE = "tel:0338909973";
@@ -80,40 +73,65 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function WhiteWinePage({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
 	const pageUrl = buildPageUrl(locale, "/white-wine");
+	const productsPath = `${SITE_URL}/san-pham`;
 
-	const breadcrumbJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		itemListElement: [
-			{ "@type": "ListItem", position: 1, name: "Trang chủ", item: SITE_URL },
-			{ "@type": "ListItem", position: 2, name: "Sản phẩm", item: `${SITE_URL}/san-pham` },
-			{ "@type": "ListItem", position: 3, name: "Rượu Vang Trắng", item: pageUrl },
-		],
-	};
+	const supabase = await createClient();
+	const { data: topProducts } = await supabase
+		.from("products")
+		.select("slug, name, thumbnail_url, description, price, discount_percentage")
+		.eq("category", "wine")
+		.in("wine_type", ["white", "trắng", "Trắng", "White"])
+		.gt("stock", 0)
+		.order("sold_count", { ascending: false })
+		.limit(8);
 
-	const faqJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "FAQPage",
-		mainEntity: faqItems.map((item) => ({
-			"@type": "Question",
-			name: item.q,
-			acceptedAnswer: { "@type": "Answer", text: item.a },
-		})),
-	};
+	const breadcrumbJsonLd = buildBreadcrumbSchema([
+		{ name: "Trang chủ", url: SITE_URL },
+		{ name: "Sản phẩm", url: `${SITE_URL}/san-pham` },
+		{ name: "Rượu Vang Trắng", url: pageUrl },
+	]);
+
+	const faqJsonLd = buildFAQSchema(faqItems);
 
 	const webPageJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "CollectionPage",
 		name: "Rượu Vang Trắng Nhập Khẩu Chính Hãng",
-		description: "Tuyển chọn rượu vang trắng nhập khẩu chính hãng từ Pháp, Ý, Úc tại Viora Wine.",
+		description: "Tuyển chọn rượu vang trắng nhập khẩu chính hãng từ Pháp, Ý, Úc, New Zealand, Đức tại Viora Wine. Chardonnay, Sauvignon Blanc, Riesling từ 350.000đ. Giao hàng toàn quốc.",
 		url: pageUrl,
+		inLanguage: "vi-VN",
+		breadcrumb: breadcrumbJsonLd,
+		speakable: {
+			"@type": "SpeakableSpecification",
+			cssSelector: ["h1", ".category-description"],
+		},
+		publisher: { "@type": "Organization", name: "Viora Wine", url: SITE_URL },
 	};
+
+	const itemListJsonLd = topProducts?.length
+		? buildItemListSchema(
+				topProducts.map((p) => ({
+					name: p.name,
+					url: `${productsPath}/${p.slug}`,
+					image: p.thumbnail_url ?? undefined,
+					description: p.description ?? undefined,
+					price: p.discount_percentage
+						? Math.round(p.price * (1 - p.discount_percentage / 100))
+						: p.price,
+				})),
+				"Rượu Vang Trắng Bán Chạy Tại Viora Wine",
+				"Danh sách rượu vang trắng nhập khẩu chính hãng bán chạy nhất tại Viora Wine",
+			)
+		: null;
 
 	return (
 		<>
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(webPageJsonLd) }} />
+			{itemListJsonLd && (
+				<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(itemListJsonLd) }} />
+			)}
 
 			<div className="min-h-screen bg-white">
 				{/* Hero — cinematic golden gradient */}

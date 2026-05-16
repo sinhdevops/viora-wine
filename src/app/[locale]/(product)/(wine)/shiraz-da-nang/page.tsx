@@ -1,4 +1,6 @@
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildFAQSchema, buildItemListSchema, jsonLdScript } from "@/lib/geo-schemas";
+import { createClient } from "@/utils/supabase/server";
 import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
 
 export const revalidate = 3600;
@@ -97,31 +99,45 @@ export default async function ShirazDaNangPage() {
 		aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: 2000, bestRating: "5", worstRating: "1" },
 	};
 
-	const faqJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "FAQPage",
-		mainEntity: faqItems.map((item) => ({
-			"@type": "Question",
-			name: item.q,
-			acceptedAnswer: { "@type": "Answer", text: item.a },
-		})),
-	};
+	const supabase = await createClient();
+	const { data: topProducts } = await supabase
+		.from("products")
+		.select("slug, name, thumbnail_url, description, price, discount_percentage")
+		.ilike("grape_variety", "%Shiraz%")
+		.gt("stock", 0)
+		.order("sold_count", { ascending: false })
+		.limit(6);
 
-	const breadcrumbJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		itemListElement: [
-			{ "@type": "ListItem", position: 1, name: "Trang chủ", item: SITE_URL },
-			{ "@type": "ListItem", position: 2, name: "Rượu Vang Shiraz", item: `${SITE_URL}/ruou-vang-shiraz` },
-			{ "@type": "ListItem", position: 3, name: "Shiraz Đà Nẵng", item: pageUrl },
-		],
-	};
+	const faqJsonLd = buildFAQSchema(faqItems);
+
+	const breadcrumbJsonLd = buildBreadcrumbSchema([
+		{ name: "Trang chủ", url: SITE_URL },
+		{ name: "Rượu Vang Shiraz", url: `${SITE_URL}/ruou-vang-shiraz` },
+		{ name: "Shiraz Đà Nẵng", url: pageUrl },
+	]);
+
+	const itemListJsonLd = topProducts?.length
+		? buildItemListSchema(
+				topProducts.map((p) => ({
+					name: p.name,
+					url: `${SITE_URL}/san-pham/${p.slug}`,
+					image: p.thumbnail_url ?? undefined,
+					description: p.description ?? undefined,
+					price: p.discount_percentage ? Math.round(p.price * (1 - p.discount_percentage / 100)) : p.price,
+				})),
+				"Rượu Vang Shiraz Giao Tại Đà Nẵng",
+				"Danh sách rượu vang Shiraz Úc nhập khẩu chính hãng, giao 2–4h nội thành Đà Nẵng",
+			)
+		: null;
 
 	return (
 		<>
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(localBusinessJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }} />
+			{itemListJsonLd && (
+				<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(itemListJsonLd) }} />
+			)}
 
 			<div className="min-h-screen bg-white">
 				{/* ── Hero ─────────────────────────────────────────────── */}

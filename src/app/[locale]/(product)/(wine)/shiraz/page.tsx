@@ -1,4 +1,6 @@
 import { buildAlternates, buildPageUrl, SITE_URL } from "@/lib/seo";
+import { buildBreadcrumbSchema, buildCategoryFAQ, buildFAQSchema, buildItemListSchema, jsonLdScript } from "@/lib/geo-schemas";
+import { createClient } from "@/utils/supabase/server";
 import WineProductGrid from "@/components/page/wine/wine-product-grid-wrapper";
 import TrustBar from "@/components/conversion/trust-bar";
 import UrgencyStrip from "@/components/conversion/urgency-strip";
@@ -10,28 +12,15 @@ export const revalidate = 3600;
 const ZALO_LINK = "https://zalo.me/0325610016";
 const PHONE = "tel:0338909973";
 
-const faqItems = [
-	{
-		q: "Rượu vang Shiraz có vị như thế nào?",
-		a: "Shiraz là loại vang đỏ đậm đà với hương trái cây đỏ và đen như mận, mâm xôi, blackberry. Đặc trưng nổi bật là vị cay nhẹ của hạt tiêu đen, tanin mềm mượt và hậu vị kéo dài. Shiraz Úc thường fruit-forward và dễ uống hơn so với Syrah của Pháp.",
-	},
-	{
-		q: "Rượu vang Shiraz Úc khác gì Shiraz Pháp (Syrah)?",
-		a: "Shiraz Úc (Barossa Valley, McLaren Vale) đậm đà, fruity, cay nhẹ và giàu màu sắc phong cách New World dễ tiếp cận. Syrah Pháp (Rhône Valley) tinh tế hơn, nhiều khoáng chất và herb hơn phong cách Old World. Shiraz Úc được ưa chuộng tại Việt Nam vì vị dễ uống và phù hợp khẩu vị châu Á.",
-	},
-	{
-		q: "Shiraz uống cùng món ăn gì ngon nhất?",
-		a: "Rượu vang Shiraz đặc biệt hợp với thịt đỏ: bò nướng, cừu quay, sườn BBQ, phô mai cứng. Với khẩu vị Việt Nam, Shiraz rất ngon khi uống cùng bò lúc lắc, lẩu bò, thịt nướng và các món sốt đậm đà. Nhiệt độ phục vụ lý tưởng là 16–18°C.",
-	},
-	{
-		q: "Bảo quản rượu vang Shiraz như thế nào?",
-		a: "Bảo quản ở 14–18°C, tránh ánh sáng mặt trời và nhiệt độ thay đổi đột ngột. Để nằm ngang nếu chai còn nút bần. Sau khi mở, dùng nút chân không và uống trong 3–5 ngày. Không nên để trong tủ lạnh thông thường quá 1 tuần vì nhiệt độ quá lạnh làm mất hương vị.",
-	},
-	{
-		q: "Viora Wine có giao rượu Shiraz toàn quốc không?",
-		a: "Có! Viora Wine giao hàng toàn quốc với đóng gói chuyên dụng chống vỡ. Giao 1–3 ngày làm việc qua J&T và GHN. Đặt hàng và tư vấn miễn phí qua Zalo: 0338-909-973.",
-	},
-];
+const faqItems = buildCategoryFAQ({
+	name: "Rượu Vang Shiraz",
+	description: "Shiraz (hay Syrah) là giống nho đỏ nổi tiếng thế giới, đặc biệt phổ biến tại Úc. Shiraz Úc có màu tím đen đậm, hương mận chín, blackberry, chocolate đen, vị cay nhẹ đặc trưng của hạt tiêu đen và hậu vị kéo dài. Khác với Syrah Pháp tinh tế, Shiraz Úc fruit-forward và dễ uống hơn.",
+	servingTemp: "16–18°C — mở nắp trước 20–30 phút để hương thơm phát triển tốt nhất",
+	pairingFoods: "bò nướng, steak, cừu quay, sườn BBQ, phô mai cứng (Cheddar, Manchego), bò lúc lắc, lẩu bò, burger, pizza thịt",
+	origin: "Úc (Barossa Valley, McLaren Vale, Clare Valley — Nam Úc), Pháp (Rhône Valley — Syrah), California (Mỹ), Chile, Nam Phi",
+	priceRange: "từ 490.000đ đến hơn 6.000.000đ — từ Shiraz uống hàng ngày đến Shiraz single vineyard cao cấp",
+	phone: "0325-610-016",
+});
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
 	const { locale } = await params;
@@ -83,40 +72,63 @@ export default async function ShirazPage({ params }: { params: Promise<{ locale:
 	const { locale } = await params;
 	const pageUrl = buildPageUrl(locale, "/shiraz");
 
-	const faqJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "FAQPage",
-		mainEntity: faqItems.map((item) => ({
-			"@type": "Question",
-			name: item.q,
-			acceptedAnswer: { "@type": "Answer", text: item.a },
-		})),
-	};
+	const supabase = await createClient();
+	const { data: topProducts } = await supabase
+		.from("products")
+		.select("slug, name, thumbnail_url, description, price, discount_percentage")
+		.eq("category", "wine")
+		.ilike("grape_variety", "%Shiraz%")
+		.gt("stock", 0)
+		.order("sold_count", { ascending: false })
+		.limit(8);
 
-	const breadcrumbJsonLd = {
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		itemListElement: [
-			{ "@type": "ListItem", position: 1, name: "Trang chủ", item: SITE_URL },
-			{ "@type": "ListItem", position: 2, name: "Sản phẩm", item: `${SITE_URL}/san-pham` },
-			{ "@type": "ListItem", position: 3, name: "Rượu Vang Shiraz", item: pageUrl },
-		],
-	};
+	const breadcrumbJsonLd = buildBreadcrumbSchema([
+		{ name: "Trang chủ", url: SITE_URL },
+		{ name: "Sản phẩm", url: `${SITE_URL}/san-pham` },
+		{ name: "Rượu Vang Shiraz", url: pageUrl },
+	]);
+
+	const faqJsonLd = buildFAQSchema(faqItems);
 
 	const webPageJsonLd = {
 		"@context": "https://schema.org",
 		"@type": "CollectionPage",
 		name: "Rượu Vang Shiraz Úc Nhập Khẩu Chính Hãng",
-		description: "Tuyển chọn rượu vang Shiraz Úc nhập khẩu chính hãng từ Barossa Valley & McLaren Vale tại Viora Wine.",
+		description: "Tuyển chọn rượu vang Shiraz Úc nhập khẩu chính hãng từ Barossa Valley & McLaren Vale tại Viora Wine. Đậm đà, cay nhẹ, hương mận chín và tiêu đen. Từ 490.000đ. Giao hàng toàn quốc.",
 		url: pageUrl,
+		inLanguage: "vi-VN",
 		breadcrumb: breadcrumbJsonLd,
+		speakable: {
+			"@type": "SpeakableSpecification",
+			cssSelector: ["h1", ".category-description"],
+		},
+		publisher: { "@type": "Organization", name: "Viora Wine", url: SITE_URL },
 	};
+
+	const itemListJsonLd = topProducts?.length
+		? buildItemListSchema(
+				topProducts.map((p) => ({
+					name: p.name,
+					url: `${SITE_URL}/san-pham/${p.slug}`,
+					image: p.thumbnail_url ?? undefined,
+					description: p.description ?? undefined,
+					price: p.discount_percentage
+						? Math.round(p.price * (1 - p.discount_percentage / 100))
+						: p.price,
+				})),
+				"Rượu Vang Shiraz Bán Chạy Tại Viora Wine",
+				"Danh sách rượu vang Shiraz Úc nhập khẩu chính hãng bán chạy nhất tại Viora Wine",
+			)
+		: null;
 
 	return (
 		<>
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }} />
+			<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(webPageJsonLd) }} />
+			{itemListJsonLd && (
+				<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(itemListJsonLd) }} />
+			)}
 
 			<div className="min-h-screen bg-white">
 				{/* Hero — cinematic dark red gradient */}
